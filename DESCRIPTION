@@ -1,0 +1,26 @@
+Package: PiProteline
+Type: Package
+Title: Proteomics Bioinformatic Pipeline
+Version: 0.1.0
+Author: Andre Lomagno
+Maintainer: Andrea Lomagno <andrea.lomagno@yahoo.it>
+Description: Miscellaneus of functions useful for bioinformatics and in particular 
+    for proteomics analysis. It includes also a pipeline that comprise the main 
+    steps to interpret MS-MS data.
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.3.2
+Imports:
+    ggplot2 (>= 3.5.1),
+    magrittr (>= 2.0.3),
+    matrixStats (>= 1.3.0),
+    randomForest (>= 4.7.1.1),
+    rbioapi (>= 0.8.1),
+    dplyr (>= 1.1.4),
+    igraph (>= 2.0.3),
+    Hmisc (>= 5.1.2),
+    parallel (>= 4.3.3),
+    doParallel (>= 1.0.17),
+    foreach (>= 1.5.2),
+    ggrepel (>= 0.9.5)
