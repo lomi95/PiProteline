@@ -15,6 +15,8 @@
 #' @importFrom ggplot2 theme
 #' @importFrom ggplot2 geom_label
 #' @importFrom ggrepel geom_text_repel
+#' @importFrom ggplot2 labs
+#' @importFrom ggplot2 unit
 #'
 #' @return A ggplot object
 #' @export
@@ -50,7 +52,7 @@ Volcano_Plot <- function(df,boundFC,thr_pvalue, Name_1 = "Group1", Name_2 = "Gro
                     max.overlaps = 5) +
     theme_minimal() +
     theme(legend.position = "none") +
-    labs(title = paste0("Volcano Plot - ", Name_1,".vs.",Name_2),
+    labs(title = paste0("Volcano Plot - UP ", Name_1," vs DOWN ",Name_2),
          x = "log2(FC)",
          y = "-log10(p.adjusted)") +
     geom_label(
@@ -66,6 +68,8 @@ Volcano_Plot <- function(df,boundFC,thr_pvalue, Name_1 = "Group1", Name_2 = "Gro
       color = "red",
       fill = NA)
 
-  return(Vplot)
+  return(list(plot = Vplot,
+              Genes = list(UP   = df$gene[df$color == "up-regulated"],
+                           DOWN = df$gene[df$color == "down-regulated"])))
 }
 

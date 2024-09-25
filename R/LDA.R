@@ -50,7 +50,8 @@ LDA <- function(dataset,
       })
       indxs <- table(unlist(pos.vectors_groups))
       if (max(indxs)>1){
-        message("Warning: ",paste(rownames(dataset.t)[which(indxs>1)], collapse = ", ")," is/are selected for more than one group")
+        message("Warning: ",paste(rownames(dataset.t)[which(indxs>1)], collapse = ", "),
+                " is/are selected for more than one group")
       }
     }
   }
@@ -62,7 +63,8 @@ LDA <- function(dataset,
 
       indxs <- table(unlist(pos.vectors_groups))
       if (max(indxs)>1){
-        message("Warning: ",paste(rownames(dataset.t)[which(indxs>1)], collapse = ", ")," is/are selected for more than one group")
+        message("Warning: ",paste(rownames(dataset.t)[which(indxs>1)], collapse = ", "),
+                " is/are selected for more than one group")
       }
 
       if (is.null(names(pos.vectors_groups))){
@@ -86,7 +88,8 @@ LDA <- function(dataset,
       grep(x,rownames(dataset.t), ignore.case = ignoreCase)
     })))
     if (max(indxs)>1){
-      message("Warning: ",paste(rownames(dataset.t)[which(indxs>1)], collapse = ", "),"is/are selected for more than one group")
+      message("Warning: ",paste(rownames(dataset.t)[which(indxs>1)], collapse = ", "),
+              "is/are selected for more than one group")
     }
 
     for ( i in names_of_groups){
@@ -127,7 +130,8 @@ LDA <- function(dataset,
   independent_var <- as.factor(final_dm_norm_t$labels)
 
   #MANOVA
-  #for manova model insert dependent variables before tilde and independent ones after. After comma indicate the dataframe cointaning both labels and quantitative data
+  #for manova model insert dependent variables before tilde and independent ones after.
+  #After comma indicate the dataframe cointaning both labels and quantitative data
   manova_model <- manova(dependent_vars ~ independent_var, data = final_dm_norm_t)
 
   summary <- summary.aov(manova_model)
@@ -167,64 +171,61 @@ LDA <- function(dataset,
     } else {
       meancol <- sapply(groups.LDA, colMeans)
     }
-      updown <- matrix(0,nrow = nrow(meancol),ncol = ncol(meancol)*2,
-                       dimnames = list(rownames(meancol),
-                                       unlist(lapply(colnames(meancol),
-                                                     paste0,c("_up","_down")))))
-      for (i in 1:ncol(meancol)){
-        updown[,2*i-1] <- ifelse(meancol[,i]==rowMaxs(meancol),1,0)
-        updown[,2*i]   <- ifelse(meancol[,i]==rowMins(meancol),1,0)
-      }
+    updown <- matrix(0,nrow = nrow(meancol),ncol = ncol(meancol)*2,
+                     dimnames = list(rownames(meancol),
+                                     unlist(lapply(colnames(meancol),
+                                                   paste0,c("_up","_down")))))
+    for (i in 1:ncol(meancol)){
+      updown[,2*i-1] <- ifelse(meancol[,i]==rowMaxs(meancol),1,0)
+      updown[,2*i]   <- ifelse(meancol[,i]==rowMins(meancol),1,0)
+    }
 
       #####################
-      Volcanos <- lapply(seq_along(names_of_groups), function(x){
-        Volc.i <- lapply(seq_along(names_of_groups)[-x],function(y){
-          # print(x)
-          # print(y)
-          # g1.vs.g2 <- rownames(updown)[updown[,x*2-1] > 0 & updown[,y*2]   > 0]
-          # g2.vs.g1 <- rownames(updown)[updown[,x*2]   > 0 & updown[,y*2-1] > 0]
-          g1g2 <- output_LDA$GeneName
-          g1 <- colMeans(dataset.t[grep(names_of_groups[x],rownames(dataset.t)),])
-          g2 <- colMeans(dataset.t[grep(names_of_groups[y],rownames(dataset.t)),])
-          df <- data.frame(log2 = log2(g1/g2),
-                           pv = -log10(output_LDA$p.adj),
-                           gene = names(g1))
-          df$gene[df$log2 >= min(boundFC) & df$log2 <= max(boundFC)] <- ""
+    Volcanos <- lapply(seq_along(names_of_groups), function(x){
+      Volc.i <- lapply(seq_along(names_of_groups)[-x],function(y){
+
+        g1g2 <- output_LDA$GeneName
+        g1 <- colMeans(dataset.t[grep(names_of_groups[x],rownames(dataset.t)),])
+        g2 <- colMeans(dataset.t[grep(names_of_groups[y],rownames(dataset.t)),])
+        df <- data.frame(log2 = log2(g1/g2),
+                         pv = -log10(output_LDA$p.adj),
+                         gene = names(g1))
+        df$gene[df$log2 >= min(boundFC) & df$log2 <= max(boundFC)] <- ""
 
 
-          V.ij <- Volcano_Plot(df,boundFC, significance.LDA, names_of_groups[x], names_of_groups[y])
+        V.ij <- Volcano_Plot(df,boundFC, significance.LDA, names_of_groups[x], names_of_groups[y])
 
-          return(V.ij)
+        return(V.ij)
 
-        })
-        names(Volc.i) <- paste0("vs.", names_of_groups[seq_along(names_of_groups)[-x]])
-
-        return(Volc.i)
       })
+      names(Volc.i) <- paste0("vs.", names_of_groups[seq_along(names_of_groups)[-x]])
 
-      names(Volcanos) <- names_of_groups
+      return(Volc.i)
+    })
 
-      if (MDS){
-        mds.plot <- MDS_plot(dataset.LDA,names_of_groups,
-                             pos.vectors_groups = pos.vectors_groups,
-                             ignoreCase = ignoreCase)
-      } else {
-        mds.plot <- NULL
-      }
+    names(Volcanos) <- names_of_groups
 
-      return(list(dataset.LDA       = dataset.LDA,
-                  features_p.values = output_LDA,
-                  features_updown   = updown,
-                  mds.plot          = mds.plot,
-                  VolcanoPlots      = Volcanos))
-
+    if (MDS){
+      mds.plot <- MDS_plot(dataset.LDA,names_of_groups,
+                           pos.vectors_groups = pos.vectors_groups,
+                           ignoreCase = ignoreCase)
     } else {
-      message("No significant features were found, try with a greater 'significance.LDA' threshold or another 'correction.LDA' method")
-      return(list(dataset.LDA       = NULL,
-                  features_p.values = output_LDA,
-                  features_updown   = NULL,
-                  mds.plot          = NULL,
-                  VolcanoPlots      = NULL))
+      mds.plot <- NULL
     }
+
+    return(list(dataset.LDA       = dataset.LDA,
+                features_p.values = output_LDA,
+                features_updown   = updown,
+                mds.plot          = mds.plot,
+                VolcanoPlots      = Volcanos))
+
+  } else {
+    message("No significant features were found, try with a greater 'significance.LDA' threshold or another 'correction.LDA' method")
+    return(list(dataset.LDA       = NULL,
+                features_p.values = output_LDA,
+                features_updown   = NULL,
+                mds.plot          = NULL,
+                VolcanoPlots      = NULL))
+  }
 
 }

@@ -5,13 +5,14 @@
 \title{Title}
 \usage{
 Corr_PPI.model(
-  list.groups,
-  genes_id,
-  list.Corr = NULL,
+  dataset,
+  genes_id = NULL,
+  Corr = NULL,
   corr.test = "spearman",
   signifCorr = 0.05,
   correctionCorr = "BH",
-  interactome = NULL,
+  interactome.graph = NULL,
+  score_threshold = c(escore = 0.15, dscore = 0.35),
   tax_ID = 9606,
   NAasZero = F,
   ZeroasNA = T,
@@ -19,12 +20,11 @@ Corr_PPI.model(
 )
 }
 \arguments{
-\item{list.groups}{List of groups to build network models}
+\item{dataset}{dataset to build network models}
 
 \item{genes_id}{vector of genes to build interactome, ignored if 'interactome' is given}
 
-\item{list.Corr}{list of flatten correlations to speed up the computation.
-See 'flatten2CorrPPI' function. Default = NULL}
+\item{Corr}{Correlation if given}
 
 \item{corr.test}{"spearman" or "pearson". Default = "spearman"}
 
@@ -32,7 +32,9 @@ See 'flatten2CorrPPI' function. Default = NULL}
 
 \item{correctionCorr}{correction method for correlation pvalues. Default = "BH"}
 
-\item{interactome}{matrix or data.frame interactome. If NULL is built on 'genes_id'. default = NULL}
+\item{interactome.graph}{igraph interactome. If NULL is built on 'genes_id'. default = NULL}
+
+\item{score_threshold}{thresholds for interactome. default...}
 
 \item{tax_ID}{taxonomy ID of the spices into consideration. default human = 9606}
 

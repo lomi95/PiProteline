@@ -2,7 +2,7 @@ Package: PiProteline
 Type: Package
 Title: Proteomics Bioinformatic Pipeline
 Version: 0.1.0
-Author: Andre Lomagno
+Author: Andrea Lomagno
 Maintainer: Andrea Lomagno <andrea.lomagno@yahoo.it>
 Description: Miscellaneus of functions useful for bioinformatics and in particular 
     for proteomics analysis. It includes also a pipeline that comprise the main 

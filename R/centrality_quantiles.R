@@ -26,6 +26,12 @@ centrality_quantiles <- function(graph,
                                  ...) {
   Args <- list(...)
 
+
+  if (components(graph)$no>1){
+    options(warn = 1)
+    warning("The graph has more than one component, this could give an error if
+            'fun_list' apply to different component conditions")
+  }
   centralities <- sapply(fun_list, function(fun) {
     # Otteniamo i nomi dei parametri della funzione
     fun_params <- names(formals(fun))
@@ -53,11 +59,11 @@ centrality_quantiles <- function(graph,
         if (orderBy > 0 & orderBy <= length(fun_list)){
           ordering <- order(centralities.filtered[,orderBy], decreasing = T)
         } else {
-          message("orderBy not recgnized, ordering by 'rownames'")
+          message("orderBy not recognized, ordering by 'rownames'")
           ordering <- order(rownames(centralities.filtered))
         }
       } else {
-        message("orderBy not recgnized, ordering by 'rownames'")
+        message("orderBy not recognized, ordering by 'rownames'")
         ordering <- order(rownames(centralities.filtered))
       }
     } else if (is.character(orderBy)){
@@ -65,7 +71,7 @@ centrality_quantiles <- function(graph,
         if (orderBy %in% names(fun_list)){
           ordering <- order(centralities.filtered[,orderBy], decreasing = T)
         } else {
-          message("orderBy not recgnized, ordering by 'rownames'")
+          message("orderBy not recognized, ordering by 'rownames'")
           ordering <- order(rownames(centralities.filtered))
         }
       } else {
