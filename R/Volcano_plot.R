@@ -56,13 +56,13 @@ Volcano_Plot <- function(df,boundFC,thr_pvalue, Name_1 = "Group1", Name_2 = "Gro
          x = "log2(FC)",
          y = "-log10(p.adjusted)") +
     geom_label(
-      x = min(log2) + (max(log2)- min(log2))/18, y = max(pv), label = paste0("Down-regulated: ",num_down),
+      x = min(log2[log2!=-Inf]) + (max(log2[log2!=Inf])- min(log2[log2!=-Inf]))/18, y = max(pv), label = paste0("Down-regulated: ",num_down),
       label.padding = unit(0.55, "lines"),
       label.size = 0.35,
       color = "blue",
       fill = NA) +
     geom_label(
-      x = max(log2) - (max(log2)- min(log2))/18, y = max(pv), label = paste0("Up-regulated: ",num_up),
+      x = max(log2[log2!=Inf]) - (max(log2[log2!=Inf])- min(log2[log2!=-Inf]))/18, y = max(pv), label = paste0("Up-regulated: ",num_up),
       label.padding = unit(0.55, "lines"),
       label.size = 0.35,
       color = "red",

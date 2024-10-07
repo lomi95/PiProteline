@@ -7,7 +7,8 @@
 #' @param significance.LDA significance threshold for features pvalues. Default = 0.05
 #' @param correction.LDA correction method to adjusting pvalues. Default = "BH"
 #' @param pos.vectors_groups List containing column indexes for each group to compare
-#' @param MDS If TRUE computes random forest classification and Multi Dimensional Scaling. Default = T
+#' @param MDS If TRUE computes random forest classification an
+#' d Multi Dimensional Scaling. Default = T
 #' @param boundFC Numeric vector. Interval out of which labels are highlithed in red and labels are shown
 #'
 #' @importFrom matrixStats rowMaxs
@@ -42,7 +43,6 @@ LDA <- function(dataset,
   }
   dataset.t <- transpose(dataset, gene_column)
 
-  # modify pos.vector_groups
   if (!is.null(pos.vectors_groups)){
     if (gene_column){
       pos.vectors_groups <- lapply(pos.vectors_groups, function(p){
@@ -229,3 +229,4 @@ LDA <- function(dataset,
   }
 
 }
+

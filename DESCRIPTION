@@ -24,3 +24,6 @@ Imports:
     doParallel (>= 1.0.17),
     foreach (>= 1.5.2),
     ggrepel (>= 0.9.5)
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
