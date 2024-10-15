@@ -7,15 +7,25 @@
 convert_ID(dataset, gene_column, tax_ID)
 }
 \arguments{
-\item{dataset}{matrix or data.frame}
+\item{dataset}{A matrix or data frame containing the gene information.}
 
-\item{gene_column}{integer. the position of the gene column}
+\item{gene_column}{An integer indicating the position of the column that contains the gene identifiers.}
 
-\item{tax_ID}{integer. Taxonomy ID of the specie}
+\item{tax_ID}{An integer representing the taxonomy ID of the species.}
 }
 \value{
-The dataset with genes converted
+The original dataset with the gene identifiers converted to the preferred gene names.
 }
 \description{
-convert_ID
+Converts gene identifiers in a dataset to the preferred gene name using the specified taxonomy ID.
+}
+\examples{
+\dontrun{
+# Example dataset
+dataset <- data.frame(GeneName = c("BRCA1", "TP53", "EGFR"),
+                      Value = c(5.6, 3.8, 7.2))
+
+# Convert gene identifiers for human (tax_ID = 9606)
+converted_dataset <- convert_ID(dataset, gene_column = 1, tax_ID = 9606)
+}
 }

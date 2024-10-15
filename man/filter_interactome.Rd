@@ -2,7 +2,7 @@
 % Please edit documentation in R/filter_interactome.R
 \name{filter_interactome}
 \alias{filter_interactome}
-\title{filter_interactome}
+\title{Filter interactome data based on score thresholds}
 \usage{
 filter_interactome(
   interactome,
@@ -10,14 +10,31 @@ filter_interactome(
 )
 }
 \arguments{
-\item{interactome}{data.frame or matrix interactome}
+\item{interactome}{A data frame containing interactome data. Each row
+represents an interaction, and columns represent different scores or metrics.}
 
-\item{scores_threshold}{a numeric vector named with the types of scores to filter.
-Default =  c("escore" = 0.15, "dscore" = 0.3)}
+\item{scores_threshold}{A named numeric vector of thresholds, where names
+correspond to column names in the `interactome`. Only rows where at least
+one score exceeds the respective threshold are retained. Default is
+\code{c("escore" = 150, "dscore" = 300)}.}
 }
 \value{
-A data.frame interactome filtered
+A filtered data frame where rows meet the threshold criteria.
 }
 \description{
-filter_interactome
+Filters the interactome data frame or matrix by retaining rows where at least
+one of the specified score columns exceeds the corresponding threshold.
+}
+\examples{
+interactome.hs <- data.frame(protein1 = c("P12345", "P67890", "P23456", "P34567"),
+                             protein2 = c("P54321", "P09876", "P65432", "P76543"),
+                             experimental = c(200, 120, 180, 160),
+                             database = c(400, 300, 350, 320))
+
+# Define custom score thresholds
+score_thresholds <- c("experimental" = 150, "database" = 350)
+
+# Filter the interactome data using these thresholds
+filtered_interactome <- filter_interactome(interactome.hs, score_thresholds)
+
 }

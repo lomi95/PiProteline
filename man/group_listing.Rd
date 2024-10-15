@@ -2,27 +2,47 @@
 % Please edit documentation in R/group_listing.R
 \name{group_listing}
 \alias{group_listing}
-\title{group.listing}
+\title{Group Listing Function}
 \usage{
 group_listing(
-  dataset.t,
-  names_of_groups,
-  ignoreCase = T,
+  dataset,
+  names_of_groups = NULL,
+  ignoreCase = TRUE,
   pos.vectors_groups = NULL
 )
 }
 \arguments{
-\item{dataset.t}{Dataset Samples x Proteins}
+\item{dataset}{A matrix or data frame where rows represent proteins and columns represent samples.}
 
-\item{names_of_groups}{ignored if pos.vectors_groups is not NULL. Names of condition specified within rownames(dataset)}
+\item{names_of_groups}{A character vector specifying the conditions within `rownames(dataset)` to group by. Ignored if `pos.vectors_groups` is not NULL.}
 
-\item{ignoreCase}{ignored if 'names_of_groups' is not used. If FALSE the names in 'names_of_groups' are case sensitives. default T.}
+\item{ignoreCase}{A logical value indicating whether the matching of `names_of_groups` should be case-insensitive. Default is TRUE. Ignored if `pos.vectors_groups` is provided.}
 
-\item{pos.vectors_groups}{list with in each element a vector with the row indexes}
+\item{pos.vectors_groups}{A list where each element is a vector of row indices. If provided, `names_of_groups` and `ignoreCase` are ignored.}
 }
 \value{
-A list with each specified group
+A list where each element is a subset of the dataset corresponding to a specific group of rows.
+
+If `names_of_groups` is provided, rows will be grouped based on matching patterns in the row names of the dataset.
+If `pos.vectors_groups` is provided, rows will be grouped based on the index vectors.
+
+Warnings:
+- If any row is selected for more than one group, a warning will be issued.
+- If some indices in `pos.vectors_groups` exceed the dimensions of the dataset, they will be removed, and a warning will be issued.
+- If any group is empty, a warning will be issued, and the empty groups will be removed.
 }
 \description{
-group.listing
+This function groups rows of a dataset based on user-specified conditions or index positions.
+}
+\examples{
+# Example 1: Using names_of_groups to group rows
+dataset <- matrix(rnorm(100), nrow = 10)
+rownames(dataset) <- c("control_1", "control_2", "treatment_1", "treatment_2",
+                       "control_3", "treatment_3", "control_4", "control_5",
+                       "treatment_4", "treatment_5")
+group_listing(dataset, names_of_groups = c("control", "treatment"))
+
+# Example 2: Using pos.vectors_groups to group rows
+group_listing(dataset, pos.vectors_groups = list(c(1, 3, 5), c(2, 4, 6)))
+
 }

@@ -2,22 +2,45 @@
 % Please edit documentation in R/filter_quantiles.R
 \name{filter_quantiles}
 \alias{filter_quantiles}
-\title{filter_quantiles}
+\title{Filter Centralities Based on Quantiles}
 \usage{
 filter_quantiles(centralities, quantiles, orderBy = NULL)
 }
 \arguments{
-\item{centralities}{data.frame of centralities to filter}
+\item{centralities}{A data frame where each column represents a centrality measure,
+and each row corresponds to a gene or network node.}
 
-\item{quantiles}{quantile to filter}
+\item{quantiles}{Numeric vector specifying the quantile thresholds for filtering.
+Genes with values greater than or equal to the specified quantile for each centrality are retained.}
 
-\item{orderBy}{integer or name of the centrality corresponding to the
-centrality position in 'colnames(centralities)' by which the data.frame rows are ordered.
-Default as 'rownames'}
+\item{orderBy}{An integer or character specifying the centrality column to order the filtered data by.
+If an integer, it should be the index of the column; if a character, it should be the name of the column.
+If `NULL`, the rows will be ordered by row names. Default is `NULL`.}
 }
 \value{
-A data.frame filtered
+A data frame of filtered centrality values, potentially ordered based on the specified column.
+    If no genes meet the condition imposed, a message is displayed.
 }
 \description{
-filter_quantiles
+Filters a data frame of centrality measures by keeping only the rows (genes) that meet
+the specified quantile thresholds across all centralities. Additionally, the resulting
+data frame can be ordered based on a specified centrality.
+}
+\details{
+The function calculates the specified quantile thresholds for each centrality column,
+    filters the genes that satisfy these thresholds, and optionally orders the resulting data frame
+    by the specified centrality column.
+}
+\examples{
+# Example centralities data
+centralities <- data.frame(
+  Betweenness = runif(100),
+  Closeness = runif(100),
+  Degree = runif(100)
+)
+
+# Filter based on quantiles and order by Betweenness
+filtered_result <- filter_quantiles(centralities, quantiles = 0.9, orderBy = "Betweenness")
+print(filtered_result)
+
 }

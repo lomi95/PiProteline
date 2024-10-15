@@ -2,16 +2,37 @@
 % Please edit documentation in R/DAve.R
 \name{DAve}
 \alias{DAve}
-\title{DAve}
+\title{DAve Index Calculation}
 \usage{
 DAve(list.groups)
 }
 \arguments{
-\item{list.groups}{list of groups that we want to compare}
+\item{list.groups}{A list where each element is a numeric matrix or data frame representing a group.
+The columns represent different variables, and the rows represent samples.}
 }
 \value{
-A matrix of DAve indexes
+A matrix of DAve indexes. The rows correspond to the variables, and the columns represent the pairwise
+    comparisons between groups.
 }
 \description{
-DAve
+Computes the Differential Average (DAve) index for each pair of groups, allowing the comparison of the mean values
+across multiple groups.
+}
+\details{
+The DAve index is calculated for all possible pairwise comparisons between the groups in the list.
+    For a pair of groups \(i\) and \(j\), the DAve index for a variable is calculated as:
+    \deqn{DAve_{ij} = \frac{(mean_i - mean_j)}{(mean_i + mean_j)/0.5}}
+    where \(mean_i\) and \(mean_j\) are the column-wise means for groups \(i\) and \(j\), respectively.
+}
+\examples{
+# Example dataset with two groups
+group1 <- matrix(rnorm(20), nrow = 5, ncol = 4)
+group2 <- matrix(rnorm(20), nrow = 5, ncol = 4)
+group3 <- matrix(rnorm(20), nrow = 5, ncol = 4)
+list.groups <- list(Group1 = group1, Group2 = group2, Group3 = group3)
+
+# Calculate DAve
+DAve_result <- DAve(list.groups)
+print(DAve_result)
+
 }

@@ -2,17 +2,25 @@
 % Please edit documentation in R/biggest_component.R
 \name{biggest_component}
 \alias{biggest_component}
-\title{biggest_component}
+\title{Biggest Component of a Graph}
 \usage{
 biggest_component(graph)
 }
 \arguments{
-\item{graph}{check the number graph components and take the biggest one if there
-are more than one}
+\item{graph}{An `igraph` object representing the graph to be analyzed.}
 }
 \value{
-igraph object, the biggest component
+An `igraph` object representing the biggest component of the input graph.
 }
 \description{
-biggest_component
+This function checks the number of components in a graph and returns the largest
+component if there is more than one.
+}
+\examples{
+library(igraph)
+g <- make_ring(10) \%>\%
+  add_vertices(5) \%>\%
+  add_edges(c(1, 11, 1, 12, 1, 13, 1, 14))
+biggest_graph <- biggest_component(g)
+
 }

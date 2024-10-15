@@ -1,44 +1,59 @@
-#' DAve
+#' DAve Index Calculation
 #'
-#' @param list.groups list of groups that we want to compare
+#' Computes the Differential Average (DAve) index for each pair of groups, allowing the comparison of the mean values
+#' across multiple groups.
 #'
-#' @return A matrix of DAve indexes
+#' @param list.groups A list where each element is a numeric matrix or data frame representing a group.
+#'     The columns represent different variables, and the rows represent samples.
+#'
+#' @details The DAve index is calculated for all possible pairwise comparisons between the groups in the list.
+#'     For a pair of groups \(i\) and \(j\), the DAve index for a variable is calculated as:
+#'     \deqn{DAve_{ij} = \frac{(mean_i - mean_j)}{(mean_i + mean_j)/0.5}}
+#'     where \(mean_i\) and \(mean_j\) are the column-wise means for groups \(i\) and \(j\), respectively.
+#'
+#' @return A matrix of DAve indexes. The rows correspond to the variables, and the columns represent the pairwise
+#'     comparisons between groups.
+#' @examples
+#' # Example dataset with two groups
+#' group1 <- matrix(rnorm(20), nrow = 5, ncol = 4)
+#' group2 <- matrix(rnorm(20), nrow = 5, ncol = 4)
+#' group3 <- matrix(rnorm(20), nrow = 5, ncol = 4)
+#' list.groups <- list(Group1 = group1, Group2 = group2, Group3 = group3)
+#'
+#' # Calculate DAve
+#' DAve_result <- DAve(list.groups)
+#' print(DAve_result)
+#'
 #' @export
-#'
 DAve <- function(list.groups){
   names_of_groups <- names(list.groups)
   names(names_of_groups) <- names_of_groups
 
-  list_groups.mean <- sapply(list.groups,colMeans)
-
+  list_groups.mean <- sapply(list.groups, rowMeans)
 
   names_col <- c()
-  for (i in 1:(ncol(list_groups.mean)-1)){
-    for (j in (i+1):ncol(list_groups.mean)){
-      names_col <- c(names_col, paste0(colnames(list_groups.mean)[i],"_vs_",
-                                      colnames(list_groups.mean)[j]))
-      names_col <- c(names_col, paste0(colnames(list_groups.mean)[j],"_vs_",
-                                      colnames(list_groups.mean)[i]))
+  for (i in 1:(ncol(list_groups.mean) - 1)){
+    for (j in (i + 1):ncol(list_groups.mean)){
+      names_col <- c(names_col, paste0(colnames(list_groups.mean)[i], "_vs_", colnames(list_groups.mean)[j]))
+      names_col <- c(names_col, paste0(colnames(list_groups.mean)[j], "_vs_", colnames(list_groups.mean)[i]))
     }
   }
-  DAve <- matrix(nrow = nrow(list_groups.mean), ncol = factorial(ncol(list_groups.mean)),
-                              dimnames = list(rownames(list_groups.mean),names_col))
+
+  DAve <- matrix(nrow = nrow(list_groups.mean), ncol = length(names_col),
+                 dimnames = list(rownames(list_groups.mean), names_col))
 
   n <- 1
-  for (i in 1:(ncol(list_groups.mean)-1)){
-    for (j in (i+1):ncol(list_groups.mean)){
+  for (i in 1:(ncol(list_groups.mean) - 1)){
+    for (j in (i + 1):ncol(list_groups.mean)){
+      DAve[, n] <- (list_groups.mean[, i] - list_groups.mean[, j]) /
+        ((list_groups.mean[, i] + list_groups.mean[, j]) / 0.5)
+      n <- n + 1
 
-      DAve[,n] <- (list_groups.mean[,i]-list_groups.mean[,j])/
-        (list_groups.mean[,i]+list_groups.mean[,j])/0.5
-      n <- n+1
-
-      DAve[,n] <- (list_groups.mean[,j]-list_groups.mean[,i])/
-        (list_groups.mean[,j]+list_groups.mean[,i])/0.5
-      n <- n+1
-
+      DAve[, n] <- (list_groups.mean[, j] - list_groups.mean[, i]) /
+        ((list_groups.mean[, j] + list_groups.mean[, i]) / 0.5)
+      n <- n + 1
     }
   }
 
   return(DAve)
 }
-

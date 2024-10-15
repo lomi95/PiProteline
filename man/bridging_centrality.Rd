@@ -2,7 +2,7 @@
 % Please edit documentation in R/bridging_centrality.R
 \name{bridging_centrality}
 \alias{bridging_centrality}
-\title{bridging_centrality}
+\title{Bridging Centrality Calculation}
 \usage{
 bridging_centrality(
   graph,
@@ -13,24 +13,44 @@ bridging_centrality(
 )
 }
 \arguments{
-\item{graph}{igraph object}
+\item{graph}{An `igraph` object representing the graph.}
 
-\item{Betw}{if already computed it can be given to speed up the computation.
-Default = NULL}
+\item{Betw}{A precomputed betweenness centrality vector to speed up computation.
+If NULL, betweenness will be computed within the function. Default is NULL.}
 
-\item{weights_as_distances}{weights (as distances) of all vertices.
-If NULL it will be computed the unweighted bridging. Default = NULL}
+\item{weights_as_distances}{A vector of weights to be treated as distances on the graph's edges.
+If NULL, unweighted bridging centrality will be computed. Default is NULL.}
 
-\item{range_weights}{The range that should have the weights, used to compute
-the weighted degree. If NULL the range is assumed to be range(weights_as_distances).
-Ignored if weighted degree is FALSE. Default = NULL}
+\item{range_weights}{A numeric range indicating the desired range of weights for the computation.
+If NULL, the range of `weights_as_distances` will be used. Ignored if `degree_weighted = FALSE`.
+Default is NULL.}
 
-\item{degree_weighted}{If TRUE the degree will be computed as the sum of the weights
-(not as distances), instead of the number of the edges}
+\item{degree_weighted}{A logical indicating whether the degree should be computed as the sum of weights
+(when `TRUE`) or the number of edges (when `FALSE`). Default is TRUE.}
 }
 \value{
-A bridging centrality vector
+A numeric vector of bridging centrality values for each vertex.
 }
 \description{
-bridging_centrality
+This function calculates the bridging centrality of each vertex in a graph. The
+bridging centrality combines both the betweenness centrality and the "bridging
+coefficient," a measure of how well-connected a node is relative to its neighbors.
+The bridging coefficient is calculated following the method described by Hwang et al.
+(2006). For weighted graphs, the formula is slightly changed: instead of using
+the degree,  For more details, see the reference below.
+}
+\details{
+When `degree_weighted = TRUE`, instead of using the degree (i.e., the number of edges)
+as described by Hwang et al, the weighted degree is used, which is calculated
+as the sum of the incident edge weights on each vertex.
+}
+\examples{
+library(igraph)
+g <- make_ring(10) \%>\%
+  add_edges(c(1, 5, 2, 6))
+bc <- bridging_centrality(g)
+
+}
+\references{
+Hwang, W., Cho, Y. R., Zhang, A., & Ramanathan, M. (2006). Bridging Centrality: Identifying Bridging Nodes in Scale-Free Networks. *Technical Report*. Department of Computer Science and Engineering, University at Buffalo, State University of New York. Available at: \url{https://cse.buffalo.edu/tech-reports/2006-05.pdf}.
 }

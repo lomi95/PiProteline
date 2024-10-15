@@ -2,7 +2,7 @@
 % Please edit documentation in R/LDA.R
 \name{LDA}
 \alias{LDA}
-\title{Linear Discriminant Analysis}
+\title{Linear Discriminant Analysis (LDA)}
 \usage{
 LDA(
   dataset,
@@ -17,27 +17,39 @@ LDA(
 )
 }
 \arguments{
-\item{dataset}{The dataset to analyze}
+\item{dataset}{The dataset to analyze, where rows represent features (e.g., genes, proteins) and columns represent samples.}
 
-\item{names_of_groups}{names of groups in colnames(dataset), ignored if 'pos.vector_groups' is not NULL}
+\item{names_of_groups}{A character vector specifying the names of the groups present in the column names of the dataset. Ignored if `pos.vectors_groups` is provided.}
 
-\item{gene_column}{position of gene column. If 0 no genes column is present}
+\item{gene_column}{The position of the column containing gene identifiers. If set to 0, no gene column is assumed.}
 
-\item{ignoreCase}{if TRUE the 'names_of_groups' search is not case sensitive. Default = T}
+\item{ignoreCase}{Logical, if TRUE (default), the matching of `names_of_groups` is case insensitive.}
 
-\item{significance.LDA}{significance threshold for features pvalues. Default = 0.05}
+\item{significance.LDA}{Numeric, the significance threshold for feature p-values. Default is 0.05.}
 
-\item{correction.LDA}{correction method to adjusting pvalues. Default = "BH"}
+\item{correction.LDA}{A character string specifying the p-value correction method. Default is "BH" (Benjamini-Hochberg). See `p.adjust.methods` for more options.}
 
-\item{pos.vectors_groups}{List containing column indexes for each group to compare}
+\item{pos.vectors_groups}{A list where each element contains column indices for a group of samples. If provided, `names_of_groups` is ignored.}
 
-\item{boundFC}{Numeric vector. Interval out of which labels are highlithed in red and labels are shown}
+\item{boundFC}{A numeric vector specifying the bounds for highlighting fold changes in Volcano plots. Default is c(-2, 2).}
 
-\item{MDS}{If TRUE computes random forest classification and Multi Dimensional Scaling. Default = T}
+\item{MDS}{Logical, if TRUE (default), computes random forest classification and Multi-Dimensional Scaling (MDS).}
 }
 \value{
-A list with linear discriminant analysis information
+A list containing:
+\item{dataset.LDA}{The filtered dataset with significant features.}
+\item{features_p.values}{A dataframe with p-values and adjusted p-values for the features.}
+\item{features_updown}{A matrix indicating which features are up- or down-regulated in each group.}
+\item{mds.plot}{MDS plot if `MDS = TRUE`.}
+\item{VolcanoPlots}{A list of Volcano plots for pairwise group comparisons.}
 }
 \description{
-Linear Discriminant Analysis
+This function performs linear discriminant analysis on a dataset, identifying significant features across multiple groups. It can also compute random forest classification and Multi-Dimensional Scaling (MDS) if specified.
+}
+\examples{
+dataset <- matrix(rnorm(100), nrow = 20)
+colnames(dataset) <- c("control_1", "control_2", "treatment_1", "treatment_2", "control_3")
+rownames(dataset) <- paste("gene", 1:20, sep = "_")
+LDA(dataset, names_of_groups = c("control", "treatment"), gene_column = 0)
+
 }

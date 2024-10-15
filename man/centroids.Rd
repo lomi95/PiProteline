@@ -2,30 +2,44 @@
 % Please edit documentation in R/centroids.R
 \name{centroids}
 \alias{centroids}
-\title{centroids}
+\title{Compute Graph Centroids}
 \usage{
 centroids(
   graph,
   weights_as_distances = NULL,
-  parallel = T,
+  parallel = TRUE,
   num_cores = round(3 * detectCores()/4)
 )
 }
 \arguments{
-\item{graph}{igraph object}
+\item{graph}{An `igraph` object representing the graph.}
 
-\item{weights_as_distances}{weights (as distances) used to compute the shortest paths.
-If NULL centroids will be computed unweighted. Default = NULL}
+\item{weights_as_distances}{A vector of edge weights to be used as distances for computing the
+shortest paths. If NULL, the centroids will be computed unweighted. Default is NULL.}
 
-\item{parallel}{if TRUE it will be used 'num_cores' to parallel the process.
-Default = T}
+\item{parallel}{Logical, whether to use parallel processing to speed up computation. Default is TRUE.}
 
-\item{num_cores}{number of cores to be used, ignored if parallel = FALSE.
-Default = round(3*detectCores()/4)}
+\item{num_cores}{The number of CPU cores to use for parallel computation. Ignored if `parallel = FALSE`.
+Default is `round(3 * detectCores() / 4)`.}
 }
 \value{
-centroids vector for all nodes
+A numeric vector containing the centroid values for all nodes in the graph.
+    Each value corresponds to the node's centroid score, with lower values indicating higher
+    centrality.
 }
 \description{
-centroids
+This function computes the centroids for all nodes in a graph based on the shortest path distances.
+Centroids are nodes that minimize the difference between the number of nodes closer to them and
+the number of nodes farther from them.
+}
+\details{
+The function can compute centroids using parallel processing to speed up computation, especially
+for large graphs.
+}
+\examples{
+library(igraph)
+g <- make_ring(10)
+centroids <- centroids(g, parallel = FALSE)
+print(centroids)
+
 }

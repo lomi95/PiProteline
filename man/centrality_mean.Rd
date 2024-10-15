@@ -2,26 +2,41 @@
 % Please edit documentation in R/centrality_mean.R
 \name{centrality_mean}
 \alias{centrality_mean}
-\title{centrality_mean}
+\title{Centrality Mean Calculation and Filtering}
 \usage{
 centrality_mean(graph, fun_list, orderBy = NULL, ...)
 }
 \arguments{
-\item{graph}{igraph object}
+\item{graph}{An `igraph` object representing the graph.}
 
-\item{fun_list}{list of centrality functions to apply.
-Use only nodes centralities or only edges centralities.}
+\item{fun_list}{A list of centrality functions to apply. The functions should either
+return node centralities or edge centralities, but not a mix.}
 
-\item{orderBy}{integer or name of the centrality corresponding to the
-centrality position in 'fun_list' by which the data.frame rows are ordered.
-Default as 'rownames'}
+\item{orderBy}{An integer or the name of the centrality by which to order the
+resulting data frame rows. If NULL, the data frame will be ordered by row names.
+Default is NULL.}
 
-\item{...}{evantual further inputs for centrality functions. All functions that
-accept a named parameter will accept it if given}
+\item{...}{Additional arguments to pass to the centrality functions. These will be
+filtered to match the parameters accepted by each function.}
 }
 \value{
-A 'data.frame' with genes as 'rownames', and columns as centrality measures
+A data frame with nodes as row names and centrality measures as columns.
+    Only nodes with a centrality score above the mean for each measure will be included.
 }
 \description{
-centrality_mean
+This function applies multiple centrality measures to a graph and filters nodes
+based on whether their centrality score is above the mean. It returns a data frame
+containing only the common nodes that meet this condition across all centrality
+measures.
+}
+\details{
+You can choose to order the resulting data frame by a specific centrality measure
+using the `orderBy` argument.
+}
+\examples{
+library(igraph)
+g <- make_ring(10)
+centralities <- centrality_mean(g, fun_list = list(degree, closeness))
+print(centralities)
+
 }

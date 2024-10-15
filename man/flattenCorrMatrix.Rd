@@ -2,20 +2,41 @@
 % Please edit documentation in R/flattenCorrMatrix.R
 \name{flattenCorrMatrix}
 \alias{flattenCorrMatrix}
-\title{flattenCorrMatrix}
+\title{Flatten Correlation Matrix}
 \usage{
 flattenCorrMatrix(cormat, pmat, nmat)
 }
 \arguments{
-\item{cormat}{matrix of correlation values}
+\item{cormat}{A matrix of correlation values.}
 
-\item{pmat}{matrix of correlation pvalues}
+\item{pmat}{A matrix of correlation p-values.}
 
-\item{nmat}{matrix of observation pairs}
+\item{nmat}{A matrix of observation pairs used for the correlation calculation.}
 }
 \value{
-A data.frame that flattens the correlation matrices
+A data frame containing the flattened correlation matrices, which includes:
+\item{row}{The row names of the correlation matrix.}
+\item{column}{The column names of the correlation matrix.}
+\item{cor}{The correlation values.}
+\item{p}{The p-values associated with the correlations.}
+\item{n}{The number of observations for each correlation.}
 }
 \description{
-flattenCorrMatrix
+This function takes correlation matrices and flattens them into a data frame format,
+making it easier to work with the correlation results.
+}
+\examples{
+
+library(Hmisc)
+# Create a sample dataset
+data <- matrix(rnorm(100), ncol = 5)
+colnames(data) <- c("Gene1", "Gene2", "Gene3", "Gene4", "Gene5")
+
+# Calculate the correlation
+corr_result <- rcorr(data)
+
+# Flatten the correlation matrix
+flattened_corr <- flattenCorrMatrix(corr_result$r, corr_result$P, corr_result$n)
+print(flattened_corr)
+
 }

@@ -1,21 +1,32 @@
-#' centrality_mean
+#' Centrality Mean Calculation and Filtering
 #'
-#' @param fun_list list of centrality functions to apply.
-#'     Use only nodes centralities or only edges centralities.
-#' @param graph igraph object
-#' @param ... evantual further inputs for centrality functions. All functions that
-#'     accept a named parameter will accept it if given
-#' @param orderBy integer or name of the centrality corresponding to the
-#'     centrality position in 'fun_list' by which the data.frame rows are ordered.
-#'     Default as 'rownames'
+#' This function applies multiple centrality measures to a graph and filters nodes
+#' based on whether their centrality score is above the mean. It returns a data frame
+#' containing only the common nodes that meet this condition across all centrality
+#' measures.
 #'
+#' You can choose to order the resulting data frame by a specific centrality measure
+#' using the `orderBy` argument.
 #'
-#' @importFrom igraph components
-#' @importFrom igraph delete_vertices
+#' @param graph An `igraph` object representing the graph.
+#' @param fun_list A list of centrality functions to apply. The functions should either
+#'     return node centralities or edge centralities, but not a mix.
+#' @param orderBy An integer or the name of the centrality by which to order the
+#'     resulting data frame rows. If NULL, the data frame will be ordered by row names.
+#'     Default is NULL.
+#' @param ... Additional arguments to pass to the centrality functions. These will be
+#'     filtered to match the parameters accepted by each function.
 #'
-#'
-#' @return A 'data.frame' with genes as 'rownames', and columns as centrality measures
+#' @importFrom igraph components delete_vertices
+#' @return A data frame with nodes as row names and centrality measures as columns.
+#'     Only nodes with a centrality score above the mean for each measure will be included.
 #' @export
+#'
+#' @examples
+#' library(igraph)
+#' g <- make_ring(10)
+#' centralities <- centrality_mean(g, fun_list = list(degree, closeness))
+#' print(centralities)
 #'
 centrality_mean <- function(graph,
                             fun_list,
@@ -23,56 +34,102 @@ centrality_mean <- function(graph,
                             ...) {
   Args <- list(...)
 
+  if (components(graph)$no > 1) {
+    old_opt <- options()$warn
+    options(warn = 1)
+    warning("The graph has more than one component, this could give an error if
+            'fun_list' applies to different component conditions")
+    options(warn = old_opt)
+  }
+
   centralities <- sapply(fun_list, function(fun) {
-    # Otteniamo i nomi dei parametri della funzione
+    # Get the function's parameters
     fun_params <- names(formals(fun))
-    # Filtriamo gli argomenti opzionali in base a quelli che la funzione accetta
+    # Filter arguments to include only those accepted by the function
     filtered_args <- Args[names(Args) %in% fun_params]
-    # Applichiamo la funzione al grafo con gli argomenti filtrati
+    # Apply the function with the filtered arguments
     do.call(fun, c(list(graph), filtered_args))
   })
 
-  q.centralities <- apply(centralities,2, function(x){
-    names(which(x >= mean(x)))
-  },simplify = F)
+  # Find nodes with centrality above the mean for each centrality measure
+  q.centralities <- apply(centralities, 2, function(x) {
+    x >= mean(x)
+  })
 
-  commonGenes <- Reduce(intersect, q.centralities)
+  # Find common nodes across all centrality measures
+  commonGenes <- rowSums(q.centralities) == 2
 
-  centralities.filtered <- centralities[commonGenes,]
+  centralities.filtered <- centralities[commonGenes, ]
 
-
-  if (!nrow(centralities.filtered)){
-    message("No genes meet the condition imposed")
-  } else {
-    if (is.numeric(orderBy)){
-      if (length(orderBy) == 1){
-        if (orderBy > 0 & orderBy <= length(fun_list)){
-          ordering <- order(centralities.filtered[,orderBy], decreasing = T)
-        } else {
-          message("orderBy not recgnized, ordering by 'rownames'")
-          ordering <- order(rownames(centralities.filtered))
-        }
-      } else {
-        message("orderBy not recgnized, ordering by 'rownames'")
-        ordering <- order(rownames(centralities.filtered))
-      }
-    } else if (is.character(orderBy)){
-      if (length(orderBy) == 1){
-        if (orderBy %in% names(fun_list)){
-          ordering <- order(centralities.filtered[,orderBy], decreasing = T)
-        } else {
-          message("orderBy not recgnized, ordering by 'rownames'")
-          ordering <- order(rownames(centralities.filtered))
-        }
-      } else {
-        message("orderBy not recgnized, ordering by 'rownames'")
-        ordering <- order(rownames(centralities.filtered))
-      }
+  if (!is.null(rownames(centralities.filtered))){
+    if (!nrow(centralities.filtered)) {
+      message("No genes meet the condition imposed, try changing quantiles")
     } else {
-      ordering <- order(rownames(centralities.filtered))
-    }
+      if (is.numeric(orderBy)) {
+        if (length(orderBy) == 1) {
+          if (orderBy > 0 & orderBy <= length(fun_list)) {
+            ordering <- order(centralities.filtered[, orderBy], decreasing = TRUE)
+          } else {
+            message("orderBy not recognized, ordering by 'rownames'")
+            ordering <- order(rownames(centralities.filtered))
+          }
+        } else {
+          message("orderBy not recognized, ordering by 'rownames'")
+          ordering <- order(rownames(centralities.filtered))
+        }
+      } else if (is.character(orderBy)) {
+        if (length(orderBy) == 1) {
+          if (orderBy %in% names(fun_list)) {
+            ordering <- order(centralities.filtered[, orderBy], decreasing = TRUE)
+          } else {
+            message("orderBy not recognized, ordering by 'rownames'")
+            ordering <- order(rownames(centralities.filtered))
+          }
+        } else {
+          message("orderBy not recognized, ordering by 'rownames'")
+          ordering <- order(rownames(centralities.filtered))
+        }
+      } else {
+        ordering <- order(rownames(centralities.filtered))
+      }
 
-    centralities.filtered  <- centralities.filtered[ordering,]
+      centralities.filtered <- centralities.filtered[ordering, ]
+    }
+  } else {
+
+    if (!nrow(centralities.filtered)) {
+      message("No genes meet the condition imposed, try changing quantiles")
+    } else {
+      if (is.numeric(orderBy)) {
+        if (length(orderBy) == 1) {
+          if (orderBy > 0 & orderBy <= length(fun_list)) {
+            ordering <- order(centralities.filtered[, orderBy], decreasing = TRUE)
+          } else {
+            message("orderBy not recognized, ordering by first column")
+            ordering <- order(centralities.filtered[,1])
+          }
+        } else {
+          message("orderBy not recognized, ordering by first column")
+          ordering <- order(centralities.filtered[,1])
+        }
+      } else if (is.character(orderBy)) {
+        if (length(orderBy) == 1) {
+          if (orderBy %in% names(fun_list)) {
+            ordering <- order(centralities.filtered[, orderBy], decreasing = TRUE)
+          } else {
+            message("orderBy not recognized, ordering by first column")
+            ordering <- order(centralities.filtered[,1])
+          }
+        } else {
+          message("orderBy not recognized, ordering by first column")
+          ordering <- order(centralities.filtered[,1])
+        }
+      } else {
+        ordering <- order(centralities.filtered[,1])
+      }
+
+      centralities.filtered <- centralities.filtered[ordering, ]
+    }
   }
   return(data.frame(centralities.filtered))
 }

@@ -13,8 +13,10 @@
 #' @return A filtered data frame where rows meet the threshold criteria.
 #'
 #' @examples
-#' # Load the interactome data provided with the package
-#' data(interactome.hs)
+#' interactome.hs <- data.frame(protein1 = c("P12345", "P67890", "P23456", "P34567"),
+#'                              protein2 = c("P54321", "P09876", "P65432", "P76543"),
+#'                              experimental = c(200, 120, 180, 160),
+#'                              database = c(400, 300, 350, 320))
 #'
 #' # Define custom score thresholds
 #' score_thresholds <- c("experimental" = 150, "database" = 350)
