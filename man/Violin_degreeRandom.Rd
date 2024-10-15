@@ -2,20 +2,27 @@
 % Please edit documentation in R/Violin_degreeRandom.R
 \name{Violin_degreeRandom}
 \alias{Violin_degreeRandom}
-\title{Violin_degreeRandom}
+\title{Violin Plot of Average Degree Distribution for Random Graphs}
 \usage{
 Violin_degreeRandom(graph, nIter = 100, set_seed = 1)
 }
 \arguments{
-\item{graph}{A igraph object}
+\item{graph}{An `igraph` object representing the original network.}
 
-\item{nIter}{number of random iterations}
+\item{nIter}{An integer specifying the number of random iterations. Default is 100.}
 
-\item{set_seed}{random seed}
+\item{set_seed}{An integer specifying the random seed for reproducibility. Default is 1.}
 }
 \value{
-A ggplot object containing a distribution degree violin plot
+A `ggplot` object containing a violin plot of the distribution of average degrees from the random graphs.
 }
 \description{
-Violin_degreeRandom
+This function generates a violin plot showing the distribution of average degrees from a set of random graphs generated using the Erdős-Rényi model, compared with the average degree of a given input graph.
+}
+\examples{
+# Example usage
+library(igraph)
+g <- make_ring(10)
+Violin_degreeRandom(g, nIter = 100, set_seed = 42)
+
 }

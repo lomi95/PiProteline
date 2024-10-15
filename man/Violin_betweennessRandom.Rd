@@ -2,22 +2,29 @@
 % Please edit documentation in R/Violin_betweennessRandom.R
 \name{Violin_betweennessRandom}
 \alias{Violin_betweennessRandom}
-\title{Violin_betweennessRandom}
+\title{Violin Plot of Average Betweenness Centrality Distribution for Random Graphs}
 \usage{
 Violin_betweennessRandom(graph, nIter = 100, Weights = NULL, set_seed = 1)
 }
 \arguments{
-\item{graph}{A igraph object}
+\item{graph}{An `igraph` object representing the original network.}
 
-\item{nIter}{number of random iterations}
+\item{nIter}{An integer specifying the number of random iterations. Default is 100.}
 
-\item{Weights}{weights (as distances) to use computing the betweenness}
+\item{Weights}{A numeric vector representing edge weights (used as distances) for betweenness calculation. If `NULL`, unweighted betweenness is computed. Default is `NULL`.}
 
-\item{set_seed}{random seed}
+\item{set_seed}{An integer specifying the random seed for reproducibility. Default is 1.}
 }
 \value{
-A ggplot object containing a distribution betweenness violin plot
+A `ggplot` object containing a violin plot of the distribution of average betweenness centrality for the random graphs.
 }
 \description{
-Violin_betweennessRandom
+This function generates a violin plot showing the distribution of average betweenness centrality from a set of random graphs generated to preserve the degree sequence of the original graph, compared with the average betweenness of the given input graph.
+}
+\examples{
+# Example usage
+library(igraph)
+g <- make_ring(10)
+Violin_betweennessRandom(g, nIter = 100, set_seed = 42)
+
 }

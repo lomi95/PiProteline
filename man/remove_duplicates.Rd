@@ -2,26 +2,39 @@
 % Please edit documentation in R/remove_duplicates.R
 \name{remove_duplicates}
 \alias{remove_duplicates}
-\title{remove_duplicates}
+\title{Remove Duplicate Rows Based on Gene Names}
 \usage{
-remove_duplicates(dataset, genes, FUN = max, NAasZero = T, ZeroasNA = F)
+remove_duplicates(dataset, genes, FUN = max, NAasZero = TRUE, ZeroasNA = FALSE)
 }
 \arguments{
-\item{dataset}{The dataset in which we want to remove duplicates}
+\item{dataset}{A data frame from which duplicate rows should be removed.}
 
-\item{genes}{name of the column containing the Gene names, or vector containing
-as elements as the number of dataset rows}
+\item{genes}{An integer specifying the column index, a character specifying the column name for gene names, or a character vector containing gene names for each row. The length of the vector must be equal to the number of rows in the dataset.}
 
-\item{FUN}{the function applied to duplicated values, default max}
+\item{FUN}{A function to apply to duplicate values for resolving duplicates. Default is `max`.}
 
-\item{NAasZero}{if TRUE all NAs will be converted in zeros, default T
-if both NAasZero and ZeroasNA are TRUE, it will give an error}
+\item{NAasZero}{A logical value indicating if NAs should be treated as zeros. Default is `TRUE`. If both `NAasZero` and `ZeroasNA` are `TRUE`, an error will be raised.}
 
-\item{ZeroasNA}{if TRUE all zeros will be converted in NAs, default F}
+\item{ZeroasNA}{A logical value indicating if zeros should be treated as NAs. Default is `FALSE`.}
 }
 \value{
-A data.frame with no more duplicated Genes, with a new gene column called GeneName
+A data frame with duplicate rows removed, based on the specified gene column. The resulting data frame includes a new column named `GeneName` for the gene identifiers.
 }
 \description{
-remove_duplicates
+This function removes duplicate rows from a dataset based on a specified column containing gene names. It applies a specified function to resolve duplicates and allows handling of missing values (NA) and zeros.
+}
+\examples{
+# Example dataset
+data <- data.frame(
+  Gene = c("Gene1", "Gene2", "Gene1", "Gene3"),
+  Value1 = c(5, 2, 7, 3),
+  Value2 = c(NA, 4, 1, 8)
+)
+
+# Remove duplicates based on the "Gene" column, using the default max function
+remove_duplicates(data, genes = "Gene")
+
+# Handle NAs as zeros
+remove_duplicates(data, genes = "Gene", NAasZero = TRUE)
+
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/weights_as_distances.R
 \name{weights_as_distances}
 \alias{weights_as_distances}
-\title{weights_as_distances}
+\title{Convert Edge Weights to Distances}
 \usage{
 weights_as_distances(
   originalWeights = NULL,
@@ -11,17 +11,32 @@ weights_as_distances(
 )
 }
 \arguments{
-\item{originalWeights}{A vector with the node weights. If NULL it will be
-used the first edge.attributes of 'graph'. Default = NULL}
+\item{originalWeights}{A numeric vector with the original weights of the edges. If `NULL`, the first edge attribute from the `graph` is used. Default is `NULL`.}
 
-\item{graph}{igraph object. Not necessary if 'originalWeights' is given. Default = NULL}
+\item{graph}{An `igraph` object. Not necessary if `originalWeights` is provided. If both are `NULL`, an error will occur. Default is `NULL`.}
 
-\item{range.weights}{The range the should have the weights. If NULL it will
-be used range(originalWeights) . Default = NULL}
+\item{range.weights}{A numeric vector of length two specifying the range for the weights. If `NULL`, the range is set to `range(originalWeights)`. Default is `NULL`.}
 }
 \value{
-A vector containing the weights
+A numeric vector containing the transformed weights (distances).
 }
 \description{
-weights_as_distances
+The function `weights_as_distances` takes a set of edge weights and converts them into distances.
+This is done by reversing the weight values, so that higher original weights become smaller distances.
+If the minimum weight is zero, a small constant is added to all weights to avoid issues with betweenness computations.
+}
+\examples{
+# Example with a graph
+library(igraph)
+g <- make_ring(5)
+E(g)$weight <- c(1, 2, 3, 4, 5)
+weights_as_distances(graph = g)
+
+# Example with original weights
+original_weights <- c(10, 20, 30, 40, 50)
+weights_as_distances(originalWeights = original_weights)
+
+}
+\seealso{
+[igraph::edge.attributes]
 }

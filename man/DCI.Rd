@@ -2,16 +2,25 @@
 % Please edit documentation in R/DCI.R
 \name{DCI}
 \alias{DCI}
-\title{DCI}
+\title{DCI Index Calculation for Pairwise Group Comparisons}
 \usage{
 DCI(list.groups)
 }
 \arguments{
-\item{list.groups}{A list of groups that we want to compare}
+\item{list.groups}{A list where each element represents a group of observations (e.g., numeric vectors or matrices of data).}
 }
 \value{
-A matrix of DCI indexes
+A matrix where each column corresponds to the DCI index for pairwise comparisons between groups.
+The column names follow the pattern "Group1_vs_Group2" and "Group2_vs_Group1" for each pairwise comparison.
 }
 \description{
-DCI
+Computes the DCI (Discriminant Component Index) for pairwise comparisons between groups of observations.
+}
+\examples{
+group1 <- matrix(c(1, 2, 3, 4, 5, 6), nrow = 2)
+group2 <- matrix(c(3, 2, 1, 6, 5, 4), nrow = 2)
+group3 <- matrix(c(5, 4, 3, 2, 1, 0), nrow = 2)
+list.groups <- list(Group1 = group1, Group2 = group2, Group3 = group3)
+DCI(list.groups)
+
 }

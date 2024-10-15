@@ -1,32 +1,41 @@
-#' DCI
+#' DCI Index Calculation for Pairwise Group Comparisons
 #'
-#' @param list.groups A list of groups that we want to compare
+#' Computes the DCI (Discriminant Component Index) for pairwise comparisons between groups of observations.
 #'
-#' @return A matrix of DCI indexes
+#' @param list.groups A list where each element represents a group of observations (e.g., numeric vectors or matrices of data).
+#'
+#' @return A matrix where each column corresponds to the DCI index for pairwise comparisons between groups.
+#' The column names follow the pattern "Group1_vs_Group2" and "Group2_vs_Group1" for each pairwise comparison.
+#'
+#' @examples
+#' group1 <- matrix(c(1, 2, 3, 4, 5, 6), nrow = 2)
+#' group2 <- matrix(c(3, 2, 1, 6, 5, 4), nrow = 2)
+#' group3 <- matrix(c(5, 4, 3, 2, 1, 0), nrow = 2)
+#' list.groups <- list(Group1 = group1, Group2 = group2, Group3 = group3)
+#' DCI(list.groups)
+#'
 #' @export
-#'
 DCI <- function(list.groups){
+
   names_of_groups <- names(list.groups)
   names(names_of_groups) <- names_of_groups
 
-  list_groups.mean <- sapply(list.groups,colMeans)
+  list_groups.mean <- sapply(list.groups, rowMeans)
 
   names_col <- c()
-  for (i in 1:(ncol(list_groups.mean)-1)){
-    for (j in (i+1):ncol(list_groups.mean)){
-      names_col <- c(names_col, paste0(colnames(list_groups.mean)[i],"_vs_",
-                                      colnames(list_groups.mean)[j]))
-      names_col <- c(names_col, paste0(colnames(list_groups.mean)[j],"_vs_",
-                                      colnames(list_groups.mean)[i]))
+  for (i in 1:(ncol(list_groups.mean) - 1)){
+    for (j in (i + 1):ncol(list_groups.mean)){
+      names_col <- c(names_col, paste0(colnames(list_groups.mean)[i], "_vs_", colnames(list_groups.mean)[j]))
+      names_col <- c(names_col, paste0(colnames(list_groups.mean)[j], "_vs_", colnames(list_groups.mean)[i]))
     }
   }
-  DCI  <- matrix(nrow = nrow(list_groups.mean), ncol = factorial(ncol(list_groups.mean)),
-                              dimnames = list(rownames(list_groups.mean),names_col))
+
+  DCI <- matrix(nrow = nrow(list_groups.mean), ncol = length(names_col),
+                 dimnames = list(rownames(list_groups.mean), names_col))
 
   n <- 1
-  for (i in 1:(ncol(list_groups.mean)-1)){
-    for (j in (i+1):ncol(list_groups.mean)){
-
+  for (i in 1:(ncol(list_groups.mean) - 1)){
+    for (j in (i + 1):ncol(list_groups.mean)){
       DCI[,n] <- (list_groups.mean[,i]+list_groups.mean[,j])*
         (list_groups.mean[,i]-list_groups.mean[,j])/2
       n <- n+1
@@ -34,9 +43,9 @@ DCI <- function(list.groups){
       DCI[,n] <- (list_groups.mean[,j]+list_groups.mean[,i])*
         (list_groups.mean[,j]-list_groups.mean[,i])/2
       n <- n+1
-
     }
   }
+
 
   return(DCI)
 }
