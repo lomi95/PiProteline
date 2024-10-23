@@ -76,7 +76,8 @@ cor2W_transform <- function(flattCorr, signifCorr) {
 
   # Solve the system
   eps <- (new_max - max(flattCorr$p.adj)) * signifCorr / (signifCorr - new_max)
-  k <- (signifCorr - new_max) / (signifCorr - max(flattCorr$p.adj))
+  # k   <- ( signifCorr - new_max ) / ( signifCorr - max(flattCorr$p.adj) ) oLD
+  k <- new_max*(signifCorr - max(flattCorr$p.adj))/(signifCorr*new_max - (max(flattCorr$p.adj))^2)
 
   # Apply normalization only to non-significant p-values
   ind_notsig <- which(flattCorr$p.adj > signifCorr)

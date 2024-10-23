@@ -110,7 +110,7 @@ Corr_PPI.model <- function(dataset,
     } else if (NAasZero){
       dataset[is.na(dataset)] <- 0
     }
-    Corr <- rcorr(as.matrix(dataset), type = corr.test)
+    Corr <- Hmisc::rcorr(as.matrix(dataset), type = corr.test)
   }
 
   flattCorr <- flattenCorrMatrix(Corr$r,Corr$P,Corr$n)

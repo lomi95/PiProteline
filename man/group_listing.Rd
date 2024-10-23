@@ -8,41 +8,39 @@ group_listing(
   dataset,
   names_of_groups = NULL,
   ignoreCase = TRUE,
-  pos.vectors_groups = NULL
+  pos.vectors_groups = NULL,
+  freq = 0,
+  just_shared_genes = F
 )
 }
 \arguments{
 \item{dataset}{A matrix or data frame where rows represent proteins and columns represent samples.}
 
-\item{names_of_groups}{A character vector specifying the conditions within `rownames(dataset)` to group by. Ignored if `pos.vectors_groups` is not NULL.}
+\item{names_of_groups}{A character vector specifying the conditions within `colnames(dataset)` to group by. Ignored if `pos.vectors_groups` is not `NULL`.}
 
-\item{ignoreCase}{A logical value indicating whether the matching of `names_of_groups` should be case-insensitive. Default is TRUE. Ignored if `pos.vectors_groups` is provided.}
+\item{ignoreCase}{A logical value indicating whether the matching of `names_of_groups` should be case-insensitive. Default is `TRUE`. Ignored if `pos.vectors_groups` is provided.}
 
-\item{pos.vectors_groups}{A list where each element is a vector of row indices. If provided, `names_of_groups` and `ignoreCase` are ignored.}
+\item{pos.vectors_groups}{A list where each element is a vector of column indices. If provided, `names_of_groups` and `ignoreCase` are ignored.}
+
+\item{freq}{A numeric value between 0 and 1 indicating the minimum percentage of non-zero or non-NA values for a protein to be retained in the groups.}
+
+\item{just_shared_genes}{A logical value indicating whether only the genes shared across all groups should be retained. Default is `FALSE`.}
 }
 \value{
-A list where each element is a subset of the dataset corresponding to a specific group of rows.
-
-If `names_of_groups` is provided, rows will be grouped based on matching patterns in the row names of the dataset.
-If `pos.vectors_groups` is provided, rows will be grouped based on the index vectors.
-
-Warnings:
-- If any row is selected for more than one group, a warning will be issued.
-- If some indices in `pos.vectors_groups` exceed the dimensions of the dataset, they will be removed, and a warning will be issued.
-- If any group is empty, a warning will be issued, and the empty groups will be removed.
+A list where each element is a subset of the dataset corresponding to a specific group of columns.
 }
 \description{
-This function groups rows of a dataset based on user-specified conditions or index positions.
+This function groups rows of a dataset based on user-specified conditions or index positions. It allows for flexible grouping of columns, either based on matching patterns in column names or on specified column index vectors.
 }
 \examples{
-# Example 1: Using names_of_groups to group rows
+# Example 1: Using names_of_groups to group columns
 dataset <- matrix(rnorm(100), nrow = 10)
-rownames(dataset) <- c("control_1", "control_2", "treatment_1", "treatment_2",
+colnames(dataset) <- c("control_1", "control_2", "treatment_1", "treatment_2",
                        "control_3", "treatment_3", "control_4", "control_5",
                        "treatment_4", "treatment_5")
 group_listing(dataset, names_of_groups = c("control", "treatment"))
 
-# Example 2: Using pos.vectors_groups to group rows
+# Example 2: Using pos.vectors_groups to group columns
 group_listing(dataset, pos.vectors_groups = list(c(1, 3, 5), c(2, 4, 6)))
 
 }

@@ -28,14 +28,20 @@
 #' @importFrom magrittr %>%
 #' @export
 filter_interactome <- function(interactome, scores_threshold = c("escore" = 150, "dscore" = 300)) {
-  if (!all(names(scores_threshold) %in% colnames(interactome))) {
-    stop("The names of 'scores_threshold' do not match the column names of the interactome")
+
+
+  if (length(scores_threshold)){
+    if (!all(names(scores_threshold) %in% colnames(interactome))) {
+      stop("The names of 'scores_threshold' do not match the column names of the interactome")
+    }
+    df_filtered <- interactome %>%
+      filter(rowSums(across(all_of(names(scores_threshold)),
+                            ~ . > scores_threshold[cur_column()]),
+                     na.rm = TRUE) >= 1)
+
+    return(df_filtered)
   }
+  return(interactome)
 
-  df_filtered <- interactome %>%
-    filter(rowSums(across(all_of(names(scores_threshold)),
-                          ~ . > scores_threshold[cur_column()]),
-                   na.rm = TRUE) >= 1)
 
-  return(df_filtered)
 }

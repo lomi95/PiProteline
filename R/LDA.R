@@ -49,7 +49,12 @@ LDA <- function(dataset,
     correction.LDA <- match.arg(correction.LDA,choices = p.adjust.methods)
   }
   GC <- 0
-  if (gene_column){
+
+  if (is.character(gene_column)){
+    GC <- 1
+    suppressWarnings(dataset[,gene_column][!is.na(as.numeric(substr(dataset[,gene_column],1,1)))] <-
+                       paste0("X",dataset[,gene_column][!is.na(as.numeric(substr(dataset[,gene_column],1,1)))]))
+  } else if (gene_column){
     GC <- 1
     suppressWarnings(dataset[,gene_column][!is.na(as.numeric(substr(dataset[,gene_column],1,1)))] <-
                        paste0("X",dataset[,gene_column][!is.na(as.numeric(substr(dataset[,gene_column],1,1)))]))
@@ -135,6 +140,7 @@ LDA <- function(dataset,
       }
     }
   }
+  labels <- labels[labels!=F]
 
   final_dm_norm_t <- data.frame(labels,dataset.t)
 
@@ -192,13 +198,13 @@ LDA <- function(dataset,
       updown[,2*i]   <- ifelse(meancol[,i]==rowMins(meancol),1,0)
     }
 
-      #####################
+    #####################
     Volcanos <- lapply(seq_along(names_of_groups), function(x){
       Volc.i <- lapply(seq_along(names_of_groups)[-x],function(y){
 
         g1g2 <- output_LDA$GeneName
-        g1 <- colMeans(dataset.t[grep(names_of_groups[x],rownames(dataset.t)),, drop = F])
-        g2 <- colMeans(dataset.t[grep(names_of_groups[y],rownames(dataset.t)),, drop = F])
+        g1 <- colMeans(dataset.t[grep(names_of_groups[x],rownames(dataset.t),ignore.case = ignoreCase),, drop = F])
+        g2 <- colMeans(dataset.t[grep(names_of_groups[y],rownames(dataset.t),ignore.case = ignoreCase),, drop = F])
         df <- data.frame(log2 = log2(g1/g2)[g1g2],
                          pv = -log10(output_LDA$p.adj),
                          gene = g1g2)

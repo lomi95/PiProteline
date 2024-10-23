@@ -13,6 +13,10 @@
 #'
 #' @return A matrix of DAve indexes. The rows correspond to the variables, and the columns represent the pairwise
 #'     comparisons between groups.
+#' @references De Palma A, Agresta AM, Viglio S, Rossi R, D'Amato M, Di Silvestre D, Mauri P, Iadarola P.
+#'     A Shotgun Proteomic Platform for a Global Mapping of Lymphoblastoid Cells to Gain Insight into Nasu-Hakola Disease.
+#'     Int J Mol Sci. 2021 Sep 15;22(18):9959. doi: 10.3390/ijms22189959. PMID: 34576123; PMCID: PMC8472724.
+#'     (https://www.mdpi.com/1422-0067/22/18/9959)
 #' @examples
 #' # Example dataset with two groups
 #' group1 <- matrix(rnorm(20), nrow = 5, ncol = 4)

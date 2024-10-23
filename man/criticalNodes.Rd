@@ -4,7 +4,7 @@
 \alias{criticalNodes}
 \title{Identify specific critical nodes in a dataset}
 \usage{
-criticalNodes(x, names_of_groups, centralities, searching.mode)
+criticalNodes(x, names_of_groups, centralities, searching.mode, ignoreCase = T)
 }
 \arguments{
 \item{x}{A data frame containing the data on groups and centralities.}
@@ -22,6 +22,8 @@ the names of the centrality columns in the data frame.}
   \item{"centralityspecific" or "cs"}{ - Finds critical nodes that are specific to
       centralities within one group and absent in the centralities of other groups.}
  }}
+
+\item{ignoreCase}{A logical that indicate whether the names_of_groups should be searched with case sensitive.}
 }
 \value{
 A list of data frames, where each data frame contains the critical nodes specific

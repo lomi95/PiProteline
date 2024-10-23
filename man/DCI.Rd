@@ -24,3 +24,9 @@ list.groups <- list(Group1 = group1, Group2 = group2, Group3 = group3)
 DCI(list.groups)
 
 }
+\references{
+De Palma A, Agresta AM, Viglio S, Rossi R, D'Amato M, Di Silvestre D, Mauri P, Iadarola P.
+    A Shotgun Proteomic Platform for a Global Mapping of Lymphoblastoid Cells to Gain Insight into Nasu-Hakola Disease.
+    Int J Mol Sci. 2021 Sep 15;22(18):9959. doi: 10.3390/ijms22189959. PMID: 34576123; PMCID: PMC8472724.
+    (https://www.mdpi.com/1422-0067/22/18/9959)
+}

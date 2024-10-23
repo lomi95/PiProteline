@@ -6,7 +6,10 @@
 #'
 #' @return A matrix where each column corresponds to the DCI index for pairwise comparisons between groups.
 #' The column names follow the pattern "Group1_vs_Group2" and "Group2_vs_Group1" for each pairwise comparison.
-#'
+#' @references De Palma A, Agresta AM, Viglio S, Rossi R, D'Amato M, Di Silvestre D, Mauri P, Iadarola P.
+#'     A Shotgun Proteomic Platform for a Global Mapping of Lymphoblastoid Cells to Gain Insight into Nasu-Hakola Disease.
+#'     Int J Mol Sci. 2021 Sep 15;22(18):9959. doi: 10.3390/ijms22189959. PMID: 34576123; PMCID: PMC8472724.
+#'     (https://www.mdpi.com/1422-0067/22/18/9959)
 #' @examples
 #' group1 <- matrix(c(1, 2, 3, 4, 5, 6), nrow = 2)
 #' group2 <- matrix(c(3, 2, 1, 6, 5, 4), nrow = 2)

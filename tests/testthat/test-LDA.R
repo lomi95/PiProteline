@@ -1,5 +1,6 @@
 test_that("LDA performs LDA analysis correctly", {
   # Create mock dataset
+  set.seed(123)
   dataset <- matrix(rnorm(100), nrow = 20)
   colnames(dataset) <- c("control_1", "control_2", "treatment_1", "treatment_2", "control_3")
   rownames(dataset) <- paste("gene", 1:20, sep = "_")
@@ -20,6 +21,7 @@ test_that("LDA performs LDA analysis correctly", {
 
 test_that("LDA handles missing groups correctly", {
   # Create dataset where no groups match
+  set.seed(123)
   dataset <- matrix(rnorm(100), nrow = 20)
   colnames(dataset) <- c("sample1", "sample2", "sample3", "sample4", "sample5")
   rownames(dataset) <- paste("gene", 1:20, sep = "_")
@@ -34,6 +36,7 @@ test_that("LDA handles missing groups correctly", {
 
 test_that("LDA performs correct filtering and significant feature selection", {
   # Create mock dataset
+  set.seed(123)
   dataset <- matrix(rnorm(100), nrow = 20)
   colnames(dataset) <- c("control_1", "control_2", "treatment_1", "treatment_2", "control_3")
   rownames(dataset) <- paste("gene", 1:20, sep = "_")

@@ -22,7 +22,7 @@
 #' @param degree_weighted A logical indicating whether the degree should be computed as the sum of weights
 #'     (when `TRUE`) or the number of edges (when `FALSE`). Default is TRUE.
 #'
-#' @importFrom igraph components delete_vertices edge_attr as_adj neighborhood betweenness set_edge_attr
+#' @importFrom igraph components delete_vertices edge_attr as_adjacency_matrix neighborhood betweenness set_edge_attr
 #' @return A numeric vector of bridging centrality values for each vertex.
 #' @export
 #'
@@ -66,10 +66,10 @@ bridging_centrality <- function(graph,
     if (is.null(range_weights)){
       range_weights <- range(weights_as_distances)
     }
-    graph.ad <- max(range_weights) - as_adj(graph,attr = "ed.att")
+    graph.ad <- max(range_weights) - as_adjacency_matrix(graph,attr = "ed.att")
 
   } else {
-    graph.ad <- as_adj(graph)
+    graph.ad <- as_adjacency_matrix(graph)
   }
 
   # vector that contains vertex degrees

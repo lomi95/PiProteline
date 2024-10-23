@@ -10,6 +10,7 @@ Description: Miscellaneus of functions useful for bioinformatics and in particul
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
+LazyDataCompression: xz
 RoxygenNote: 7.3.2
 Imports:
     ggplot2 (>= 3.5.1),
@@ -29,3 +30,5 @@ Suggests:
     mockery (>= 0.4.4)
 Config/testthat/edition: 3
 Config/testthat/parallel: true
+Depends: 
+    R (>= 3.5.0)
