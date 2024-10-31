@@ -45,7 +45,7 @@ functional_analysis <- function(LDA_pairw.results, Unweighted_CN, Weighted_CN, n
                                 CN.weighted = Weighted_CN)
 
 
-  enrLDA <- enrichment_LDA(summaryTable$summaryLDA$prot_LDA, tax_ID, categories)
+  enrLDA <- enrichment_LDA(prot_LDA = summaryTable$summaryLDA$prot_LDA, tax_ID, categories)
 
   enrNetw      <- enrichment_Netw(summaryTable$summaryUnweightedNetw$prot_Netw,
                                   summaryTable$summaryWeightedNetw$prot_Netw,

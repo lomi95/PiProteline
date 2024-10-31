@@ -65,11 +65,17 @@ network_analysis <- function(data.grouped = NULL, data.grouped.evenDim = NULL, f
                                                     quantile_critical_nodes = quantile_critical_nodes, args_list)
 
   if (violins){
-    Violins <- list(RandomDegree                 = suppressMessages(lapply(unweightedNetwAnalysis$PPI_unweighted,Violin_degreeRandom)),
-                    RandomBetweenness_unweighted = suppressMessages(lapply(unweightedNetwAnalysis$PPI_unweighted,Violin_betweennessRandom)),
-                    RandomBetweenness_weighted   = suppressMessages(lapply(weightedNetwAnalysis$PPI_correlations, function(x){
-                      Violin_betweennessRandom(x,Weights = weights_as_distances(graph = x))
-                    })))
+    vd <- vb <- vwb <- NULL
+    try(vd  <- suppressMessages(lapply(unweightedNetwAnalysis$PPI_unweighted,Violin_degreeRandom)))
+    try(vb  <- suppressMessages(lapply(unweightedNetwAnalysis$PPI_unweighted,Violin_betweennessRandom)))
+    try(vwb <- suppressMessages(lapply(weightedNetwAnalysis$PPI_correlations, function(x){
+      Violin_betweennessRandom(x,Weights = weights_as_distances(graph = x))
+    })))
+
+
+    Violins <- list(RandomDegree                 = vd,
+                    RandomBetweenness_unweighted = vb,
+                    RandomBetweenness_weighted   = vwb)
 
     return(list(PPI_unweighted           = unweightedNetwAnalysis$PPI_unweighted,
                 PPI_correlations         = weightedNetwAnalysis$PPI_correlations,

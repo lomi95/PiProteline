@@ -11,9 +11,9 @@ pipeline(
   normType = "TotSigNorm",
   quantile_critical_nodes = 0.75,
   fun_list = c(Degree = wDegree, Betweenness = igraph::betweenness, Centroids =
-    centroids, Bridging = bridging_centrality, Closeness = closeness),
-  g.interactome = g.interactome,
-  violins = T,
+    centroids, Bridging = bridging_centrality, Closeness = igraph::closeness),
+  g.interactome = NULL,
+  violins = F,
   categories = c("Component", "Function", "Process", "RCTM", "WikiPathway"),
   tax_ID = 9606,
   ...

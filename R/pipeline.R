@@ -21,7 +21,7 @@
 #'   \item{networkAnalysis}{Unweighted and weighted PPI analysis, centralities, critical nodes, and violin plots.}
 #'   \item{functionalAnalysis}{Results of the functional analysis, including enrichment and intersecting enrichment terms.}
 #' }
-#' @importFrom igraph degree betweenness as_adjacency_matrix V edge.attributes graph_from_edgelist
+#' @importFrom igraph degree betweenness as_adjacency_matrix V edge.attributes graph_from_edgelist closeness
 #' @export
 #'
 #' @examples
@@ -41,13 +41,17 @@ pipeline <- function(dataset,names_of_groups,gene_column = 1,
                                   Betweenness = igraph::betweenness,
                                   Centroids   = centroids,
                                   Bridging    = bridging_centrality,
-                                  Closeness   = closeness),
-                     g.interactome = g.interactome,
-                     violins = T,
+                                  Closeness   = igraph::closeness),
+                     g.interactome = NULL,
+                     violins = F,
                      categories = c("Component","Function","Process","RCTM","WikiPathway"),
                      tax_ID = 9606,
                      ...){
   args_list <- list(...)
+
+  if (is.null(g.interactome)){
+    g.interactome <- graph_from_edgelist(as.matrix(interactome_hs[,3:4]),directed = FALSE)
+  }
 
   message("preprocessing data")
   preprocData <- preprocessing_data(dataset,names_of_groups,gene_column,normType,args_list)
@@ -69,9 +73,9 @@ pipeline <- function(dataset,names_of_groups,gene_column = 1,
   networkAnalysis <- network_analysis(data.grouped = preprocData$data.grouped,
                                       data.grouped.evenDim = preprocData$data.grouped.evenDim,
                                       fun_list = fun_list,
-                                      g.interactome = igraph::graph_from_edgelist(as_matrix(interactome_hs[,3:4]),directed = F),
+                                      g.interactome = g.interactome,
                                       quantile_critical_nodes = quantile_critical_nodes,
-                                      violins = violins)
+                                      violins = violins, ... = args_list)
 
   message("computing functional analysis - ", Sys.time())
   functionalAnalysis <- functional_analysis(LDA_pairw.results = quantitativeAnalysis$LDA_pairw.results,

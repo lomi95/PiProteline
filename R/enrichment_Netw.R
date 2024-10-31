@@ -37,22 +37,20 @@
 enrichment_Netw <- function(prot_UnwNetw, prot_WNetw, names_of_groups, tax_ID, categories, diff = TRUE) {
   names(names_of_groups) <- names_of_groups
   enr_Net <- suppressMessages(lapply(names_of_groups, function(x) {
-    # Unire i gruppi di proteine non pesate e pesate
+
     prot_group <- union(unlist(prot_UnwNetw[grep(x, names(prot_UnwNetw))]),
                         unlist(prot_WNetw[grep(x, names(prot_WNetw))]))
-    # Eseguire l'arricchimento utilizzando la libreria rbioapi
     enr <- rbioapi::rba_string_enrichment(prot_group, tax_ID, split_df = FALSE)
-    # Filtrare i risultati per le categorie specificate
-    if (!is.null(enr)) {
+
+    if (!is.null(enr) & nrow(enr)) {
       return(enr %>% dplyr::filter(category %in% categories))
     } else {
-      # Restituire un dataframe vuoto se l'arricchimento non produce risultati
+
       enr <- rbioapi::rba_string_enrichment(c("RPL24", "RPL26", "RPL29", "RPL34", "RPS15", "RPS24"), tax_ID, split_df = FALSE)
       return(enr[0, ])
     }
   }))
 
-  # Calcolare l'arricchimento differenziale se richiesto
   if (diff) {
     enr_Net.diff <- list()
     for (I in 1:(length(names_of_groups) - 1)) {
@@ -60,7 +58,6 @@ enrichment_Netw <- function(prot_UnwNetw, prot_WNetw, names_of_groups, tax_ID, c
         i <- names_of_groups[I]
         j <- names_of_groups[J]
 
-        # Arricchimento specifico per ciascuna coppia di gruppi
         enr_Net.diff[[paste0(i, "_vs_", j)]] <- enr_Net[[i]] %>% dplyr::filter(term %in% setdiff(term, enr_Net[[j]]$term))
         enr_Net.diff[[paste0(j, "_vs_", i)]] <- enr_Net[[j]] %>% dplyr::filter(term %in% setdiff(term, enr_Net[[i]]$term))
       }

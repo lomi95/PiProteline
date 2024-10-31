@@ -31,7 +31,7 @@ FC <- function(list.groups){
     }
   }
 
-  FC <-matrix(nrow = nrow(list_groups.mean), ncol = factorial(ncol(list_groups.mean)),
+  FC <-matrix(nrow = nrow(list_groups.mean), ncol = length(names_col),
               dimnames = list(rownames(list_groups.mean),names_col))
 
   n <- 1

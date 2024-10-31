@@ -28,12 +28,12 @@
 LDA_pairwise <- function(dataset, names_of_groups, gene_column, ...) {
   combinations <- utils::combn(names_of_groups, 2)
 
-  LDA.pairwise <- apply(combinations, 2, function(x) {
+  LDA.pairwise <- suppressMessages(apply(combinations, 2, function(x) {
     LDA(dataset = dataset,
         names_of_groups = x,
         gene_column = gene_column,
         ...)
-  })
+  }))
 
   names(LDA.pairwise) <- apply(combinations, 2, paste, collapse = "_vs_")
 

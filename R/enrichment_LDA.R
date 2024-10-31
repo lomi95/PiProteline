@@ -28,8 +28,13 @@
 #' @export
 enrichment_LDA <- function(prot_LDA, tax_ID, categories, diff = T){
   enr_LDA <- suppressMessages(lapply(prot_LDA, function(x){
-    enr <- rbioapi::rba_string_enrichment(x, tax_ID, split_df = F)
-    if (!is.null(enr)){
+    if (length(x)){
+      enr <- rbioapi::rba_string_enrichment(x, tax_ID, split_df = F)
+    } else {
+      enr <- rbioapi::rba_string_enrichment(c("RPL24","RPL26","RPL29","RPL34","RPS15","RPS24"), tax_ID, split_df = F)
+      return(enr[0,])
+    }
+    if (!is.null(enr) & nrow(enr)){
       return(enr %>% dplyr::filter(category %in% categories))
     } else {
       enr <- rbioapi::rba_string_enrichment(c("RPL24","RPL26","RPL29","RPL34","RPS15","RPS24"), tax_ID, split_df = F)

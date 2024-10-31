@@ -36,21 +36,21 @@ quantitative_analysis <- function(dataset, names_of_groups, gene_column, data.gr
   args_LDA <- args_list[intersect(names(args_list), names(formals(LDA)))]
 
   # Perform LDA
-  LDA_results <- do.call(LDA,
-                         c(list(dataset = dataset,
-                                names_of_groups = names_of_groups,
-                                gene_column = gene_column),
-                           args_LDA))
+  LDA_pairw.results <- do.call(LDA_pairwise,
+                               c(list(dataset = dataset,
+                                      names_of_groups = names_of_groups,
+                                      gene_column = gene_column),
+                                 args_LDA))
 
   # Perform pairwise LDA if more than two groups
   if (length(names_of_groups) > 2) {
-    LDA_pairw.results <- do.call(LDA_pairwise,
-                                 c(list(dataset = dataset,
-                                        names_of_groups = names_of_groups,
-                                        gene_column = gene_column),
-                                   args_LDA))
+    LDA_results <- do.call(LDA,
+                           c(list(dataset = dataset,
+                                  names_of_groups = names_of_groups,
+                                  gene_column = gene_column),
+                             args_LDA))
   } else {
-    LDA_pairw.results <- NULL
+    LDA_results <- NULL
   }
 
   # Calculate additional indices
@@ -67,9 +67,9 @@ quantitative_analysis <- function(dataset, names_of_groups, gene_column, data.gr
   DCI_index <- DCI(data.grouped.full)
   Fold_Change <- FC(data.grouped.full)
 
-  return(list(LDA_results = LDA_results,
+  return(list(LDA_results       = LDA_results,
               LDA_pairw.results = LDA_pairw.results,
-              DAve_index = DAve_index,
-              DCI_index = DCI_index,
+              DAve_index  = DAve_index,
+              DCI_index   = DCI_index,
               Fold_Change = Fold_Change))
 }

@@ -39,7 +39,7 @@ descriptive_stats_cols <- function(data) {
       )
     } else {
       c(
-        Count = sum(is.na(x)),
+        Count = sum(!is.na(x)),
         Missing = sum(is.na(x)),
         Mean = mean(x, na.rm = TRUE),
         SD = sd(x, na.rm = TRUE),
