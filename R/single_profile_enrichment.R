@@ -91,7 +91,7 @@ single_profile_enrichment <- function(dataset, names_of_groups, gene_column = 1,
                              meanEnrTable,
                              daveEnrTable,
                              pvalue_LDA = ldaEnrTable$features_p.values$
-                             p.adj[ldaEnrTable$features_p.values$p.adj < 0.05])
+                               p.adj[ldaEnrTable$features_p.values$p.adj < 0.05])
 
 }
 
