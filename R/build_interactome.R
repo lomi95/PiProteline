@@ -58,9 +58,9 @@ build_interactome <- function(directory_interactome = NULL, tax_ID,
   p2.mapped <- mapped_id$preferredName[match(interactome.filtered$protein2,
                                                      mapped_id$queryItem)]
 
-  interactome.final <- cbind.data.frame(interactome[,1:2],
+  interactome.final <- cbind.data.frame(interactome.filtered[,1:2],
                                         p1.mapped,p2.mapped,
-                                        interactome[,3:10])
+                                        interactome.filtered[,3:10])
 
   return(interactome.final)
 }
