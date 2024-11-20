@@ -10,6 +10,7 @@ pipeline(
   gene_column = 1,
   normType = "TotSigNorm",
   quantile_critical_nodes = 0.75,
+  significance.LDA = 0.05,
   fun_list = c(Degree = wDegree, Betweenness = igraph::betweenness, Centroids =
     centroids, Bridging = bridging_centrality, Closeness = igraph::closeness),
   g.interactome = NULL,
@@ -29,6 +30,8 @@ pipeline(
 \item{normType}{The type of normalization to apply. Default is "TotSigNorm".}
 
 \item{quantile_critical_nodes}{A numeric value specifying the quantile threshold for identifying critical nodes. Default is 0.75.}
+
+\item{significance.LDA}{A numeric argument indicating the significance threshold for Linear Discriminant Analysis}
 
 \item{fun_list}{A named list of functions for calculating centralities. Default is a set of common centrality measures.}
 

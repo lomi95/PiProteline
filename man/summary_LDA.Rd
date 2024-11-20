@@ -4,10 +4,10 @@
 \alias{summary_LDA}
 \title{Summary of LDA Analysis Results}
 \usage{
-summary_LDA(LDA_pairw.results)
+summary_LDA(volcano_plots)
 }
 \arguments{
-\item{LDA_pairw.results}{A list containing LDA results for pairwise comparisons, where each comparison includes a list of volcano plots with up-regulated and down-regulated genes.}
+\item{volcano_plots}{A list containing LDA results for pairwise comparisons, where each comparison includes a list of volcano plots with up-regulated and down-regulated genes.}
 }
 \value{
 A list containing:
@@ -22,7 +22,7 @@ This function generates a summary of linear discriminant analysis (LDA) results 
 \examples{
 \dontrun{
 # Example usage
-LDA_pairw.results <- list(
+volcano_plots <- list(
   Comparison1 = list(
     VolcanoPlots = list(
       list(list(Genes = list(UP = c("Gene1", "Gene2"), DOWN = c("Gene3"))))
@@ -34,6 +34,6 @@ LDA_pairw.results <- list(
     )
   )
 )
-summary_LDA(LDA_pairw.results)
+summary_LDA(volcano_plots)
 }
 }

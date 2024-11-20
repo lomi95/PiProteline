@@ -24,8 +24,6 @@
 #' \item{dataset.LDA}{The filtered dataset with significant features.}
 #' \item{features_p.values}{A dataframe with p-values and adjusted p-values for the features.}
 #' \item{features_updown}{A matrix indicating which features are up- or down-regulated in each group.}
-#' \item{mds.plot}{MDS plot if `MDS = TRUE`.}
-#' \item{VolcanoPlots}{A list of Volcano plots for pairwise group comparisons.}
 #'
 #' @examples
 #' dataset <- matrix(rnorm(100), nrow = 20)
@@ -198,52 +196,16 @@ LDA <- function(dataset,
       updown[,2*i]   <- ifelse(meancol[,i]==rowMins(meancol),1,0)
     }
 
-    #####################
-    Volcanos <- lapply(seq_along(names_of_groups), function(x){
-      Volc.i <- lapply(seq_along(names_of_groups)[-x],function(y){
-
-        g1g2 <- output_LDA$GeneName
-        g1 <- colMeans(dataset.t[grep(names_of_groups[x],rownames(dataset.t),ignore.case = ignoreCase),, drop = F])
-        g2 <- colMeans(dataset.t[grep(names_of_groups[y],rownames(dataset.t),ignore.case = ignoreCase),, drop = F])
-        df <- data.frame(log2 = log2(g1/g2)[g1g2],
-                         pv = -log10(output_LDA$p.adj),
-                         gene = g1g2)
-        df$gene[df$log2 >= min(boundFC) & df$log2 <= max(boundFC)] <- ""
-
-
-        V.ij <- Volcano_Plot(df,boundFC, significance.LDA, names_of_groups[x], names_of_groups[y])
-
-        return(V.ij)
-
-      })
-      names(Volc.i) <- paste0("vs.", names_of_groups[seq_along(names_of_groups)[-x]])
-
-      return(Volc.i)
-    })
-
-    names(Volcanos) <- names_of_groups
-
-    if (MDS){
-      mds.plot <- MDS_plot(dataset.LDA,names_of_groups,
-                           pos.vectors_groups = pos.vectors_groups,
-                           ignoreCase = ignoreCase)
-    } else {
-      mds.plot <- NULL
-    }
 
     return(list(dataset.LDA       = dataset.LDA,
                 features_p.values = output_LDA,
-                features_updown   = updown,
-                mds.plot          = mds.plot,
-                VolcanoPlots      = Volcanos))
+                features_updown   = updown))
 
   } else {
     message("No significant features were found, try with a greater 'significance.LDA' threshold or another 'correction.LDA' method")
     return(list(dataset.LDA       = NULL,
                 features_p.values = output_LDA,
-                features_updown   = NULL,
-                mds.plot          = NULL,
-                VolcanoPlots      = NULL))
+                features_updown   = NULL))
   }
 
 }

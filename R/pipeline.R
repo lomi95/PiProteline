@@ -7,6 +7,7 @@
 #' @param gene_column The name or index of the column containing gene identifiers. Default is 1.
 #' @param normType The type of normalization to apply. Default is "TotSigNorm".
 #' @param quantile_critical_nodes A numeric value specifying the quantile threshold for identifying critical nodes. Default is 0.75.
+#' @param significance.LDA A numeric argument indicating the significance threshold for Linear Discriminant Analysis
 #' @param fun_list A named list of functions for calculating centralities. Default is a set of common centrality measures.
 #' @param g.interactome An `igraph` object representing the interactome of the species, used for mapping protein interactions.
 #' @param violins Logical value indicating whether to create violin plots. Default is `TRUE`.
@@ -37,6 +38,7 @@
 
 pipeline <- function(dataset,names_of_groups,gene_column = 1,
                      normType = "TotSigNorm", quantile_critical_nodes = 0.75,
+                     significance.LDA = 0.05,
                      fun_list = c(Degree      = wDegree,
                                   Betweenness = igraph::betweenness,
                                   Centroids   = centroids,
@@ -67,6 +69,7 @@ pipeline <- function(dataset,names_of_groups,gene_column = 1,
                                                 names_of_groups = names_of_groups,
                                                 gene_column = 1,
                                                 data.grouped.full = preprocData$data.grouped.full,
+                                                significance.LDA = significance.LDA,
                                                 ... = args_list)
 
   message("computing network analysis - ", Sys.time())
@@ -78,10 +81,11 @@ pipeline <- function(dataset,names_of_groups,gene_column = 1,
                                       violins = violins, ... = args_list)
 
   message("computing functional analysis - ", Sys.time())
-  functionalAnalysis <- functional_analysis(LDA_pairw.results = quantitativeAnalysis$LDA_pairw.results,
-                                            Unweighted_CN     = networkAnalysis$Unweighted_criticalNodes,
-                                            Weighted_CN       = networkAnalysis$Weighted_criticalNodes,
-                                            names_of_groups,tax_ID, categories)
+  functionalAnalysis <- functional_analysis(dataset = preprocData$data.norm,
+                                            volcano_plots = quantitativeAnalysis$volcano_plots,
+                                            Unweighted_CN = networkAnalysis$Unweighted_criticalNodes,
+                                            Weighted_CN   = networkAnalysis$Weighted_criticalNodes,
+                                            names_of_groups,tax_ID, categories, ... = args_list)
 
 
 

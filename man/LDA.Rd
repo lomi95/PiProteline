@@ -40,8 +40,6 @@ A list containing:
 \item{dataset.LDA}{The filtered dataset with significant features.}
 \item{features_p.values}{A dataframe with p-values and adjusted p-values for the features.}
 \item{features_updown}{A matrix indicating which features are up- or down-regulated in each group.}
-\item{mds.plot}{MDS plot if `MDS = TRUE`.}
-\item{VolcanoPlots}{A list of Volcano plots for pairwise group comparisons.}
 }
 \description{
 This function performs linear discriminant analysis on a dataset, identifying significant features across multiple groups. It can also compute random forest classification and Multi-Dimensional Scaling (MDS) if specified.

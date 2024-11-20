@@ -4,10 +4,10 @@
 \alias{summary_table}
 \title{Summary Table for Network Analysis Results}
 \usage{
-summary_table(LDA_pairw.results, CN.unweighted, CN.weighted)
+summary_table(volcano_plots, CN.unweighted, CN.weighted)
 }
 \arguments{
-\item{LDA_pairw.results}{The results from pairwise LDA analysis.}
+\item{volcano_plots}{The results from pairwise LDA analysis.}
 
 \item{CN.unweighted}{The list of critical nodes identified in unweighted networks.}
 
@@ -41,7 +41,7 @@ CN_unweighted <- list(CN.M = data.frame(GeneName = c("Gene1", "Gene3"),
 CN_weighted <- list(CN.M = data.frame(GeneName = c("Gene1", "Gene2"),
                         Centrality_weighted = c(3, 6)))
 
-summary_table(LDA_pairw.results = LDA_results, CN.unweighted = CN_unweighted,
+summary_table(volcano_plots = LDA_results, CN.unweighted = CN_unweighted,
                     CN.weighted = CN_weighted)
 }
 }

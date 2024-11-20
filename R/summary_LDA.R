@@ -2,7 +2,7 @@
 #'
 #' This function generates a summary of linear discriminant analysis (LDA) results for pairwise comparisons. It extracts up-regulated and down-regulated genes from the LDA results and constructs a gene matrix indicating the presence of each gene across different comparisons.
 #'
-#' @param LDA_pairw.results A list containing LDA results for pairwise comparisons, where each comparison includes a list of volcano plots with up-regulated and down-regulated genes.
+#' @param volcano_plots A list containing LDA results for pairwise comparisons, where each comparison includes a list of volcano plots with up-regulated and down-regulated genes.
 #'
 #' @return A list containing:
 #' \describe{
@@ -14,7 +14,7 @@
 #' @examples
 #' \dontrun{
 #' # Example usage
-#' LDA_pairw.results <- list(
+#' volcano_plots <- list(
 #'   Comparison1 = list(
 #'     VolcanoPlots = list(
 #'       list(list(Genes = list(UP = c("Gene1", "Gene2"), DOWN = c("Gene3"))))
@@ -26,15 +26,15 @@
 #'     )
 #'   )
 #' )
-#' summary_LDA(LDA_pairw.results)
+#' summary_LDA(volcano_plots)
 #' }
-summary_LDA <- function(LDA_pairw.results) {
+summary_LDA <- function(volcano_plots) {
   prot_LDA <- list()
 
   # Estrarre geni up-regulated e down-regulated per ciascun confronto
-  for (comparison in names(LDA_pairw.results)) {
-    up_genes <- LDA_pairw.results[[comparison]]$VolcanoPlots[[1]][[1]]$Genes$UP
-    down_genes <- LDA_pairw.results[[comparison]]$VolcanoPlots[[1]][[1]]$Genes$DOWN
+  for (comparison in names(volcano_plots)) {
+    up_genes <- volcano_plots[[comparison]][[1]][[1]]$Genes$UP
+    down_genes <- volcano_plots[[comparison]][[1]][[1]]$Genes$DOWN
 
     prot_LDA[[paste0(comparison, "_UP")]] <- up_genes
     prot_LDA[[paste0(comparison, "_DOWN")]] <- down_genes

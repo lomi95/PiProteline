@@ -1,4 +1,4 @@
-#' Volcano Plot for Differential Expression Analysis
+#' Volcano plot for Differential Expression Analysis
 #'
 #' This function generates a volcano plot to visualize differential expression analysis results, highlighting genes that are significantly up-regulated or down-regulated based on log-fold change and p-value thresholds.
 #'
@@ -25,14 +25,14 @@
 #'   gene = paste0("Gene", 1:1000)
 #' )
 #' # Generate volcano plot
-#' result <- Volcano_Plot(example_data, boundFC = c(-1, 1), thr_pvalue = 0.05)
+#' result <- volcano_plot(example_data, boundFC = c(-1, 1), thr_pvalue = 0.05)
 #' # Display the plot
 #' print(result$plot)
 #' # List up-regulated and down-regulated genes
 #' result$Genes
 #'
 #' @export
-Volcano_Plot <- function(df, boundFC, thr_pvalue, Name_1 = "Group1", Name_2 = "Group2") {
+volcano_plot <- function(df, boundFC, thr_pvalue, Name_1 = "Group1", Name_2 = "Group2") {
   thr_pvalue.log <- -log10(thr_pvalue)
   log2 <- df$log2
   pv <- df$pv
@@ -61,23 +61,23 @@ Volcano_Plot <- function(df, boundFC, thr_pvalue, Name_1 = "Group1", Name_2 = "G
                     max.overlaps = 5) +
     theme_minimal() +
     theme(legend.position = "none") +
-    labs(title = paste0("Volcano Plot - UP ", Name_1, " vs DOWN ", Name_2),
+    labs(title = paste0("volcano plot - UP ", Name_1, " vs DOWN ", Name_2),
          x = "log2(FC)",
-         y = "-log10(p.adjusted)") +
-    geom_label(
-      x = min(log2[log2 != -Inf]) + (max(log2[log2 != Inf]) - min(log2[log2 != -Inf])) / 18, y = max(pv),
-      label = paste0("Down-regulated: ", num_down),
-      label.padding = unit(0.55, "lines"),
-      label.size = 0.35,
-      color = "blue",
-      fill = NA) +
-    geom_label(
-      x = max(log2[log2 != Inf]) - (max(log2[log2 != Inf]) - min(log2[log2 != -Inf])) / 18, y = max(pv),
-      label = paste0("Up-regulated: ", num_up),
-      label.padding = unit(0.55, "lines"),
-      label.size = 0.35,
-      color = "red",
-      fill = NA)
+         y = "-log10(p.adjusted)") # +
+    # geom_label(
+    #   x = min(log2[log2 != -Inf]) + (max(log2[log2 != Inf]) - min(log2[log2 != -Inf])) / 18, y = max(pv),
+    #   label = paste0("Down-regulated: ", num_down),
+    #   label.padding = unit(0.55, "lines"),
+    #   label.size = 0.35,
+    #   color = "blue",
+    #   fill = NA) +
+    # geom_label(
+    #   x = max(log2[log2 != Inf]) - (max(log2[log2 != Inf]) - min(log2[log2 != -Inf])) / 18, y = max(pv),
+    #   label = paste0("Up-regulated: ", num_up),
+    #   label.padding = unit(0.55, "lines"),
+    #   label.size = 0.35,
+    #   color = "red",
+    #   fill = NA)
 
   return(list(plot = Vplot,
               Genes = list(UP = df$gene[df$color == "up-regulated"],

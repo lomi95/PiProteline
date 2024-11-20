@@ -9,6 +9,7 @@ quantitative_analysis(
   names_of_groups,
   gene_column,
   data.grouped.full = NULL,
+  significance.LDA,
   ...
 )
 }
@@ -20,6 +21,8 @@ quantitative_analysis(
 \item{gene_column}{An integer or character specifying the column in the dataset containing gene names.}
 
 \item{data.grouped.full}{List of data frames with the same number of rows.}
+
+\item{significance.LDA}{A numeric argument indicating the significance threshold for Linear Discriminant Analysis}
 
 \item{...}{Additional arguments passed to the underlying functions for LDA, DAve, DCI, and fold change calculations.}
 }
@@ -47,6 +50,6 @@ data$Gene <- paste0("Gene_",1:100)
 
 # Perform quantitative analysis
 quantitative_analysis(data, names_of_groups = c("Group1", "Group2", "Group3"),
-                      gene_column = "Gene")
+                      gene_column = "Gene", significance.LDA = 0.05)
 
 }

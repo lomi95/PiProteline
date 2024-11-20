@@ -24,7 +24,8 @@ Imports:
     parallel (>= 4.3.3),
     doParallel (>= 1.0.17),
     foreach (>= 1.5.2),
-    ggrepel (>= 0.9.5)
+    ggrepel (>= 0.9.5),
+    purrr (>= 1.0.2)
 Suggests: 
     testthat (>= 3.0.0),
     mockery (>= 0.4.4)

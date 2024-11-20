@@ -5,16 +5,20 @@
 \title{Functional Analysis for Network and LDA Results}
 \usage{
 functional_analysis(
-  LDA_pairw.results,
+  dataset,
+  volcano_plots,
   Unweighted_CN,
   Weighted_CN,
   names_of_groups,
   tax_ID,
-  categories
+  categories,
+  ...
 )
 }
 \arguments{
-\item{LDA_pairw.results}{The results from pairwise LDA analysis.}
+\item{dataset}{A data.frame containing protein samples, with column named after names of groups}
+
+\item{volcano_plots}{The results from pairwise LDA analysis.}
 
 \item{Unweighted_CN}{The list of critical nodes identified in unweighted networks.}
 
@@ -25,6 +29,8 @@ functional_analysis(
 \item{tax_ID}{An integer representing the taxonomy ID for the organism (e.g., 9606 for human).}
 
 \item{categories}{A character vector specifying the enrichment categories to filter (e.g., "GO", "KEGG").}
+
+\item{...}{Additional arguments passed to \link{single_profile_enrichment} function.}
 }
 \value{
 A list containing:
@@ -41,7 +47,7 @@ This function performs a functional analysis combining LDA pairwise results and 
 \examples{
 \dontrun{
 # Example usage
-LDA_pairw.results <- list(
+volcano_plots <- list(
   Comparison1 = list(
     VolcanoPlots = list(
       list(list(Genes = list(UP = c("Gene1", "Gene2"), DOWN = c("Gene3"))))
@@ -54,7 +60,7 @@ names_of_groups <- c("Group1", "Group2")
 tax_ID <- 9606
 categories <- c("GO", "KEGG")
 
-functional_analysis(LDA_pairw.results, Unweighted_CN, Weighted_CN,
+functional_analysis(volcano_plots, Unweighted_CN, Weighted_CN,
                     names_of_groups, tax_ID, categories)
 
 }

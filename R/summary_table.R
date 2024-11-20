@@ -2,7 +2,7 @@
 #'
 #' This function generates a summary table that merges results from pairwise LDA, unweighted network critical nodes, and weighted network critical nodes. It calculates a combined score for each gene based on various metrics.
 #'
-#' @param LDA_pairw.results The results from pairwise LDA analysis.
+#' @param volcano_plots The results from pairwise LDA analysis.
 #' @param CN.unweighted The list of critical nodes identified in unweighted networks.
 #' @param CN.weighted The list of critical nodes identified in weighted networks.
 #'
@@ -31,12 +31,12 @@
 #' CN_weighted <- list(CN.M = data.frame(GeneName = c("Gene1", "Gene2"),
 #'                         Centrality_weighted = c(3, 6)))
 #'
-#' summary_table(LDA_pairw.results = LDA_results, CN.unweighted = CN_unweighted,
+#' summary_table(volcano_plots = LDA_results, CN.unweighted = CN_unweighted,
 #'                     CN.weighted = CN_weighted)
 #' }
-summary_table <- function(LDA_pairw.results, CN.unweighted, CN.weighted) {
+summary_table <- function(volcano_plots, CN.unweighted, CN.weighted) {
   # Calcolare i riassunti per LDA, rete non pesata e pesata
-  summaryLDA    <- summary_LDA(LDA_pairw.results)
+  summaryLDA    <- summary_LDA(volcano_plots)
   summaryUnwNet <- summary_CriticalNodes(CN.unweighted, "_unweighted")
   summaryWNet   <- summary_CriticalNodes(CN.weighted, "_weighted")
 

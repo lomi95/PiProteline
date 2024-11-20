@@ -15,8 +15,6 @@ test_that("LDA performs LDA analysis correctly", {
   expect_true("dataset.LDA" %in% names(result))
   expect_true("features_p.values" %in% names(result))
   expect_true("features_updown" %in% names(result))
-  expect_true("mds.plot" %in% names(result))
-  expect_true("VolcanoPlots" %in% names(result))
 })
 
 test_that("LDA handles missing groups correctly", {
@@ -47,3 +45,4 @@ test_that("LDA performs correct filtering and significant feature selection", {
   # Check that the result contains significant features
   expect_true(nrow(result$features_p.values) > 0)
 })
+

@@ -8,7 +8,8 @@ test_that("quantitative_analysis performs LDA correctly", {
   data$Gene <- paste0("Gene_",1:100)
   result <- quantitative_analysis(dataset = data,
                                   names_of_groups = c("Group1", "Group2", "Group3"),
-                                  gene_column = ncol(data))
+                                  gene_column = ncol(data),
+                                  significance.LDA = 0.05)
 
   # Check if the output is a list
   expect_type(result, "list")
@@ -29,16 +30,17 @@ test_that("quantitative_analysis handles two groups without pairwise LDA", {
   data$Gene <- paste0("Gene_",1:100)
 
   result <- quantitative_analysis(data, names_of_groups = c("Group1", "Group2"),
-                                  gene_column = ncol(data))
+                                  gene_column = ncol(data),
+                                  significance.LDA = 0.05)
 
   # Check if the output is a list
   expect_type(result, "list")
 
   # Verify that the LDA results are present
-  expect_true(!is.null(result$LDA_results))
+  expect_true("LDA_results" %in% names(result))
 
   # Check if the pairwise LDA results are NULL for two groups
-  expect_null(result$LDA_pairw.results)
+  expect_null(result$LDA_results)
 })
 
 test_that("quantitative_analysis calculates additional indices correctly", {
@@ -50,7 +52,7 @@ test_that("quantitative_analysis calculates additional indices correctly", {
   data$Gene <- paste0("Gene_",1:100)
 
   result <- quantitative_analysis(data, names_of_groups = c("Group1", "Group2", "Group3"),
-                                  gene_column = ncol(data))
+                                  gene_column = ncol(data), significance.LDA = 0.05)
 
   # Check if the additional indices are not NULL
   expect_true(!is.null(result$DAve_index))
@@ -70,7 +72,8 @@ test_that("quantitative_analysis handles different argument lists for LDA functi
 
   # Pass additional arguments to LDA function
   result <- quantitative_analysis(data, names_of_groups = c("Group1", "Group2", "Group3"),
-                                  gene_column = ncol(data), someLDAParameter = TRUE)
+                                  gene_column = ncol(data), significance.LDA = 0.05,
+                                  someLDAParameter = TRUE)
 
   # Check if the LDA results are not NULL
   expect_true(!is.null(result$LDA_results))

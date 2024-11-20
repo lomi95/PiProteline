@@ -58,11 +58,14 @@ single_profile_enrichment <- function(dataset, names_of_groups, gene_column = 1,
     cl <- parallel::makeCluster(num_cores)
 
     singleEnrichments <- parallel::parLapply(cl = cl, X = identified_prots,
-                                             rbioapi::rba_string_enrichment, species = tax_ID, split_df = F)
+                                             rbioapi::rba_string_enrichment,
+                                             species = tax_ID, split_df = F,
+                                             verbose = F)
   } else {
     singleEnrichments <- lapply(identified_prots,
                                 rbioapi::rba_string_enrichment,
-                                species = tax_ID, split_df = F)
+                                species = tax_ID, split_df = F,
+                                verbose = F)
   }
   for (i in seq_along(no_prots)){
     if (no_prots[i]) singleEnrichments[[i]] <- singleEnrichments[[i]][0,]
