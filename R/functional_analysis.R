@@ -43,6 +43,7 @@
 functional_analysis <- function(dataset, volcano_plots, Unweighted_CN, Weighted_CN,
                                 names_of_groups, tax_ID, categories,...){
 
+  args_list <- list(...)
   summaryTable <- summary_table(volcano_plots = volcano_plots,
                                 CN.unweighted = Unweighted_CN,
                                 CN.weighted = Weighted_CN)
@@ -57,7 +58,7 @@ functional_analysis <- function(dataset, volcano_plots, Unweighted_CN, Weighted_
 
   enr_LDA.Netw <- intersect_enrichment(enr1 = enrLDA$enr_LDA.diff,enr2 = enrNetw$enr_Netw.diff)
 
-  args_SPE <- args_MDS <- args_list[intersect(names(args_list), names(formals(single_profile_enrichment)))]
+  args_SPE <- args_list[intersect(names(args_list), names(formals(single_profile_enrichment)))]
   singleProfileEnrichment <- do.call(single_profile_enrichment,
                                      c(list(dataset = dataset,
                                             names_of_groups = names_of_groups,
@@ -72,5 +73,5 @@ functional_analysis <- function(dataset, volcano_plots, Unweighted_CN, Weighted_
               enrLDA = enrLDA,
               enrNetw = enrNetw,
               enr_LDA.Netw = enr_LDA.Netw,
-              singleProfileEnrichment))
+              singleProfileEnrichment = singleProfileEnrichment))
 }
