@@ -4,10 +4,10 @@
 \alias{DAve}
 \title{DAve Index Calculation}
 \usage{
-DAve(list.groups)
+DAve(groups_list)
 }
 \arguments{
-\item{list.groups}{A list where each element is a numeric matrix or data frame representing a group.
+\item{groups_list}{A list where each element is a numeric matrix or data frame representing a group.
 The columns represent different variables, and the rows represent samples.}
 }
 \value{
@@ -29,10 +29,15 @@ The DAve index is calculated for all possible pairwise comparisons between the g
 group1 <- matrix(rnorm(20), nrow = 5, ncol = 4)
 group2 <- matrix(rnorm(20), nrow = 5, ncol = 4)
 group3 <- matrix(rnorm(20), nrow = 5, ncol = 4)
-list.groups <- list(Group1 = group1, Group2 = group2, Group3 = group3)
+groups_list <- list(Group1 = group1, Group2 = group2, Group3 = group3)
+groups_list <- lapply(groups_list, function(x){
+    rownames(x) <- c("gene1","gene2","gene3","gene4","gene5")
+    colnames(x) <- paste0("sample_",1:4)
+    return(x)
+})
 
 # Calculate DAve
-DAve_result <- DAve(list.groups)
+DAve_result <- DAve(groups_list)
 print(DAve_result)
 
 }

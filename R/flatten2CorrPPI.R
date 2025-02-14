@@ -2,7 +2,7 @@
 #'
 #' Converts the output of the \link[Hmisc]{rcorr} function into a flattened data frame format.
 #'
-#' @param Corr A list containing the output of the \link[Hmisc]{rcorr} function, including matrices
+#' @param corr_list A list containing the output of the \link[Hmisc]{rcorr} function, including matrices
 #'     for correlation coefficients (`r`), p-values (`P`), and number of observations (`n`).
 #'
 #' @details The function extracts the correlation coefficients, p-values, and number of observations
@@ -26,8 +26,8 @@
 #' print(flattened_corr)
 #'
 #' @export
-flatten2CorrPPI <- function(Corr){
-  flattCorr <- flattenCorrMatrix(Corr$r, Corr$P, Corr$n)
+flatten2CorrPPI <- function(corr_list){
+  flattCorr <- flattenCorrMatrix(corr_list$r, corr_list$P, corr_list$n)
   flattCorr$cor_features <- paste(flattCorr$row, "and", flattCorr$column)
   flattCorr$cor[is.na(flattCorr$cor)] <- 0
   flattCorr$p[is.na(flattCorr$p)] <- 1

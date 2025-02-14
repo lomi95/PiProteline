@@ -7,20 +7,23 @@
 group_listing(
   dataset,
   names_of_groups = NULL,
-  ignoreCase = TRUE,
-  pos.vectors_groups = NULL,
+  gene_column = NULL,
+  ignore_case = TRUE,
+  pos_vectors_groups = NULL,
   freq = 0,
   just_shared_genes = F
 )
 }
 \arguments{
-\item{dataset}{A matrix or data frame where rows represent proteins and columns represent samples.}
+\item{dataset}{A data frame where rows represent proteins and columns represent samples.}
 
-\item{names_of_groups}{A character vector specifying the conditions within `colnames(dataset)` to group by. Ignored if `pos.vectors_groups` is not `NULL`.}
+\item{names_of_groups}{A character vector specifying the conditions within `colnames(dataset)` to group by. Ignored if `pos_vectors_groups` is not `NULL`.}
 
-\item{ignoreCase}{A logical value indicating whether the matching of `names_of_groups` should be case-insensitive. Default is `TRUE`. Ignored if `pos.vectors_groups` is provided.}
+\item{gene_column}{An integer or character specifying the column in the dataset containing gene names, that will be used as rownames. If `NULL` (default)}
 
-\item{pos.vectors_groups}{A list where each element is a vector of column indices. If provided, `names_of_groups` and `ignoreCase` are ignored.}
+\item{ignore_case}{A logical value indicating whether the matching of `names_of_groups` should be case-insensitive. Default is `TRUE`. Ignored if `pos_vectors_groups` is provided.}
+
+\item{pos_vectors_groups}{A list where each element is a vector of column indices. If provided, `names_of_groups` and `ignore_case` are ignored.}
 
 \item{freq}{A numeric value between 0 and 1 indicating the minimum percentage of non-zero or non-NA values for a protein to be retained in the groups.}
 
@@ -40,7 +43,7 @@ colnames(dataset) <- c("control_1", "control_2", "treatment_1", "treatment_2",
                        "treatment_4", "treatment_5")
 group_listing(dataset, names_of_groups = c("control", "treatment"))
 
-# Example 2: Using pos.vectors_groups to group columns
-group_listing(dataset, pos.vectors_groups = list(c(1, 3, 5), c(2, 4, 6)))
+# Example 2: Using pos_vectors_groups to group columns
+group_listing(dataset, pos_vectors_groups = list(c(1, 3, 5), c(2, 4, 6)))
 
 }

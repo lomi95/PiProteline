@@ -4,25 +4,23 @@
 \alias{descriptive_statistics}
 \title{Descriptive Statistics and Correlation Analysis}
 \usage{
-descriptive_statistics(data.unique, data.grouped, data.grouped.full, ...)
+descriptive_statistics(data_unique, data_grouped_full, ...)
 }
 \arguments{
-\item{data.unique}{A data frame containing the unique data (e.g., after preprocessing).}
+\item{data_unique}{A data frame containing the unique data (e.g., after preprocessing).}
 
-\item{data.grouped}{A list of data frames, each representing data grouped by specified criteria.}
+\item{data_grouped_full}{A list of data frames representing the fully grouped data for correlation analysis.}
 
-\item{data.grouped.full}{A list of data frames representing the fully grouped data for correlation analysis.}
-
-\item{...}{Additional arguments passed to the functions \code{\link{Corr_Between_Groups}}}
+\item{...}{Additional arguments passed to the functions \code{\link{corr_between_groups}}}
 }
 \value{
 A list containing the following elements:
 \describe{
   \item{DS_col}{Descriptive statistics for columns of the original dataset.}
   \item{DS_row}{Descriptive statistics for rows of the original dataset.}
-  \item{DS_col.groups}{A list of descriptive statistics for columns of each grouped dataset.}
-  \item{DS_row.groups}{A list of descriptive statistics for rows of each grouped dataset.}
-  \item{CorrBetweenGroups}{Correlation analysis results between different groups.}
+  \item{DS_col_groups}{A list of descriptive statistics for columns of each grouped dataset.}
+  \item{DS_row_group}{A list of descriptive statistics for rows of each grouped dataset.}
+  \item{corrBetweenGroups}{Correlation analysis results between different groups.}
 }
 }
 \description{
@@ -30,23 +28,19 @@ This function computes descriptive statistics for the input data, including per-
 }
 \examples{
 # Example usage
-data.unique <- data.frame(Sample1 = c(10, 20, 30, 56, 98),
+data_unique <- data.frame(Sample1 = c(10, 20, 30, 56, 98),
                          Sample2 = c(15, 25, 35, 11, 55),
                          Sample3 = c(5, 15, 25, 654, 79),
                          Sample4 = c(5, 123, 215, 36, 41),
                          Sample5 = c(12,12, 12, 11, 87)
                          )
 
-data.grouped <- list(
-  Group1 = data.unique[1:2, ],
-  Group2 = data.unique[2:3, ]
+
+data_grouped_full <- list(
+  Group1 = data_unique,
+  Group2 = data_unique
 )
 
-data.grouped.full <- list(
-  Group1 = data.unique,
-  Group2 = data.unique
-)
-
-descriptive_statistics(data.unique, data.grouped, data.grouped.full)
+descriptive_statistics(data_unique, data_grouped_full)
 
 }

@@ -8,8 +8,8 @@ quantitative_analysis(
   dataset,
   names_of_groups,
   gene_column,
-  data.grouped.full = NULL,
-  significance.LDA,
+  data_grouped_full = NULL,
+  significance_manova,
   ...
 )
 }
@@ -20,24 +20,24 @@ quantitative_analysis(
 
 \item{gene_column}{An integer or character specifying the column in the dataset containing gene names.}
 
-\item{data.grouped.full}{List of data frames with the same number of rows.}
+\item{data_grouped_full}{List of data frames with the same number of rows.}
 
-\item{significance.LDA}{A numeric argument indicating the significance threshold for Linear Discriminant Analysis}
+\item{significance_manova}{A numeric argument indicating the significance threshold for Multivariate Analysis of Variance}
 
-\item{...}{Additional arguments passed to the underlying functions for LDA, DAve, DCI, and fold change calculations.}
+\item{...}{Additional arguments passed to the underlying functions for manova, DAve, DCI, and fold change calculations.}
 }
 \value{
 A list containing the results of the quantitative analysis:
 \describe{
-  \item{LDA_results}{The results from the linear discriminant analysis (LDA).}
-  \item{LDA_pairw.results}{The results from pairwise LDA, if applicable.}
-  \item{DAve_index}{The DAve index calculated from the data.}
-  \item{DCI_index}{The DCI index calculated from the data.}
-  \item{Fold_Change}{The fold change analysis results.}
+  \item{manova_results}{The results from manova analysis if more than two groups are present, with DAve and Fold Change indexes.}
+  \item{manova_pairw_results}{The results from pairwise manova, with DAve and Fold Change indexes.}
+  \item{mds_plot}{The results from Multi Dimensional Scaling if more than two groups are present.}
+  \item{mds_plot_results}{The results from pairwise Multi dimensional Scaling.}
+  \item{volcano_plots}{Volcano plot for each pairwise comparison.}
 }
 }
 \description{
-This function performs quantitative analysis on a dataset, including linear discriminant analysis (LDA), pairwise LDA (if more than two groups are provided), and calculation of additional indices such as DAve, DCI, and fold change.
+This function performs quantitative analysis on a dataset, including Multivariate Analysis of Variance (manova), pairwise manova (if more than two groups are provided), and calculation of additional indices such as DAve, DCI, and fold change.
 }
 \examples{
 # Example dataset
@@ -49,7 +49,7 @@ matrix(runif(1500),ncol = 15,
 data$Gene <- paste0("Gene_",1:100)
 
 # Perform quantitative analysis
-quantitative_analysis(data, names_of_groups = c("Group1", "Group2", "Group3"),
-                      gene_column = "Gene", significance.LDA = 0.05)
+qa <- quantitative_analysis(data, names_of_groups = c("Group1", "Group2", "Group3"),
+                            gene_column = "Gene", significance_manova = 0.05)
 
 }

@@ -8,7 +8,7 @@
 #'     and each row corresponds to a gene or network node.
 #' @param quantiles Numeric vector specifying the quantile thresholds for filtering.
 #'     Genes with values greater than or equal to the specified quantile for each centrality are retained.
-#' @param orderBy An integer or character specifying the centrality column to order the filtered data by.
+#' @param order_by An integer or character specifying the centrality column to order the filtered data by.
 #'     If an integer, it should be the index of the column; if a character, it should be the name of the column.
 #'     If `NULL`, the rows will be ordered by row names. Default is `NULL`.
 #'
@@ -29,11 +29,11 @@
 #' )
 #'
 #' # Filter based on quantiles and order by Betweenness
-#' filtered_result <- filter_quantiles(centralities, quantiles = 0.9, orderBy = "Betweenness")
+#' filtered_result <- filter_quantiles(centralities, quantiles = 0.9, order_by = "Betweenness")
 #' print(filtered_result)
 #'
 #' @export
-filter_quantiles <- function(centralities, quantiles, orderBy = NULL){
+filter_quantiles <- function(centralities, quantiles, order_by = NULL){
   q.centralities <- apply(centralities, 2, function(x){
     q.centr <- quantile(x, quantiles)
     names(which(x >= q.centr))
@@ -46,28 +46,28 @@ filter_quantiles <- function(centralities, quantiles, orderBy = NULL){
   if (!nrow(centralities.filtered)){
     message("No genes meet the condition imposed, try changing quantiles")
   } else {
-    if (is.numeric(orderBy)){
-      if (length(orderBy) == 1){
-        if (orderBy > 0 & orderBy <= ncol(centralities)){
-          ordering <- order(centralities.filtered[, orderBy], decreasing = TRUE)
+    if (is.numeric(order_by)){
+      if (length(order_by) == 1){
+        if (order_by > 0 & order_by <= ncol(centralities)){
+          ordering <- order(centralities.filtered[, order_by], decreasing = TRUE)
         } else {
-          message("orderBy not recognized, ordering by 'rownames'")
+          message("order_by not recognized, ordering by 'rownames'")
           ordering <- order(rownames(centralities.filtered))
         }
       } else {
-        message("orderBy not recognized, ordering by 'rownames'")
+        message("order_by not recognized, ordering by 'rownames'")
         ordering <- order(rownames(centralities.filtered))
       }
-    } else if (is.character(orderBy)){
-      if (length(orderBy) == 1){
-        if (orderBy %in% colnames(centralities)){
-          ordering <- order(centralities.filtered[, orderBy], decreasing = TRUE)
+    } else if (is.character(order_by)){
+      if (length(order_by) == 1){
+        if (order_by %in% colnames(centralities)){
+          ordering <- order(centralities.filtered[, order_by], decreasing = TRUE)
         } else {
-          message("orderBy not recognized, ordering by 'rownames'")
+          message("order_by not recognized, ordering by 'rownames'")
           ordering <- order(rownames(centralities.filtered))
         }
       } else {
-        message("orderBy not recognized, ordering by 'rownames'")
+        message("order_by not recognized, ordering by 'rownames'")
         ordering <- order(rownames(centralities.filtered))
       }
     } else {

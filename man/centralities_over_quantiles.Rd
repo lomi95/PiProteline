@@ -4,10 +4,10 @@
 \alias{centralities_over_quantiles}
 \title{Identify Critical Nodes Based on Centrality Quantiles}
 \usage{
-centralities_over_quantiles(Centralities, merge_all, quantile_critical_nodes)
+centralities_over_quantiles(centralities, merge_all, quantile_critical_nodes)
 }
 \arguments{
-\item{Centralities}{A list of data frames, where each data frame contains
+\item{centralities}{A list of data frames, where each data frame contains
 centrality measures for a group. Rows represent nodes,
 and columns represent different centrality metrics.}
 
@@ -37,10 +37,10 @@ rownames(group1) <- paste0("Gene", 1:100)
 group2 <- data.frame(Degree = rnorm(100), Closeness = rnorm(100))
 rownames(group2) <- paste0("Gene", 1:100)
 
-Centralities <- list(Group1 = group1, Group2 = group2)
+centralities <- list(Group1 = group1, Group2 = group2)
 
 # Identify critical nodes based on the top 25\% of centrality values
-result <- centralities_over_quantiles(Centralities, merge_all = TRUE,quantile_critical_nodes = 0.75)
+result <- centralities_over_quantiles(centralities, merge_all = TRUE,quantile_critical_nodes = 0.75)
 print(result)
 
 }

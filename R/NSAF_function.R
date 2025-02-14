@@ -2,10 +2,10 @@
 #'
 #' This function calculates the NSAF index for a list of groups or a dataset of samples by proteins. The NSAF index is used in proteomics to normalize spectral counts for protein length and compare relative protein abundance across samples.
 #'
-#' @param list.groups A list of data frames or matrices representing different groups for which to compute the NSAF index, or a single data frame/matrix where rows represent samples and columns represent proteins.
+#' @param groups_list A list of data frames or matrices representing different groups for which to compute the NSAF index, or a single data frame/matrix where rows represent samples and columns represent proteins.
 #' @param length_proteins A numeric vector representing the lengths of the proteins, ordered according to the columns of the dataset.
 #'
-#' @return A matrix or vector of NSAF indexes for each protein, depending on whether `list.groups` is a list or a single data frame/matrix.
+#' @return A matrix or vector of NSAF indexes for each protein, depending on whether `groups_list` is a list or a single data frame/matrix.
 #' @references Zhang, Y., Wen, Z., Washburn, M.P., & Florens, L. (2010).
 #'      Effect of dynamic exclusion duration on spectral count based quantitative proteomics.
 #'      *Journal of Proteome Research*, 9(10), 4552–4560. [PMC3599300](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3599300/)
@@ -38,13 +38,13 @@
 #' NSAF_function(list(group1, group2), length_proteins)
 #'
 #' @export
-NSAF_function <- function(list.groups, length_proteins) {
-  if (is.list(list.groups)) {
-    nsaf_index <- sapply(list.groups, function(x) {
+NSAF_function <- function(groups_list, length_proteins) {
+  if (is.list(groups_list)) {
+    nsaf_index <- sapply(groups_list, function(x) {
       (colMeans(x) / length_proteins) / sum(colMeans(x) / length_proteins)
     })
   } else {
-    nsaf_index <- (colMeans(list.groups) / length_proteins) / sum(colMeans(list.groups) / length_proteins)
+    nsaf_index <- (colMeans(groups_list) / length_proteins) / sum(colMeans(groups_list) / length_proteins)
   }
 
   return(nsaf_index)

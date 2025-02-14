@@ -25,7 +25,9 @@ Imports:
     doParallel (>= 1.0.17),
     foreach (>= 1.5.2),
     ggrepel (>= 0.9.5),
-    purrr (>= 1.0.2)
+    purrr (>= 1.0.2),
+    openxlsx (>= 4.2.7.1),
+    stringr(>= 1.5.1)
 Suggests: 
     testthat (>= 3.0.0),
     mockery (>= 0.4.4)

@@ -4,7 +4,7 @@
 \alias{centrality_mean}
 \title{Centrality Mean Calculation and Filtering}
 \usage{
-centrality_mean(graph, fun_list, orderBy = NULL, ...)
+centrality_mean(graph, fun_list, order_by = NULL, ...)
 }
 \arguments{
 \item{graph}{An `igraph` object representing the graph.}
@@ -12,7 +12,7 @@ centrality_mean(graph, fun_list, orderBy = NULL, ...)
 \item{fun_list}{A list of centrality functions to apply. The functions should either
 return node centralities or edge centralities, but not a mix.}
 
-\item{orderBy}{An integer or the name of the centrality by which to order the
+\item{order_by}{An integer or the name of the centrality by which to order the
 resulting data frame rows. If NULL, the data frame will be ordered by row names.
 Default is NULL.}
 
@@ -31,7 +31,7 @@ measures.
 }
 \details{
 You can choose to order the resulting data frame by a specific centrality measure
-using the `orderBy` argument.
+using the `order_by` argument.
 }
 \examples{
 library(igraph)

@@ -4,10 +4,10 @@
 \alias{flatten2CorrPPI}
 \title{Flatten Correlation Output for PPI Analysis}
 \usage{
-flatten2CorrPPI(Corr)
+flatten2CorrPPI(corr_list)
 }
 \arguments{
-\item{Corr}{A list containing the output of the \link[Hmisc]{rcorr} function, including matrices
+\item{corr_list}{A list containing the output of the \link[Hmisc]{rcorr} function, including matrices
 for correlation coefficients (`r`), p-values (`P`), and number of observations (`n`).}
 }
 \value{

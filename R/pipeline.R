@@ -5,24 +5,24 @@
 #' @param dataset A data frame where rows represent proteins and columns represent samples.
 #' @param names_of_groups A character vector specifying the groups within `colnames(dataset)` for grouping the data.
 #' @param gene_column The name or index of the column containing gene identifiers. Default is 1.
-#' @param normType The type of normalization to apply. Default is "TotSigNorm".
+#' @param norm_type The type of normalization to apply. Default is "TotSigNorm".
 #' @param quantile_critical_nodes A numeric value specifying the quantile threshold for identifying critical nodes. Default is 0.75.
-#' @param significance.LDA A numeric argument indicating the significance threshold for Linear Discriminant Analysis
+#' @param significance_manova A numeric argument indicating the significance threshold for Multivariate Analysis of Variance
 #' @param fun_list A named list of functions for calculating centralities. Default is a set of common centrality measures.
-#' @param g.interactome An `igraph` object representing the interactome of the species, used for mapping protein interactions.
-#' @param violins Logical value indicating whether to create violin plots. Default is `TRUE`.
+#' @param g_interactome An `igraph` object representing the interactome of the species, used for mapping protein interactions.
 #' @param categories A character vector specifying enrichment categories for functional analysis. Default is `c("Component", "Function", "Process", "RCTM", "WikiPathway")`.
 #' @param tax_ID An integer representing the taxonomy ID for the organism (e.g., 9606 for human).
+#' @param save_results_as Directory name where results will be saved. Defaults to "PiProteline_report".
 #' @param ... Additional arguments passed to other functions within the pipeline.
 #'
 #' @return A list containing results from different steps of the analysis, including:
 #' \describe{
 #'   \item{descriptiveStatistics}{Data grouped, column and row statistics, correlation between groups, and indices like NSAF and emPAI.}
-#'   \item{quantitativeAnalysis}{Results of LDA analysis, DAve and DCI indices, and fold change calculations.}
+#'   \item{quantitativeAnalysis}{Results of manova analysis, DAve and DCI indices, and fold change calculations.}
 #'   \item{networkAnalysis}{Unweighted and weighted PPI analysis, centralities, critical nodes, and violin plots.}
 #'   \item{functionalAnalysis}{Results of the functional analysis, including enrichment and intersecting enrichment terms.}
 #' }
-#' @importFrom igraph degree betweenness as_adjacency_matrix V edge.attributes graph_from_edgelist closeness
+#' @importFrom igraph degree betweenness as_adjacency_matrix V edge.attributes graph_from_edgelist
 #' @export
 #'
 #' @examples
@@ -37,57 +37,63 @@
 #'
 
 pipeline <- function(dataset,names_of_groups,gene_column = 1,
-                     normType = "TotSigNorm", quantile_critical_nodes = 0.75,
-                     significance.LDA = 0.05,
-                     fun_list = c(Degree      = wDegree,
-                                  Betweenness = igraph::betweenness,
+                     norm_type = "TotSigNorm", quantile_critical_nodes = 0.75,
+                     significance_manova = 0.05,
+                     fun_list = c(Betweenness = igraph::betweenness,
                                   Centroids   = centroids,
-                                  Bridging    = bridging_centrality,
-                                  Closeness   = igraph::closeness),
-                     g.interactome = NULL,
-                     violins = F,
+                                  Bridging    = bridging_centrality),
+                     g_interactome = NULL,
                      categories = c("Component","Function","Process","RCTM","WikiPathway"),
                      tax_ID = 9606,
+                     save_results_as = paste0("PiProteline_report_",paste0(names_of_groups, collapse = "_")),
                      ...){
   args_list <- list(...)
 
-  if (is.null(g.interactome)){
-    g.interactome <- graph_from_edgelist(as.matrix(interactome_hs[,3:4]),directed = FALSE)
+  if (is.null(g_interactome)){
+    message("No interactome was given, the human interactome will be used")
+    g_interactome <- graph_from_edgelist(as.matrix(interactome_hs[,3:4]),directed = FALSE)
   }
 
   message("preprocessing data")
-  preprocData <- preprocessing_data(dataset,names_of_groups,gene_column,normType,args_list)
+  preprocData <- preprocessing_data(dataset,names_of_groups,gene_column,norm_type,args_list)
 
   message("computing descriptive statistics")
-  descriptiveStatistics <- descriptive_statistics(data.unique = preprocData$data.unique,
-                                                  data.grouped = preprocData$data.grouped,
-                                                  data.grouped.full = preprocData$data.grouped.full,
+  descriptiveStatistics <- descriptive_statistics(data_unique = preprocData$data_unique,
+                                                  data_grouped_full = preprocData$data_grouped_full,
                                                   ... = args_list)
 
-  message("computing quantitative analysis - ", Sys.time())
-  quantitativeAnalysis  <- quantitative_analysis(dataset = preprocData$data.norm,
+  message("computing quantitative analysis")
+  quantitativeAnalysis  <- quantitative_analysis(dataset = preprocData$data_norm,
                                                 names_of_groups = names_of_groups,
                                                 gene_column = 1,
-                                                data.grouped.full = preprocData$data.grouped.full,
-                                                significance.LDA = significance.LDA,
+                                                data_grouped_full = preprocData$data_grouped_full,
+                                                significance_manova = significance_manova,
                                                 ... = args_list)
 
-  message("computing network analysis - ", Sys.time())
-  networkAnalysis <- network_analysis(data.grouped = preprocData$data.grouped,
-                                      data.grouped.evenDim = preprocData$data.grouped.evenDim,
+  message("computing network analysis")
+  networkAnalysis <- network_analysis(data_grouped = preprocData$data_grouped,
+                                      data_grouped_even_dim = preprocData$data_grouped_even_dim,
                                       fun_list = fun_list,
-                                      g.interactome = g.interactome,
+                                      g_interactome = g_interactome,
                                       quantile_critical_nodes = quantile_critical_nodes,
-                                      violins = violins, ... = args_list)
+                                      ... = args_list)
 
-  message("computing functional analysis - ", Sys.time())
-  functionalAnalysis <- functional_analysis(dataset = preprocData$data.norm,
-                                            volcano_plots = quantitativeAnalysis$volcano_plots,
-                                            Unweighted_CN = networkAnalysis$Unweighted_criticalNodes,
-                                            Weighted_CN   = networkAnalysis$Weighted_criticalNodes,
+  message("computing functional analysis ")
+  functionalAnalysis <- functional_analysis(dataset = preprocData$data_unique,
+                                            manova_pairwise_results = quantitativeAnalysis$manova_pairw_results,
+                                            unweighted_CN = networkAnalysis$Unweighted_criticalNodes,
+                                            weighted_CN   = networkAnalysis$Weighted_criticalNodes,
                                             names_of_groups,tax_ID, categories, ... = args_list)
 
-
+  if (!is.null(save_results_as)){
+    try({
+      message("Saving the results")
+      save_results(quantitativeAnalysis,
+                   networkAnalysis,
+                   functionalAnalysis,
+                   save_results_as = save_results_as)
+    })
+  }
 
   return(list(descriptiveStatistics = descriptiveStatistics,
               quantitativeAnalysis = quantitativeAnalysis,

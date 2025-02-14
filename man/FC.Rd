@@ -4,10 +4,10 @@
 \alias{FC}
 \title{Fold Change (FC) Index Calculation for Pairwise Group Comparisons}
 \usage{
-FC(list.groups)
+FC(groups_list)
 }
 \arguments{
-\item{list.groups}{A list where each element represents a group of observations (e.g., numeric vectors or matrices of data).}
+\item{groups_list}{A list where each element represents a group of observations (e.g., numeric vectors or matrices of data).}
 }
 \value{
 A matrix where each column corresponds to the log2 Fold Change (FC) for pairwise comparisons between groups.
@@ -20,7 +20,12 @@ Computes the Fold Change (FC) for pairwise comparisons between groups of observa
 group1 <- matrix(c(1, 2, 3, 4, 5, 6), nrow = 2)
 group2 <- matrix(c(3, 2, 1, 6, 5, 4), nrow = 2)
 group3 <- matrix(c(5, 4, 3, 2, 1, 0), nrow = 2)
-list.groups <- list(Group1 = group1, Group2 = group2, Group3 = group3)
-FC(list.groups)
+groups_list <- list(Group1 = group1, Group2 = group2, Group3 = group3)
+groups_list <- lapply(groups_list, function(x){
+    rownames(x) <- c("gene1","gene2")
+    colnames(x) <- paste0("sample_",1:3)
+    return(x)
+})
+FC(groups_list)
 
 }

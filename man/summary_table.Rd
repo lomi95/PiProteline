@@ -4,44 +4,51 @@
 \alias{summary_table}
 \title{Summary Table for Network Analysis Results}
 \usage{
-summary_table(volcano_plots, CN.unweighted, CN.weighted)
+summary_table(manova_pairwise_results, unweighted_CN, weighted_CN)
 }
 \arguments{
-\item{volcano_plots}{The results from pairwise LDA analysis.}
+\item{manova_pairwise_results}{The results from pairwise manova analysis.}
 
-\item{CN.unweighted}{The list of critical nodes identified in unweighted networks.}
+\item{unweighted_CN}{The list of critical nodes identified in unweighted networks.}
 
-\item{CN.weighted}{The list of critical nodes identified in weighted networks.}
+\item{weighted_CN}{The list of critical nodes identified in weighted networks.}
 }
 \value{
 A list containing:
 \describe{
-  \item{summaryLDA}{A data frame summarizing the LDA analysis results.}
+  \item{summarymanova}{A data frame summarizing the manova analysis results.}
   \item{summaryUnweightedNetw}{A data frame summarizing the critical nodes identified in unweighted networks.}
   \item{summaryWeightedNetw}{A data frame summarizing the critical nodes identified in weighted networks.}
   \item{summary}{A merged data frame containing the combined summary table with the following columns:}
   \itemize{
     \item{GeneName:} The name of the gene.
-    \item{Various metrics:} Metrics derived from LDA results, unweighted, and weighted networks.
+    \item{Various metrics:} Metrics derived from manova results, unweighted, and weighted networks.
     \item{rawSum:} The sum of non-missing values across all metrics.
     \item{combinedScore:} A score calculated based on different metrics with weighted contributions.
   }
 }
 }
 \description{
-This function generates a summary table that merges results from pairwise LDA, unweighted network critical nodes, and weighted network critical nodes. It calculates a combined score for each gene based on various metrics.
+This function generates a summary table that merges results from pairwise manova, unweighted network critical nodes, and weighted network critical nodes. It calculates a combined score for each gene based on various metrics.
 }
 \examples{
 # Example usage
 \dontrun{
-LDA_results <- list(gene_matrix = data.frame(GeneName = c("Gene1", "Gene2"),
-                        LDA_Score = c(5, 3)))
-CN_unweighted <- list(CN.M = data.frame(GeneName = c("Gene1", "Gene3"),
-                          Specific_Centrality_unweighted = c(2, 4)))
-CN_weighted <- list(CN.M = data.frame(GeneName = c("Gene1", "Gene2"),
-                        Centrality_weighted = c(3, 6)))
+names_of_groups <- c("Group1", "Group2")
 
-summary_table(volcano_plots = LDA_results, CN.unweighted = CN_unweighted,
-                    CN.weighted = CN_weighted)
+fun_list <- c(betweenness, centroids, bridging_centrality)
+preprocData <- preprocessing_data(dataset, names_of_groups,1, "TotSigNorm" )
+manova_pairwise_results <- manova_pairwise(preprocData$data_norm,names_of_groups, 1 )
+UNA <- unweighted_network_analysis(names_of_groups = names_of_groups,
+                                   data_unique = preprocData$data_unique,
+                                   fun_list = fun_list)
+WNA <- weighted_netowrk_analysis(data_grouped_even_dim = data_grouped_even_dim,
+                                 names_of_groups = names_of_groups,
+                                 fun_list = fun_list)
+unweighted_CN <- UNA$CriticalNodes
+weighted_CN   <- WNA$CriticalNodes
+
+summary_table(manova_results = manova_pairwise_results, unweighted_CN = unweighted_CN,
+                    weighted_CN = weighted_CN)
 }
 }

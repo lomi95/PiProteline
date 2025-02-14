@@ -2,28 +2,29 @@
 % Please edit documentation in R/unweighted_network_analysis.R
 \name{unweighted_network_analysis}
 \alias{unweighted_network_analysis}
+\alias{UNA}
 \title{Unweighted Network Analysis}
 \usage{
 unweighted_network_analysis(
-  data.grouped = NULL,
+  data_grouped = NULL,
   names_of_groups,
-  data.unique = NULL,
+  data_unique = NULL,
   fun_list,
-  g.interactome,
+  g_interactome = NULL,
   quantile_critical_nodes,
   ...
 )
 }
 \arguments{
-\item{data.grouped}{A list of data frames representing grouped data. If `NULL`, data is grouped using `data.unique` and the specified parameters.}
+\item{data_grouped}{A list of data frames representing grouped data. If `NULL`, data is grouped using `data_unique` and the specified parameters.}
 
 \item{names_of_groups}{A character vector specifying the names of the groups for analysis.}
 
-\item{data.unique}{A data frame with unique data used for grouping, if `data.grouped` is `NULL`. Default is `NULL`.}
+\item{data_unique}{A data frame with unique data used for grouping, if `data_grouped` is `NULL`. Default is `NULL`.}
 
 \item{fun_list}{A list of functions for calculating network centralities.}
 
-\item{g.interactome}{A igraph object representing the interactome.}
+\item{g_interactome}{A igraph object representing the interactome.}
 
 \item{quantile_critical_nodes}{A numeric value specifying the quantile threshold for identifying critical nodes.}
 
@@ -45,22 +46,22 @@ library(igraph)
 filteredInteractome <- filter_interactome(interactome_hs,
                                           scores_threshold = c("experimental" = 0.15,
                                                                "database"    = 0.35))
-g.interactome <- graph_from_edgelist(as.matrix(filteredInteractome[,3:4]),
+g_interactome <- graph_from_edgelist(as.matrix(filteredInteractome[,3:4]),
                                      directed = FALSE)
 set.seed(1)
-data.grouped <- list(Group1 = matrix(runif(2000), nrow = 200),
+data_grouped <- list(Group1 = matrix(runif(2000), nrow = 200),
                      Group2 = matrix(runif(2000), nrow = 200))
-data.grouped <- lapply(data.grouped, function(x) {
-  rownames(x) <- sample(names(V(g.interactome)), nrow(x))
+data_grouped <- lapply(data_grouped, function(x) {
+  rownames(x) <- sample(names(V(g_interactome)), nrow(x))
   return(x)
 })
-colnames(data.grouped$Group1) <- paste0("Group1_",1:10)
-colnames(data.grouped$Group2) <- paste0("Group2_",1:10)
-result <- unweighted_network_analysis(data.grouped = data.grouped,
+colnames(data_grouped$Group1) <- paste0("Group1_",1:10)
+colnames(data_grouped$Group2) <- paste0("Group2_",1:10)
+result <- unweighted_network_analysis(data_grouped = data_grouped,
                                       names_of_groups = c("Group1", "Group2"),
                                       fun_list = list(Degree = igraph::degree,
                                                      Betweenness = igraph::betweenness),
-                                     g.interactome = g.interactome,
+                                     g_interactome = g_interactome,
                                      quantile_critical_nodes = 0.8)
 
 

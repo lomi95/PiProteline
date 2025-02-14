@@ -1,6 +1,6 @@
 test_that("flatten2CorrPPI works as expected", {
   # Create a mock correlation output using Hmisc::rcorr
-  library(Hmisc)
+  suppressWarnings(library(Hmisc))
   data <- matrix(c(0.1, 0.2, NA, 0.4, 0.5,
                    0.6, 0.7, 0.8, 0.9, NA,
                    1.0, 0.2, 0.3, 0.4, 0.5), ncol = 3)

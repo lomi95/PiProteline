@@ -1,4 +1,4 @@
-test_that("criticalNodes returns correct subsets", {
+test_that("critical_nodes returns correct subsets", {
   # Sample input data frame
   x <- data.frame(
     "group1_centrality1" = c(1, 0, 0, 1),
@@ -13,24 +13,24 @@ test_that("criticalNodes returns correct subsets", {
   centralities <- c("centrality1", "centrality2")
 
   # Not specific search mode
-  result_NS <- criticalNodes(x, groups, centralities, "")
+  result_NS <- critical_nodes(x, groups, centralities, "")
   expect_equal(rownames(result_NS$group1), c("geneA","geneD"))
   expect_equal(rownames(result_NS$group2), c("geneB","geneC","geneD"))
 
   # Specific search mode: group1 should not have overlaps with group2
-  result_specific <- criticalNodes(x, groups, centralities, "specific")
+  result_specific <- critical_nodes(x, groups, centralities, "specific")
 
   expect_equal(rownames(result_specific$group1)[rowSums(result_specific$group1[,1:2])==2], "geneA")
   expect_equal(rownames(result_specific$group2)[rowSums(result_specific$group2[,3:4])==2], c("geneB","geneC"))
 
   # Centrality-specific search mode: group1 and group2 filtered by centralities
-  result_cs <- criticalNodes(x, groups, centralities, "centralityspecific")
+  result_cs <- critical_nodes(x, groups, centralities, "centralityspecific")
 
   expect_equal(nrow(result_cs$group1),0)
   expect_equal(rownames(result_cs$group2), "geneC")
 })
 
-test_that("criticalNodes handles non-matching groups", {
+test_that("critical_nodes handles non-matching groups", {
   # Sample input data frame
   x <- data.frame(
     "group1_centrality1" = c(1, 0, 1, 0),
@@ -44,11 +44,11 @@ test_that("criticalNodes handles non-matching groups", {
   groups <- c("group1", "group3")  # group3 doesn't exist in the data
   centralities <- c("centrality1", "centrality2")
 
-  result <- suppressWarnings(criticalNodes(x, groups, centralities, "specific"))
+  result <- suppressWarnings(critical_nodes(x, groups, centralities, "specific"))
 
   # Should give a Warning
   # Expect a warning when calling the function with a non-existing group
-  #expect_warning(criticalNodes(x, groups, centralities, "specific"), "group3 was not found in 'colnames(x)'")
+  #expect_warning(critical_nodes(x, groups, centralities, "specific"), "group3 was not found in 'colnames(x)'")
 
   # group1 should return one result, group3 should be empty
   expect_equal(rownames(result$group1), "geneA")

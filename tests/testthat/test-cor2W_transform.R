@@ -1,12 +1,12 @@
 test_that("cor2W_transform correctly transforms weights", {
   # Example flattened correlation data frame
-  flattCorr <- data.frame(
+  flatt_corr <- data.frame(
     cor = c(0.8, 0.5, -0.3, 0.9),
     p.adj = c(0.05, 0.02, 1, 0.8)
   )
-  signifCorr <- 0.05
+  significance_corr <- 0.05
 
-  result <- cor2W_transform(flattCorr, signifCorr)
+  result <- cor2W_transform(flatt_corr, significance_corr)
 
   # Check if the result includes a 'weights' column
   expect_true("weights" %in% colnames(result))

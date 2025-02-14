@@ -7,19 +7,19 @@
 #' (2006). For weighted graphs, the formula is slightly changed: instead of using
 #' the degree,  For more details, see the reference below.
 #'
-#' When `degree_weighted = TRUE`, instead of using the degree (i.e., the number of edges)
+#' When `weighted_degree = TRUE`, instead of using the degree (i.e., the number of edges)
 #' as described by Hwang et al, the weighted degree is used, which is calculated
 #' as the sum of the incident edge weights on each vertex.
 #'
 #' @param graph An `igraph` object representing the graph.
-#' @param Betw A precomputed betweenness centrality vector to speed up computation.
+#' @param betw A precomputed betweenness centrality vector to speed up computation.
 #'     If NULL, betweenness will be computed within the function. Default is NULL.
 #' @param weights_as_distances A vector of weights to be treated as distances on the graph's edges.
 #'     If NULL, unweighted bridging centrality will be computed. Default is NULL.
 #' @param range_weights A numeric range indicating the desired range of weights for the computation.
-#'     If NULL, the range of `weights_as_distances` will be used. Ignored if `degree_weighted = FALSE`.
+#'     If NULL, the range of `weights_as_distances` will be used. Ignored if `weighted_degree = FALSE`.
 #'     Default is NULL.
-#' @param degree_weighted A logical indicating whether the degree should be computed as the sum of weights
+#' @param weighted_degree A logical indicating whether the degree should be computed as the sum of weights
 #'     (when `TRUE`) or the number of edges (when `FALSE`). Default is TRUE.
 #'
 #' @importFrom igraph components delete_vertices edge_attr as_adjacency_matrix neighborhood betweenness set_edge_attr
@@ -36,10 +36,10 @@
 #' bc <- bridging_centrality(g)
 #'
 bridging_centrality <- function(graph,
-                                Betw = NULL,
+                                betw = NULL,
                                 weights_as_distances = NULL,
                                 range_weights = NULL,
-                                degree_weighted = T){
+                                weighted_degree = T){
 
   inherit_igraph(graph)
 
@@ -61,7 +61,7 @@ bridging_centrality <- function(graph,
     graph <- graph
   }
   ### se sono presenti i pesi la matrice di adiacenza viene costruita con i pesi
-  if (!is.null(weights_as_distances) & degree_weighted){
+  if (!is.null(weights_as_distances) & weighted_degree){
     graph <- set_edge_attr(graph,name = "ed.att",value = weights_as_distances)
     if (is.null(range_weights)){
       range_weights <- range(weights_as_distances)
@@ -88,13 +88,13 @@ bridging_centrality <- function(graph,
   BridCoeff <- mapply(BC, dgraph, firstNeighbors)
 
 
-  if (is.null(Betw)){
+  if (is.null(betw)){
     if (!is.null(weights_as_distances)){
-      Betw <- betweenness(graph,weights = weights_as_distances)
+      betw <- betweenness(graph,weights = weights_as_distances)
     } else {
-      Betw <- betweenness(graph)
+      betw <- betweenness(graph)
     }
   }
 
-  return(BridCoeff*Betw)
+  return(BridCoeff*betw)
 }

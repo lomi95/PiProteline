@@ -5,21 +5,21 @@
 \title{MDS Plot Using Random Forest Proximity}
 \usage{
 MDS_plot(
-  dataset,
+  t_dataset,
   names_of_groups,
-  ignoreCase = TRUE,
-  pos.vectors_groups = NULL,
+  ignore_case = TRUE,
+  pos_vectors_groups = NULL,
   n_tree = 5000
 )
 }
 \arguments{
-\item{dataset}{A matrix or data frame where rows represent samples and columns represent features (e.g., proteins).}
+\item{t_dataset}{A matrix or data frame where rows represent samples and columns represent features (e.g., proteins).}
 
-\item{names_of_groups}{A character vector specifying the class names to group by, based on row names of the dataset. Ignored if `pos.vectors_groups` is provided.}
+\item{names_of_groups}{A character vector specifying the class names to group by, based on row names of the t_dataset. Ignored if `pos_vectors_groups` is provided.}
 
-\item{ignoreCase}{Logical, if TRUE (default), the matching of `names_of_groups` is case insensitive.}
+\item{ignore_case}{Logical, if TRUE (default), the matching of `names_of_groups` is case insensitive.}
 
-\item{pos.vectors_groups}{A list where each element contains row indices for each class group. Default is NULL, in which case `names_of_groups` is used.}
+\item{pos_vectors_groups}{A list where each element contains row indices for each class group. Default is NULL, in which case `names_of_groups` is used.}
 
 \item{n_tree}{Integer, the number of trees to use in the random forest. Default is 5000.}
 }
@@ -33,10 +33,10 @@ This function generates a Multi-Dimensional Scaling (MDS) plot using the proximi
 The MDS plot is constructed by first training a random forest model to calculate the proximity between samples. Then, Multi-Dimensional Scaling (MDS) is applied to the proximity matrix to reduce the dimensionality, and the plot shows the first two dimensions (MDS1 and MDS2) with their respective variances explained.
 }
 \examples{
-dataset <- matrix(rnorm(100), nrow = 10)
-rownames(dataset) <- c("control_1", "control_2", "treatment_1", "treatment_2",
+t_dataset <- matrix(rnorm(100), nrow = 10)
+rownames(t_dataset) <- c("control_1", "control_2", "treatment_1", "treatment_2",
                        "control_3", "treatment_3", "control_4", "control_5",
                        "treatment_4", "treatment_5")
-MDS_plot(dataset, names_of_groups = c("control", "treatment"))
+MDS_plot(t_dataset, names_of_groups = c("control", "treatment"))
 
 }

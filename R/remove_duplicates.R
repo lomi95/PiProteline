@@ -5,8 +5,8 @@
 #' @param dataset A data frame from which duplicate rows should be removed.
 #' @param genes An integer specifying the column index, a character specifying the column name for gene names, or a character vector containing gene names for each row. The length of the vector must be equal to the number of rows in the dataset.
 #' @param FUN A function to apply to duplicate values for resolving duplicates. Default is `max`.
-#' @param NAasZero A logical value indicating if NAs should be treated as zeros. Default is `TRUE`. If both `NAasZero` and `ZeroasNA` are `TRUE`, an error will be raised.
-#' @param ZeroasNA A logical value indicating if zeros should be treated as NAs. Default is `FALSE`.
+#' @param na_as_zero A logical value indicating if NAs should be treated as zeros. Default is `TRUE`. If both `na_as_zero` and `zero_as_na` are `TRUE`, an error will be raised.
+#' @param zero_as_na A logical value indicating if zeros should be treated as NAs. Default is `FALSE`.
 #'
 #' @return A data frame with duplicate rows removed, based on the specified gene column. The resulting data frame includes a new column named `GeneName` for the gene identifiers.
 #' @examples
@@ -21,12 +21,12 @@
 #' remove_duplicates(data, genes = "Gene")
 #'
 #' # Handle NAs as zeros
-#' remove_duplicates(data, genes = "Gene", NAasZero = TRUE)
+#' remove_duplicates(data, genes = "Gene", na_as_zero = TRUE)
 #'
 #' @export
-remove_duplicates <- function(dataset, genes, FUN = max, NAasZero = TRUE, ZeroasNA = FALSE) {
-  if (NAasZero & ZeroasNA) {
-    stop("Both 'NAasZero' and 'ZeroasNA' are TRUE")
+remove_duplicates <- function(dataset, genes, FUN = max, na_as_zero = TRUE, zero_as_na = FALSE) {
+  if (na_as_zero & zero_as_na) {
+    stop("Both 'na_as_zero' and 'zero_as_na' are TRUE")
   }
 
   L <- length(genes)
@@ -50,9 +50,9 @@ remove_duplicates <- function(dataset, genes, FUN = max, NAasZero = TRUE, Zeroas
   }
 
   dataset.1 <- aggregate(dataset[], list(GeneName = genes_id), FUN = function(x) {
-    if (ZeroasNA) {
+    if (zero_as_na) {
       x[as.numeric(x) == 0] <- NA
-    } else if (NAasZero) {
+    } else if (na_as_zero) {
       x[is.na(x)] <- 0
     }
     return(suppressWarnings(FUN(as.numeric(x))))

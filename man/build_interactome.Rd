@@ -9,7 +9,7 @@ build_interactome(
   tax_ID,
   interactome = NULL,
   scores_threshold = NULL,
-  AnnNbyN = 1999
+  splitting_for_API = 1999
 )
 }
 \arguments{
@@ -24,7 +24,7 @@ the function will read the file specified by `directory_interactome`.}
 \item{scores_threshold}{A numeric vector of threshold scores to filter the interactome by.
 If `NULL`, no filtering is applied.}
 
-\item{AnnNbyN}{An integer vector for splitting the protein list during annotation to
+\item{splitting_for_API}{An integer vector for splitting the protein list during annotation to
 avoid API timeout errors. Lower values may prevent timeouts. Default is `1999`.}
 }
 \value{

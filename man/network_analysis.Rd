@@ -5,33 +5,30 @@
 \title{Network Analysis for Biological Data}
 \usage{
 network_analysis(
-  data.grouped = NULL,
-  data.grouped.evenDim = NULL,
+  data_grouped = NULL,
+  data_grouped_even_dim = NULL,
   fun_list,
-  g.interactome,
+  g_interactome = NULL,
   quantile_critical_nodes,
   names_of_groups = NULL,
-  data.unique = NULL,
-  violins = F,
+  data_unique = NULL,
   ...
 )
 }
 \arguments{
-\item{data.grouped}{A list of data frames representing grouped data. If `NULL`, data is grouped using `data.unique` and the specified parameters.}
+\item{data_grouped}{A list of data frames representing grouped data. If `NULL`, data is grouped using `data_unique` and the specified parameters.}
 
-\item{data.grouped.evenDim}{A list of data frames representing grouped data with even dimensions. Used for weighted network analysis. Default is `NULL`.}
+\item{data_grouped_even_dim}{A list of data frames representing grouped data with even dimensions. Used for weighted network analysis. Default is `NULL`.}
 
 \item{fun_list}{A list of functions for calculating network centralities.}
 
-\item{g.interactome}{A igraph object representing the interactome.}
+\item{g_interactome}{A igraph object representing the interactome.}
 
 \item{quantile_critical_nodes}{A numeric value specifying the quantile threshold for identifying critical nodes.}
 
-\item{names_of_groups}{A character vector specifying the names of the groups. If `NULL`, it is derived from `data.grouped` or must be provided with `data.unique`. Default is `NULL`.}
+\item{names_of_groups}{A character vector specifying the names of the groups. If `NULL`, it is derived from `data_grouped` or must be provided with `data_unique`. Default is `NULL`.}
 
-\item{data.unique}{A data frame with unique data used for grouping, if `data.grouped` is `NULL`. Default is `NULL`.}
-
-\item{violins}{A logical value indicating whether to generate violin plots for random networks. Default is `FALSE`.}
+\item{data_unique}{A data frame with unique data used for grouping, if `data_grouped` is `NULL`. Default is `NULL`.}
 
 \item{...}{Additional arguments passed to internal functions.}
 }
@@ -44,7 +41,6 @@ A list containing:
   \item{Unweighted_criticalNodes}{Lists of critical nodes (hubs and bottlenecks) in unweighted networks.}
   \item{Weighted_centralities}{A list of centrality measures for weighted networks.}
   \item{Weighted_criticalNodes}{Lists of critical nodes in weighted networks.}
-  \item{RandomDist_Violins}{Violin plots for random network distributions (if `violins = TRUE`).}
 }
 }
 \description{
@@ -55,12 +51,12 @@ This function performs network analysis on grouped biological data, including th
 library(igraph)
 \dontrun{
 
-data.unique <- matrix(runif(4000), nrow = 200)
-rownames(data.unique) <- sample(names(V(g.interactome)), nrow(data.unique))
-colnames(data.unique) <- c(paste0("Group1_",1:10),paste0("Group2_",1:10))
+data_unique <- matrix(runif(4000), nrow = 200)
+rownames(data_unique) <- sample(names(V(g_interactome)), nrow(data_unique))
+colnames(data_unique) <- c(paste0("Group1_",1:10),paste0("Group2_",1:10))
 
 # Perform network analysis
-network_analysis(data.unique = data.unique,
+network_analysis(data_unique = data_unique,
                  fun_list = list(bridging = bridging_centrality,
                                  centroids = centroids,
                                  betweenness = betweenness),

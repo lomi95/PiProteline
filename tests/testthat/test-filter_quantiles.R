@@ -22,8 +22,8 @@ test_that("filter_quantiles filters and orders correctly", {
   ]
   expect_equal(rownames(result), genes_to_keep)
 
-  # Test ordering with 'Degree' as the orderBy column
-  result_ordered <- filter_quantiles(centralities, quantiles = 0.5, orderBy = "Degree")
+  # Test ordering with 'Degree' as the order_by column
+  result_ordered <- filter_quantiles(centralities, quantiles = 0.5, order_by = "Degree")
 
   # Check if the result is ordered by 'Degree' in descending order
   expect_equal(order(result_ordered$Degree, decreasing = TRUE), seq_len(nrow(result_ordered)))

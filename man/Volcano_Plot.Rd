@@ -4,41 +4,44 @@
 \alias{volcano_plot}
 \title{Volcano plot for Differential Expression Analysis}
 \usage{
-volcano_plot(df, boundFC, thr_pvalue, Name_1 = "Group1", Name_2 = "Group2")
+volcano_plot(
+  t_dataset,
+  significance = 0.05,
+  fc_bounds = c(-0, 0),
+  ignore_case = T,
+  group_1 = "Group1",
+  group_2 = "Group2"
+)
 }
 \arguments{
-\item{df}{A data frame with columns named `log2` (log2 fold change, x-axis), `pv` (-log10 of the p-value, y-axis), and `gene` (gene names or labels).}
+\item{t_dataset}{A numeric matrix or data frame where rows represent features (e.g., genes)
+and columns represent samples. The last row should contain p-values.}
 
-\item{boundFC}{A numeric vector of length 2 specifying the fold change boundaries. Genes with log2 fold changes outside this range are highlighted in red (up-regulated) or blue (down-regulated).}
+\item{significance}{A numeric value indicating the p-value threshold. Genes with p-values below this threshold (after applying -log10 transformation) are considered significant.}
 
-\item{thr_pvalue}{A numeric value indicating the p-value threshold. Genes with p-values below this threshold (after applying -log10 transformation) are considered significant.}
+\item{fc_bounds}{A numeric vector of length 2 specifying the fold change boundaries. Genes with log2 fold changes outside this range are highlighted in red (up-regulated) or blue (down-regulated).}
 
-\item{Name_1}{A character string specifying the name of the first group. Default is "Group1".}
+\item{ignore_case}{Logical; if TRUE (default), group names are matched ignoring case.}
 
-\item{Name_2}{A character string specifying the name of the second group. Default is "Group2".}
+\item{group_1}{A character string specifying the name of the first (upregulated positive) group. Default is "Group1".}
+
+\item{group_2}{A character string specifying the name of the second group. Default is "Group2".}
 }
 \value{
-A list containing:
-\describe{
-  \item{plot}{A `ggplot` object representing the volcano plot.}
-  \item{Genes}{A list of up-regulated and down-regulated gene names.}
-}
+A `ggplot` object representing the volcano plot
 }
 \description{
 This function generates a volcano plot to visualize differential expression analysis results, highlighting genes that are significantly up-regulated or down-regulated based on log-fold change and p-value thresholds.
 }
 \examples{
-# Example data
-example_data <- data.frame(
-  log2 = rnorm(1000),
-  pv = -log10(runif(1000)),
-  gene = paste0("Gene", 1:1000)
-)
-# Generate volcano plot
-result <- volcano_plot(example_data, boundFC = c(-1, 1), thr_pvalue = 0.05)
-# Display the plot
-print(result$plot)
-# List up-regulated and down-regulated genes
-result$Genes
+set.seed(1)
+dataset <- data.frame(GeneName = letters,
+                      matrix(runif(26*15), nrow = 26))
+colnames(dataset)[-1] <- paste0(rep(c("Group1", "Group2", "Group3"), each = 5), "_",1:15)
+
+mp <- manova_pairwise(dataset,c("Group1", "Group2", "Group3"),gene_column = 1 )
+dv <- data_volcano(dataset, mp, 0.95)
+
+vp <- volcano_plot(dv[[1]], 0.95)
 
 }

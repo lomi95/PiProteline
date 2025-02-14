@@ -2,9 +2,9 @@
 % Please edit documentation in R/centrality_quantiles.R
 \name{centrality_quantiles}
 \alias{centrality_quantiles}
-\title{Centrality Quantiles Filtering}
+\title{Centrality Quantiles}
 \usage{
-centrality_quantiles(graph, fun_list, quantiles = 0, orderBy = NULL, ...)
+centrality_quantiles(graph, fun_list, quantiles = 0, order_by = NULL, ...)
 }
 \arguments{
 \item{graph}{An `igraph` object representing the graph.}
@@ -16,7 +16,7 @@ return node centralities or edge centralities, but not a mix.}
 measures for nodes. Nodes with a centrality score above the given quantile will
 be included. Default is 0 (includes all nodes).}
 
-\item{orderBy}{An integer or the name of the centrality by which to order the
+\item{order_by}{An integer or the name of the centrality by which to order the
 resulting data frame rows. If NULL, the data frame will be ordered by row names.
 Default is NULL.}
 
@@ -36,7 +36,7 @@ all centrality measures.
 }
 \details{
 You can choose to order the resulting data frame by a specific centrality measure
-using the `orderBy` argument.
+using the `order_by` argument.
 }
 \examples{
 library(igraph)

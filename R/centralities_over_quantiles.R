@@ -3,7 +3,7 @@
 #'      by determining whether each node's centrality value exceeds a specified quantile threshold
 #'      for each centrality measure across different groups.
 #'
-#' @param Centralities A list of data frames, where each data frame contains
+#' @param centralities A list of data frames, where each data frame contains
 #'  centrality measures for a group. Rows represent nodes,
 #'  and columns represent different centrality metrics.
 #' @param merge_all A logical indicating whether to include all nodes when merging
@@ -25,14 +25,14 @@
 #' group2 <- data.frame(Degree = rnorm(100), Closeness = rnorm(100))
 #' rownames(group2) <- paste0("Gene", 1:100)
 #'
-#' Centralities <- list(Group1 = group1, Group2 = group2)
+#' centralities <- list(Group1 = group1, Group2 = group2)
 #'
 #' # Identify critical nodes based on the top 25% of centrality values
-#' result <- centralities_over_quantiles(Centralities, merge_all = TRUE,quantile_critical_nodes = 0.75)
+#' result <- centralities_over_quantiles(centralities, merge_all = TRUE,quantile_critical_nodes = 0.75)
 #' print(result)
 #'
 #' @export
-centralities_over_quantiles <- function(Centralities, merge_all, quantile_critical_nodes){
+centralities_over_quantiles <- function(centralities, merge_all, quantile_critical_nodes){
 
   merge_by_rownames <- function(x,y){
     x$GeneName <- rownames(x)
@@ -43,19 +43,19 @@ centralities_over_quantiles <- function(Centralities, merge_all, quantile_critic
     return(xy)
   }
 
-  if (is.null(names(Centralities))){
-    names_of_groups <- paste0("Group_",1:length(Centralities))
+  if (is.null(names(centralities))){
+    names_of_groups <- paste0("Group_",1:length(centralities))
   } else {
-    names_of_groups <- names(Centralities)
+    names_of_groups <- names(centralities)
   }
   names(names_of_groups) <- names_of_groups
 
-  Centralities.1 <- lapply(names_of_groups, function(x){
-    colnames(Centralities[[x]]) <- paste0(colnames(Centralities[[x]]),"_",x)
-    return(Centralities[[x]])
+  centralities.1 <- lapply(names_of_groups, function(x){
+    colnames(centralities[[x]]) <- paste0(colnames(centralities[[x]]),"_",x)
+    return(centralities[[x]])
   })
 
-  Centralities.2 <- Reduce(merge_by_rownames,Centralities.1)
-  Centralities.q <- apply(Centralities.2,2, function(x) x > quantile(x,quantile_critical_nodes,na.rm = T))
-  return(Centralities.q)
+  centralities.2 <- Reduce(merge_by_rownames,centralities.1)
+  centralities.q <- apply(centralities.2,2, function(x) x > quantile(x,quantile_critical_nodes,na.rm = T))
+  return(centralities.q)
 }

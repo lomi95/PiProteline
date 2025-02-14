@@ -4,15 +4,15 @@
 \alias{NSAF_function}
 \title{NSAF (Normalized Spectral Abundance Factor)}
 \usage{
-NSAF_function(list.groups, length_proteins)
+NSAF_function(groups_list, length_proteins)
 }
 \arguments{
-\item{list.groups}{A list of data frames or matrices representing different groups for which to compute the NSAF index, or a single data frame/matrix where rows represent samples and columns represent proteins.}
+\item{groups_list}{A list of data frames or matrices representing different groups for which to compute the NSAF index, or a single data frame/matrix where rows represent samples and columns represent proteins.}
 
 \item{length_proteins}{A numeric vector representing the lengths of the proteins, ordered according to the columns of the dataset.}
 }
 \value{
-A matrix or vector of NSAF indexes for each protein, depending on whether `list.groups` is a list or a single data frame/matrix.
+A matrix or vector of NSAF indexes for each protein, depending on whether `groups_list` is a list or a single data frame/matrix.
 }
 \description{
 This function calculates the NSAF index for a list of groups or a dataset of samples by proteins. The NSAF index is used in proteomics to normalize spectral counts for protein length and compare relative protein abundance across samples.

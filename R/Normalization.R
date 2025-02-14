@@ -1,9 +1,9 @@
-#' Data Normalization
+#' Data normalization
 #'
 #' This function normalizes a dataset (Proteins x Samples) using various normalization techniques. It supports different methods for scaling and transforming the data, including natural logarithm transformation, Z-score normalization, Min-Max scaling, and more.
 #'
 #' @param dataset A data frame where rows represent proteins and columns represent samples.
-#' @param normType A character string specifying the type of normalization. Choose from:
+#' @param norm_type A character string specifying the type of normalization. Choose from:
 #' \describe{
 #'   \item{ln}{Natural logarithm transformation}
 #'   \item{Znorm}{Z-score normalization}
@@ -21,24 +21,25 @@
 #' @examples
 #' # Example dataset
 #' data <- data.frame(
-#'   Protein1 = c(10, 20, 30),
-#'   Protein2 = c(5, 15, 25),
-#'   Protein3 = c(2, 8, 18)
+#'   Sample1 = c(10, 20, 30),
+#'   Sample2 = c(5, 15, 25),
+#'   Sample3 = c(2, 8, 18)
 #' )
 #'
 #' # Normalize using different methods
-#' Normalization(data, normType = "ln")
-#' Normalization(data, normType = "Znorm")
-#' Normalization(data, normType = "MinMax")
-#' Normalization(data, normType = "Robust")
-#' Normalization(data, normType = "UnitVector")
-#' Normalization(data, normType = "TotSigNorm")
-#' Normalization(data, normType = "MaxSigNorm")
-#' Normalization(data, normType = "RowSigmaNorm")
+#' normalization(data, norm_type = "ln")
+#' normalization(data, norm_type = "Znorm")
+#' normalization(data, norm_type = "MinMax")
+#' normalization(data, norm_type = "Robust")
+#' normalization(data, norm_type = "UnitVector")
+#' normalization(data, norm_type = "TotSigNorm")
+#' normalization(data, norm_type = "MaxSigNorm")
+#' normalization(data, norm_type = "RowSigmaNorm")
 #'
 #' @export
-Normalization <- function(dataset, normType) {
+normalization <- function(dataset, norm_type) {
   # Remove non-numeric columns
+  dataset[is.na(dataset)] <- 0
   asnum.NA <- apply(dataset, 2, function(x) {
     suppressWarnings(sum(is.na(as.numeric(x))) > length(x) * 3 / 4)
   })
@@ -48,7 +49,7 @@ Normalization <- function(dataset, normType) {
   dataset <- dataset[, !asnum.NA]
 
   # Apply the selected normalization technique
-  data.norm <- switch(normType,
+  data.norm <- switch(norm_type,
                       ln = log(dataset + 1),
                       Znorm = apply(dataset, 2, function(x) {
                         return((x - mean(x)) / stats::sd(x))

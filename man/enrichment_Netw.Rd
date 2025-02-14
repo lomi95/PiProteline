@@ -10,7 +10,7 @@ enrichment_Netw(
   names_of_groups,
   tax_ID,
   categories,
-  diff = TRUE
+  differences = TRUE
 )
 }
 \arguments{
@@ -24,15 +24,15 @@ enrichment_Netw(
 
 \item{categories}{A character vector specifying the enrichment categories to filter (e.g., "GO", "KEGG").}
 
-\item{diff}{A logical value indicating whether to calculate differential enrichment between groups. Default is `TRUE`.}
+\item{differences}{A logical value indicating whether to calculate differential enrichment between groups. Default is `TRUE`.}
 }
 \value{
-If `diff` is `TRUE`, a list containing:
+If `differences` is `TRUE`, a list containing:
 \describe{
   \item{enr_Netw}{A list of enrichment results for each group.}
   \item{enr_Netw.diff}{A list of differential enrichment results between each pair of groups.}
 }
-If `diff` is `FALSE`, it returns a list of enrichment results for each group.
+If `differences` is `FALSE`, it returns a list of enrichment results for each group.
 }
 \description{
 This function performs enrichment analysis for protein groups from unweighted and weighted networks, using the STRING database. It identifies enrichment categories and computes differential enrichment between groups.

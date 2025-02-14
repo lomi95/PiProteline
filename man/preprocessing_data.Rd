@@ -4,7 +4,7 @@
 \alias{preprocessing_data}
 \title{Data Preprocessing Pipeline}
 \usage{
-preprocessing_data(dataset, names_of_groups, gene_column, normType, ...)
+preprocessing_data(dataset, names_of_groups, gene_column, norm_type, ...)
 }
 \arguments{
 \item{dataset}{A data frame containing the data to preprocess.}
@@ -13,18 +13,18 @@ preprocessing_data(dataset, names_of_groups, gene_column, normType, ...)
 
 \item{gene_column}{An integer or character specifying the column in the dataset containing gene names.}
 
-\item{normType}{A character string specifying the normalization type to apply. See \code{\link{Normalization}} for the available normalization types.}
+\item{norm_type}{A character string specifying the normalization type to apply. See \code{\link{normalization}} for the available normalization types.}
 
-\item{...}{Additional arguments passed to the functions \code{\link{remove_duplicates}}, \code{\link{group_listing}}, and \code{\link{Normalization}}.}
+\item{...}{Additional arguments passed to the functions \code{\link{remove_duplicates}}, \code{\link{group_listing}}, and \code{\link{normalization}}.}
 }
 \value{
 A list containing the following elements:
 \describe{
-  \item{data.unique}{A data frame with duplicates removed.}
-  \item{data.grouped}{The dataset grouped by the specified groups, with frequency filtering applied.}
-  \item{data.grouped.full}{The dataset grouped without frequency filtering.}
-  \item{data.grouped.evenDim}{The dataset grouped with shared genes across all groups.}
-  \item{data.norm}{The normalized dataset.}
+  \item{data_unique}{A data frame with duplicates removed.}
+  \item{data_grouped}{The dataset grouped by the specified groups, with frequency filtering applied.}
+  \item{data_grouped_full}{The dataset grouped without frequency filtering.}
+  \item{data_grouped_even_dim}{The dataset grouped with shared genes across all groups.}
+  \item{data_norm}{The normalized dataset.}
 }
 }
 \description{
@@ -32,7 +32,7 @@ This function performs a series of preprocessing steps on a dataset, including r
 }
 \examples{
 # Example dataset
-data.unique <- data.frame(Gene = paste0("Gene_",1:5),
+data_unique <- data.frame(Gene = paste0("Gene_",1:5),
                           Group1   = c(10, 20, 30, 56, 98),
                           Group1_1 = c(15, 25, 35, 11, 55),
                           Group2_1 = c(5, 15, 25, 654, 79),
@@ -40,7 +40,7 @@ data.unique <- data.frame(Gene = paste0("Gene_",1:5),
                           Group3_1 = c(12,12, 12, 11, 87))
 
 # Preprocess data using different normalization methods
-preprocessing_data(data.unique, names_of_groups = c("Group1", "Group2", "Group3"),
-                   gene_column = "Gene", normType = "Znorm")
+preprocessing_data(data_unique, names_of_groups = c("Group1", "Group2", "Group3"),
+                   gene_column = "Gene", norm_type = "Znorm")
 
 }

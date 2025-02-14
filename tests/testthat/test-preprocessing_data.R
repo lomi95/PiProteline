@@ -7,14 +7,14 @@ test_that("preprocessing_data works with default settings", {
   )
 
   result <- preprocessing_data(data, names_of_groups = c("Group1", "Group2", "Group3"),
-                               gene_column = "Gene", normType = "Znorm")
+                               gene_column = "Gene", norm_type = "Znorm")
 
   # Check if the output is a list
   expect_type(result, "list")
 
   # Verify that all required elements are present in the output
-  expect_true(all(c("data.unique", "data.grouped", "data.grouped.full",
-                    "data.grouped.evenDim", "data.norm") %in% names(result)))
+  expect_true(all(c("data_unique", "data_grouped", "data_grouped_full",
+                    "data_grouped_even_dim", "data_norm") %in% names(result)))
 
 })
 
@@ -31,10 +31,10 @@ test_that("preprocessing_data handles different normalization methods", {
 
   for (norm in norm_types) {
     result <- preprocessing_data(data, names_of_groups = c("Group1", "Group2", "Group3"),
-                                 gene_column = "Gene", normType = norm)
+                                 gene_column = "Gene", norm_type = norm)
 
     # Check if the normalized data is a data frame
-    expect_s3_class(result$data.norm, "data.frame")
+    expect_s3_class(result$data_norm, "data.frame")
 
   }
 })
@@ -48,10 +48,10 @@ test_that("preprocessing_data handles additional arguments for remove_duplicates
   )
 
   result <- preprocessing_data(data, names_of_groups = c("Group1", "Group2", "Group3"),
-                               gene_column = "Gene", normType = "Znorm", NAasZero = TRUE)
+                               gene_column = "Gene", norm_type = "Znorm", na_as_zero = TRUE)
 
-  # Verify that NAasZero argument is applied in remove_duplicates
-  expect_false(any(is.na(result$data.unique)))
+  # Verify that na_as_zero argument is applied in remove_duplicates
+  expect_false(any(is.na(result$data_unique)))
 })
 
 test_that("preprocessing_data handles invalid gene_column gracefully", {
@@ -63,7 +63,7 @@ test_that("preprocessing_data handles invalid gene_column gracefully", {
   )
 
   expect_error(preprocessing_data(data, names_of_groups = c("Group1", "Group2", "Group3"),
-                                  gene_column = "InvalidColumn", normType = "Znorm"),
+                                  gene_column = "InvalidColumn", norm_type = "Znorm"),
                "undefined columns selected")
 })
 
@@ -76,8 +76,8 @@ test_that("preprocessing_data works with no normalization applied", {
   )
 
   result <- preprocessing_data(data, names_of_groups = c("Group1", "Group2", "Group3"),
-                               gene_column = "Gene", normType = NULL)
+                               gene_column = "Gene", norm_type = NULL)
 
   # Verify that the normalization step didn't alter the original data structure
-  expect_equal(dim(result$data.norm), dim(result$data.unique))
+  expect_equal(dim(result$data_norm), dim(result$data_unique))
 })

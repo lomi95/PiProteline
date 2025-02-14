@@ -4,22 +4,20 @@
 \alias{intersect_enrichment}
 \title{Intersect Enrichment Results}
 \usage{
-intersect_enrichment(enr1, enr2, oppositeTrend = TRUE)
+intersect_enrichment(enr1, enr2)
 }
 \arguments{
 \item{enr1}{A list of enrichment results, where each element is a data frame with enrichment terms.}
 
 \item{enr2}{A list of enrichment results, where each element is a data frame with enrichment terms. Must be of the same length as `enr1`.}
-
-\item{oppositeTrend}{A logical value indicating whether to identify enrichment terms with opposite trends between `enr1` and `enr2`. Default is `TRUE`.}
 }
 \value{
 A list containing:
 \describe{
   \item{enrichment_SameTrend}{A list of common enrichment terms between `enr1` and `enr2` for the same trend.}
-  \item{enrichment_OppositeTrend}{If `oppositeTrend` is `TRUE`, a list of common enrichment terms where the trend is opposite between `enr1` and `enr2`.}
+  \item{enrichment_OppositeTrend}{If `opposite_trend` is `TRUE`, a list of common enrichment terms where the trend is opposite between `enr1` and `enr2`.}
 }
-If `oppositeTrend` is `FALSE`, only `enrichment_SameTrend` is returned.
+If `opposite_trend` is `FALSE`, only `enrichment_SameTrend` is returned.
 }
 \description{
 This function identifies common enrichment terms between two enrichment result lists, optionally accounting for opposite trends.
@@ -43,6 +41,6 @@ enr2 <- list(
                       description = c("Desc3", "Desc6"),
                       category = c("Cat3", "Cat6"))
 )
-intersect_enrichment(enr1, enr2, oppositeTrend = TRUE)
+intersect_enrichment(enr1, enr2, opposite_trend = TRUE)
 }
 }

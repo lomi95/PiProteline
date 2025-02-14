@@ -25,14 +25,14 @@ test_that("centrality_quantiles works correctly with graph with unnamed nodes", 
   expect_equal(colnames(result),names(fun_list))
 
   # Check that ordering works
-  result_ordered <- centrality_quantiles(g, fun_list = fun_list, orderBy = "Degree")
+  result_ordered <- centrality_quantiles(g, fun_list = fun_list, order_by = "Degree")
   expect_true(all(order(result_ordered$Degree, decreasing = T) == 1:nrow(result_ordered)))
-  result_ordered <- centrality_quantiles(g, fun_list = fun_list, orderBy = 1)
+  result_ordered <- centrality_quantiles(g, fun_list = fun_list, order_by = 1)
   expect_true(all(order(result_ordered$Degree, decreasing = T) == 1:nrow(result_ordered)))
 
 
   # Check that messages are correct
-  expect_message(centrality_quantiles(g, fun_list = fun_list, orderBy = "1egree"),"orderBy not recognized, ordering by first column")
+  expect_message(centrality_quantiles(g, fun_list = fun_list, order_by = "1egree"),"order_by not recognized, ordering by first column")
 
 
 })
@@ -66,19 +66,19 @@ test_that("centrality_quantiles works correctly with named nodes", {
   expect_equal(colnames(result),names(fun_list))
 
   # Check that ordering works
-  result_ordered <- centrality_quantiles(g, fun_list = fun_list, orderBy = "Degree")
+  result_ordered <- centrality_quantiles(g, fun_list = fun_list, order_by = "Degree")
   expect_true(all(order(result_ordered$Degree, decreasing = T) == 1:nrow(result_ordered)))
-  result_ordered <- centrality_quantiles(g, fun_list = fun_list, orderBy = 1)
+  result_ordered <- centrality_quantiles(g, fun_list = fun_list, order_by = 1)
   expect_true(all(order(result_ordered$Degree, decreasing = T) == 1:nrow(result_ordered)))
 
-  result_ordered <- suppressMessages(centrality_quantiles(g, fun_list = fun_list, orderBy = "degree"))
+  result_ordered <- suppressMessages(centrality_quantiles(g, fun_list = fun_list, order_by = "degree"))
   expect_true(all(order(rownames(result_ordered)) == 1:nrow(result_ordered)))
-  result_ordered <- suppressMessages(centrality_quantiles(g, fun_list = fun_list, orderBy = 0))
+  result_ordered <- suppressMessages(centrality_quantiles(g, fun_list = fun_list, order_by = 0))
   expect_true(all(order(rownames(result_ordered)) == 1:nrow(result_ordered)))
-  result_ordered <- suppressMessages(centrality_quantiles(g, fun_list = fun_list, orderBy = length(fun_list)+1))
+  result_ordered <- suppressMessages(centrality_quantiles(g, fun_list = fun_list, order_by = length(fun_list)+1))
   expect_true(all(order(rownames(result_ordered)) == 1:nrow(result_ordered)))
 
   # Check that messages are correct
-  expect_message(centrality_mean(g, fun_list = fun_list, orderBy = "1egree"),"orderBy not recognized, ordering by 'rownames'")
+  expect_message(centrality_mean(g, fun_list = fun_list, order_by = "1egree"),"order_by not recognized, ordering by 'rownames'")
 
 })

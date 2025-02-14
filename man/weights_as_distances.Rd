@@ -5,17 +5,17 @@
 \title{Convert Edge Weights to Distances}
 \usage{
 weights_as_distances(
-  originalWeights = NULL,
+  original_weights = NULL,
   graph = NULL,
-  range.weights = NULL
+  range_weights = NULL
 )
 }
 \arguments{
-\item{originalWeights}{A numeric vector with the original weights of the edges. If `NULL`, the first edge attribute from the `graph` is used. Default is `NULL`.}
+\item{original_weights}{A numeric vector with the original weights of the edges. If `NULL`, the first edge attribute from the `graph` is used. Default is `NULL`.}
 
-\item{graph}{An `igraph` object. Not necessary if `originalWeights` is provided. If both are `NULL`, an error will occur. Default is `NULL`.}
+\item{graph}{An `igraph` object. Not necessary if `original_weights` is provided. If both are `NULL`, an error will occur. Default is `NULL`.}
 
-\item{range.weights}{A numeric vector of length two specifying the range for the weights. If `NULL`, the range is set to `range(originalWeights)`. Default is `NULL`.}
+\item{range_weights}{A numeric vector of length two specifying the range for the weights. If `NULL`, the range is set to `range(original_weights)`. Default is `NULL`.}
 }
 \value{
 A numeric vector containing the transformed weights (distances).
@@ -34,7 +34,7 @@ weights_as_distances(graph = g)
 
 # Example with original weights
 original_weights <- c(10, 20, 30, 40, 50)
-weights_as_distances(originalWeights = original_weights)
+weights_as_distances(original_weights = original_weights)
 
 }
 \seealso{

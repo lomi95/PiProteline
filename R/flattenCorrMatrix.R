@@ -37,5 +37,9 @@ flattenCorrMatrix <- function(cormat, pmat, nmat) {
     cor  = cormat[ut],
     p = pmat[ut],
     n = nmat[ut]
-  )
+  ) %>%
+    filter(
+      row != "",
+      column != ""
+    )
 }

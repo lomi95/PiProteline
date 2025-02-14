@@ -1,10 +1,10 @@
-test_that("Normalization handles ln transformation correctly", {
+test_that("normalization handles ln transformation correctly", {
   data <- data.frame(
     Protein1 = c(10, 20, 30),
     Protein2 = c(5, 15, 25),
     Protein3 = c(2, 8, 18)
   )
-  result <- Normalization(data, normType = "ln")
+  result <- normalization(data, norm_type = "ln")
 
   # Verify dimensions
   expect_equal(dim(result), dim(data))
@@ -13,13 +13,13 @@ test_that("Normalization handles ln transformation correctly", {
   expect_equal(result$Protein1[1], log(10 + 1))
 })
 
-test_that("Normalization handles Z-score normalization correctly", {
+test_that("normalization handles Z-score normalization correctly", {
   data <- data.frame(
     Protein1 = c(10, 20, 30),
     Protein2 = c(5, 15, 25),
     Protein3 = c(2, 8, 18)
   )
-  result <- Normalization(data, normType = "Znorm")
+  result <- normalization(data, norm_type = "Znorm")
 
   # Verify dimensions
   expect_equal(dim(result), dim(data))
@@ -28,13 +28,13 @@ test_that("Normalization handles Z-score normalization correctly", {
   expect_equal(mean(result$Protein1), 0, tolerance = 1e-8)
 })
 
-test_that("Normalization handles Min-Max scaling correctly", {
+test_that("normalization handles Min-Max scaling correctly", {
   data <- data.frame(
     Protein1 = c(10, 20, 30),
     Protein2 = c(5, 15, 25),
     Protein3 = c(2, 8, 18)
   )
-  result <- Normalization(data, normType = "MinMax")
+  result <- normalization(data, norm_type = "MinMax")
 
   # Verify dimensions
   expect_equal(dim(result), dim(data))
@@ -43,13 +43,13 @@ test_that("Normalization handles Min-Max scaling correctly", {
   expect_true(all(result >= 0 & result <= 1))
 })
 
-test_that("Normalization handles Robust scaling correctly", {
+test_that("normalization handles Robust scaling correctly", {
   data <- data.frame(
     Protein1 = c(10, 20, 30),
     Protein2 = c(5, 15, 25),
     Protein3 = c(2, 8, 18)
   )
-  result <- Normalization(data, normType = "Robust")
+  result <- normalization(data, norm_type = "Robust")
 
   # Verify dimensions
   expect_equal(dim(result), dim(data))
@@ -58,13 +58,13 @@ test_that("Normalization handles Robust scaling correctly", {
   expect_equal(median(result$Protein1), 0, tolerance = 1e-8)
 })
 
-test_that("Normalization handles Unit vector scaling correctly", {
+test_that("normalization handles Unit vector scaling correctly", {
   data <- data.frame(
     Protein1 = c(10, 20, 30),
     Protein2 = c(5, 15, 25),
     Protein3 = c(2, 8, 18)
   )
-  result <- Normalization(data, normType = "UnitVector")
+  result <- normalization(data, norm_type = "UnitVector")
 
   # Verify dimensions
   expect_equal(dim(result), dim(data))
@@ -73,13 +73,13 @@ test_that("Normalization handles Unit vector scaling correctly", {
   expect_equal(sqrt(sum(result$Protein1^2)), 1, tolerance = 1e-8)
 })
 
-test_that("Normalization handles Total Signal normalization correctly", {
+test_that("normalization handles Total Signal normalization correctly", {
   data <- data.frame(
     Protein1 = c(10, 20, 30),
     Protein2 = c(5, 15, 25),
     Protein3 = c(2, 8, 18)
   )
-  result <- Normalization(data, normType = "TotSigNorm")
+  result <- normalization(data, norm_type = "TotSigNorm")
 
   # Verify dimensions
   expect_equal(dim(result), dim(data))
@@ -88,13 +88,13 @@ test_that("Normalization handles Total Signal normalization correctly", {
   expect_equal(sum(result$Protein1), 1, tolerance = 1e-8)
 })
 
-test_that("Normalization handles Maximum Signal normalization correctly", {
+test_that("normalization handles Maximum Signal normalization correctly", {
   data <- data.frame(
     Protein1 = c(10, 20, 30),
     Protein2 = c(5, 15, 25),
     Protein3 = c(2, 8, 18)
   )
-  result <- Normalization(data, normType = "MaxSigNorm")
+  result <- normalization(data, norm_type = "MaxSigNorm")
 
   # Verify dimensions
   expect_equal(dim(result), dim(data))
@@ -103,13 +103,13 @@ test_that("Normalization handles Maximum Signal normalization correctly", {
   expect_equal(max(result$Protein1), 1)
 })
 
-test_that("Normalization handles Row Sigma normalization correctly", {
+test_that("normalization handles Row Sigma normalization correctly", {
   data <- data.frame(
     Protein1 = c(10, 20, 30),
     Protein2 = c(5, 15, 25),
     Protein3 = c(2, 8, 18)
   )
-  result <- Normalization(data, normType = "RowSigmaNorm")
+  result <- normalization(data, norm_type = "RowSigmaNorm")
 
   # Verify dimensions
   expect_equal(dim(result), dim(data))

@@ -1,4 +1,4 @@
-#' Centrality Quantiles Filtering
+#' Centrality Quantiles
 #'
 #' This function applies multiple centrality measures to a graph and filters nodes
 #' based on whether their centrality score is above the quantile threshold specified.
@@ -6,7 +6,7 @@
 #' all centrality measures.
 #'
 #' You can choose to order the resulting data frame by a specific centrality measure
-#' using the `orderBy` argument.
+#' using the `order_by` argument.
 #'
 #' @param graph An `igraph` object representing the graph.
 #' @param fun_list A list of centrality functions to apply. The functions should either
@@ -14,7 +14,7 @@
 #' @param quantiles A threshold value representing the quantile of individual centrality
 #'     measures for nodes. Nodes with a centrality score above the given quantile will
 #'     be included. Default is 0 (includes all nodes).
-#' @param orderBy An integer or the name of the centrality by which to order the
+#' @param order_by An integer or the name of the centrality by which to order the
 #'     resulting data frame rows. If NULL, the data frame will be ordered by row names.
 #'     Default is NULL.
 #' @param ... Additional arguments to pass to the centrality functions. These will be
@@ -36,7 +36,7 @@
 centrality_quantiles <- function(graph,
                                  fun_list,
                                  quantiles = 0,
-                                 orderBy = NULL,
+                                 order_by = NULL,
                                  ...) {
   Args <- list(...)
 
@@ -72,28 +72,28 @@ centrality_quantiles <- function(graph,
     if (!nrow(centralities.filtered)) {
       message("No genes meet the condition imposed, try changing quantiles")
     } else {
-      if (is.numeric(orderBy)) {
-        if (length(orderBy) == 1) {
-          if (orderBy > 0 & orderBy <= length(fun_list)) {
-            ordering <- order(centralities.filtered[, orderBy], decreasing = TRUE)
+      if (is.numeric(order_by)) {
+        if (length(order_by) == 1) {
+          if (order_by > 0 & order_by <= length(fun_list)) {
+            ordering <- order(centralities.filtered[, order_by], decreasing = TRUE)
           } else {
-            message("orderBy not recognized, ordering by 'rownames'")
+            message("order_by not recognized, ordering by 'rownames'")
             ordering <- order(rownames(centralities.filtered))
           }
         } else {
-          message("orderBy not recognized, ordering by 'rownames'")
+          message("order_by not recognized, ordering by 'rownames'")
           ordering <- order(rownames(centralities.filtered))
         }
-      } else if (is.character(orderBy)) {
-        if (length(orderBy) == 1) {
-          if (orderBy %in% names(fun_list)) {
-            ordering <- order(centralities.filtered[, orderBy], decreasing = TRUE)
+      } else if (is.character(order_by)) {
+        if (length(order_by) == 1) {
+          if (order_by %in% names(fun_list)) {
+            ordering <- order(centralities.filtered[, order_by], decreasing = TRUE)
           } else {
-            message("orderBy not recognized, ordering by 'rownames'")
+            message("order_by not recognized, ordering by 'rownames'")
             ordering <- order(rownames(centralities.filtered))
           }
         } else {
-          message("orderBy not recognized, ordering by 'rownames'")
+          message("order_by not recognized, ordering by 'rownames'")
           ordering <- order(rownames(centralities.filtered))
         }
       } else {
@@ -107,28 +107,28 @@ centrality_quantiles <- function(graph,
     if (!nrow(centralities.filtered)) {
       message("No genes meet the condition imposed, try changing quantiles")
     } else {
-      if (is.numeric(orderBy)) {
-        if (length(orderBy) == 1) {
-          if (orderBy > 0 & orderBy <= length(fun_list)) {
-            ordering <- order(centralities.filtered[, orderBy], decreasing = TRUE)
+      if (is.numeric(order_by)) {
+        if (length(order_by) == 1) {
+          if (order_by > 0 & order_by <= length(fun_list)) {
+            ordering <- order(centralities.filtered[, order_by], decreasing = TRUE)
           } else {
-            message("orderBy not recognized, ordering by first column")
+            message("order_by not recognized, ordering by first column")
             ordering <- order(centralities.filtered[,1])
           }
         } else {
-          message("orderBy not recognized, ordering by first column")
+          message("order_by not recognized, ordering by first column")
           ordering <- order(centralities.filtered[,1])
         }
-      } else if (is.character(orderBy)) {
-        if (length(orderBy) == 1) {
-          if (orderBy %in% names(fun_list)) {
-            ordering <- order(centralities.filtered[, orderBy], decreasing = TRUE)
+      } else if (is.character(order_by)) {
+        if (length(order_by) == 1) {
+          if (order_by %in% names(fun_list)) {
+            ordering <- order(centralities.filtered[, order_by], decreasing = TRUE)
           } else {
-            message("orderBy not recognized, ordering by first column")
+            message("order_by not recognized, ordering by first column")
             ordering <- order(centralities.filtered[,1])
           }
         } else {
-          message("orderBy not recognized, ordering by first column")
+          message("order_by not recognized, ordering by first column")
           ordering <- order(centralities.filtered[,1])
         }
       } else {

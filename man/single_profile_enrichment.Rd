@@ -11,7 +11,8 @@ single_profile_enrichment(
   tax_ID,
   categories = c("Process", "Function", "Component", "RCTM", "WikiPathways"),
   parallel = T,
-  num_cores = parallel::detectCores() - 1
+  num_cores = parallel::detectCores() - 1,
+  ...
 )
 }
 \arguments{
@@ -33,12 +34,14 @@ Default categories include "Process", "Function", "Component", "RCTM", and "Wiki
 \item{parallel}{Logical; if TRUE, the function will execute in parallel mode.
 Default is TRUE.}
 
-\item{num_cores}{Integer specifying the number of cores to use for parallel
+\item{num_cores}{Integer specifying the number of cores to use for parallel}
+
+\item{...}{Other arguments to pass on internal functions
 processing. Default is one less than the total available cores.}
 }
 \value{
 A data frame containing enrichment results per category and term, with
-additional columns for computed metrics such as means, DAve, and LDA-adjusted
+additional columns for computed metrics such as means, DAve, and manova-adjusted
 p-values.
 }
 \description{

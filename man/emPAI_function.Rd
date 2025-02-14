@@ -4,12 +4,12 @@
 \alias{emPAI_function}
 \title{emPAI (Exponentially Modified Protein Abundance Index)}
 \usage{
-emPAI_function(list.groups_peptides, Pn_ideal)
+emPAI_function(list_groups_peptides, ideal_peptides)
 }
 \arguments{
-\item{list.groups_peptides}{A list where each element represents a group of peptides (e.g., numeric vectors or matrices of peptide data), or a dataset where rows are samples and columns are proteins.}
+\item{list_groups_peptides}{A list where each element represents a group of peptides (e.g., numeric vectors or matrices of peptide data), or a dataset where rows are samples and columns are proteins.}
 
-\item{Pn_ideal}{A numeric vector representing the ideal number of peptides for each protein.}
+\item{ideal_peptides}{A numeric vector representing the ideal number of peptides for each protein.}
 }
 \value{
 The emPAI matrix (if input is a list) or vector (if input is a dataset) for each protein.
@@ -20,18 +20,18 @@ This function calculates the emPAI (Exponentially Modified Protein Abundance Ind
 \details{
 The emPAI index provides an estimate of the relative abundance of proteins in a sample based on the number of observable and observed peptides. It is calculated as:
 \deqn{emPAI = \frac{10^{(Obs/Pn_{ideal}) - 1}}{\sum 10^{(Obs/Pn_{ideal}) - 1}}}
-where \code{Obs} is the observed number of peptides, and \code{Pn_ideal} is the ideal number of peptides for each protein.
+where \code{Obs} is the observed number of peptides, and \code{ideal_peptides} is the ideal number of peptides for each protein.
 }
 \examples{
 peptides_group1 <- matrix(c(5, 10, 15), nrow = 1)
 peptides_group2 <- matrix(c(8, 12, 20), nrow = 1)
-Pn_ideal <- c(10, 10, 10)
-list.groups_peptides <- list(Group1 = peptides_group1, Group2 = peptides_group2)
-emPAI_function(list.groups_peptides, Pn_ideal)
+ideal_peptides <- c(10, 10, 10)
+list_groups_peptides <- list(Group1 = peptides_group1, Group2 = peptides_group2)
+emPAI_function(list_groups_peptides, ideal_peptides)
 
 # Using a dataset (Sample x Protein)
 dataset <- matrix(c(5, 10, 15, 8, 12, 20), nrow = 2)
-emPAI_function(dataset, Pn_ideal)
+emPAI_function(dataset, ideal_peptides)
 
 }
 \references{

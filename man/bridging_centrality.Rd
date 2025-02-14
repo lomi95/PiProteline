@@ -6,26 +6,26 @@
 \usage{
 bridging_centrality(
   graph,
-  Betw = NULL,
+  betw = NULL,
   weights_as_distances = NULL,
   range_weights = NULL,
-  degree_weighted = T
+  weighted_degree = T
 )
 }
 \arguments{
 \item{graph}{An `igraph` object representing the graph.}
 
-\item{Betw}{A precomputed betweenness centrality vector to speed up computation.
+\item{betw}{A precomputed betweenness centrality vector to speed up computation.
 If NULL, betweenness will be computed within the function. Default is NULL.}
 
 \item{weights_as_distances}{A vector of weights to be treated as distances on the graph's edges.
 If NULL, unweighted bridging centrality will be computed. Default is NULL.}
 
 \item{range_weights}{A numeric range indicating the desired range of weights for the computation.
-If NULL, the range of `weights_as_distances` will be used. Ignored if `degree_weighted = FALSE`.
+If NULL, the range of `weights_as_distances` will be used. Ignored if `weighted_degree = FALSE`.
 Default is NULL.}
 
-\item{degree_weighted}{A logical indicating whether the degree should be computed as the sum of weights
+\item{weighted_degree}{A logical indicating whether the degree should be computed as the sum of weights
 (when `TRUE`) or the number of edges (when `FALSE`). Default is TRUE.}
 }
 \value{
@@ -40,7 +40,7 @@ The bridging coefficient is calculated following the method described by Hwang e
 the degree,  For more details, see the reference below.
 }
 \details{
-When `degree_weighted = TRUE`, instead of using the degree (i.e., the number of edges)
+When `weighted_degree = TRUE`, instead of using the degree (i.e., the number of edges)
 as described by Hwang et al, the weighted degree is used, which is calculated
 as the sum of the incident edge weights on each vertex.
 }

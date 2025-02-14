@@ -8,15 +8,16 @@ pipeline(
   dataset,
   names_of_groups,
   gene_column = 1,
-  normType = "TotSigNorm",
+  norm_type = "TotSigNorm",
   quantile_critical_nodes = 0.75,
-  significance.LDA = 0.05,
-  fun_list = c(Degree = wDegree, Betweenness = igraph::betweenness, Centroids =
-    centroids, Bridging = bridging_centrality, Closeness = igraph::closeness),
-  g.interactome = NULL,
-  violins = F,
+  significance_manova = 0.05,
+  fun_list = c(Betweenness = igraph::betweenness, Centroids = centroids, Bridging =
+    bridging_centrality),
+  g_interactome = NULL,
   categories = c("Component", "Function", "Process", "RCTM", "WikiPathway"),
   tax_ID = 9606,
+  save_results_as = paste0("PiProteline_report_", paste0(names_of_groups, collapse =
+    "_")),
   ...
 )
 }
@@ -27,21 +28,21 @@ pipeline(
 
 \item{gene_column}{The name or index of the column containing gene identifiers. Default is 1.}
 
-\item{normType}{The type of normalization to apply. Default is "TotSigNorm".}
+\item{norm_type}{The type of normalization to apply. Default is "TotSigNorm".}
 
 \item{quantile_critical_nodes}{A numeric value specifying the quantile threshold for identifying critical nodes. Default is 0.75.}
 
-\item{significance.LDA}{A numeric argument indicating the significance threshold for Linear Discriminant Analysis}
+\item{significance_manova}{A numeric argument indicating the significance threshold for Multivariate Analysis of Variance}
 
 \item{fun_list}{A named list of functions for calculating centralities. Default is a set of common centrality measures.}
 
-\item{g.interactome}{An `igraph` object representing the interactome of the species, used for mapping protein interactions.}
-
-\item{violins}{Logical value indicating whether to create violin plots. Default is `TRUE`.}
+\item{g_interactome}{An `igraph` object representing the interactome of the species, used for mapping protein interactions.}
 
 \item{categories}{A character vector specifying enrichment categories for functional analysis. Default is `c("Component", "Function", "Process", "RCTM", "WikiPathway")`.}
 
 \item{tax_ID}{An integer representing the taxonomy ID for the organism (e.g., 9606 for human).}
+
+\item{save_results_as}{Directory name where results will be saved. Defaults to "PiProteline_report".}
 
 \item{...}{Additional arguments passed to other functions within the pipeline.}
 }
@@ -49,7 +50,7 @@ pipeline(
 A list containing results from different steps of the analysis, including:
 \describe{
   \item{descriptiveStatistics}{Data grouped, column and row statistics, correlation between groups, and indices like NSAF and emPAI.}
-  \item{quantitativeAnalysis}{Results of LDA analysis, DAve and DCI indices, and fold change calculations.}
+  \item{quantitativeAnalysis}{Results of manova analysis, DAve and DCI indices, and fold change calculations.}
   \item{networkAnalysis}{Unweighted and weighted PPI analysis, centralities, critical nodes, and violin plots.}
   \item{functionalAnalysis}{Results of the functional analysis, including enrichment and intersecting enrichment terms.}
 }

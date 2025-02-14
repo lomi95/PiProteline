@@ -11,7 +11,7 @@
 #' @param tax_ID An integer specifying the taxonomy ID of the species for annotation.
 #' @param interactome A data frame of interactome data. Default is `NULL`, in which case
 #'        the function will read the file specified by `directory_interactome`.
-#' @param AnnNbyN An integer vector for splitting the protein list during annotation to
+#' @param splitting_for_API An integer vector for splitting the protein list during annotation to
 #'        avoid API timeout errors. Lower values may prevent timeouts. Default is `1999`.
 #'
 #' @details
@@ -39,7 +39,7 @@
 build_interactome <- function(directory_interactome = NULL, tax_ID,
                               interactome = NULL,
                               scores_threshold = NULL,
-                              AnnNbyN = 1999){
+                              splitting_for_API = 1999){
 
   if (is.null(interactome)){
     interactome <- read.delim(directory_interactome, sep = " ")
@@ -52,7 +52,7 @@ build_interactome <- function(directory_interactome = NULL, tax_ID,
   all.interacting.proteins <- unique(c(interactome.filtered$protein1,
                                        interactome.filtered$protein2))
 
-  mapped_id <- protein_mapping(all.interacting.proteins, tax_ID, AnnNbyN)
+  mapped_id <- protein_mapping(all.interacting.proteins, tax_ID, splitting_for_API)
   p1.mapped <- mapped_id$preferredName[match(interactome.filtered$protein1,
                                                      mapped_id$queryItem)]
   p2.mapped <- mapped_id$preferredName[match(interactome.filtered$protein2,

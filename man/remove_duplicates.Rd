@@ -4,7 +4,13 @@
 \alias{remove_duplicates}
 \title{Remove Duplicate Rows Based on Gene Names}
 \usage{
-remove_duplicates(dataset, genes, FUN = max, NAasZero = TRUE, ZeroasNA = FALSE)
+remove_duplicates(
+  dataset,
+  genes,
+  FUN = max,
+  na_as_zero = TRUE,
+  zero_as_na = FALSE
+)
 }
 \arguments{
 \item{dataset}{A data frame from which duplicate rows should be removed.}
@@ -13,9 +19,9 @@ remove_duplicates(dataset, genes, FUN = max, NAasZero = TRUE, ZeroasNA = FALSE)
 
 \item{FUN}{A function to apply to duplicate values for resolving duplicates. Default is `max`.}
 
-\item{NAasZero}{A logical value indicating if NAs should be treated as zeros. Default is `TRUE`. If both `NAasZero` and `ZeroasNA` are `TRUE`, an error will be raised.}
+\item{na_as_zero}{A logical value indicating if NAs should be treated as zeros. Default is `TRUE`. If both `na_as_zero` and `zero_as_na` are `TRUE`, an error will be raised.}
 
-\item{ZeroasNA}{A logical value indicating if zeros should be treated as NAs. Default is `FALSE`.}
+\item{zero_as_na}{A logical value indicating if zeros should be treated as NAs. Default is `FALSE`.}
 }
 \value{
 A data frame with duplicate rows removed, based on the specified gene column. The resulting data frame includes a new column named `GeneName` for the gene identifiers.
@@ -35,6 +41,6 @@ data <- data.frame(
 remove_duplicates(data, genes = "Gene")
 
 # Handle NAs as zeros
-remove_duplicates(data, genes = "Gene", NAasZero = TRUE)
+remove_duplicates(data, genes = "Gene", na_as_zero = TRUE)
 
 }

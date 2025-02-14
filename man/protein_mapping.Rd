@@ -4,14 +4,14 @@
 \alias{protein_mapping}
 \title{Map Protein IDs Using StringDB}
 \usage{
-protein_mapping(proteinsIds, tax_ID, AnnNbyN)
+protein_mapping(proteins_ids, tax_ID, splitting_API)
 }
 \arguments{
-\item{proteinsIds}{A character vector of protein IDs that need to be annotated.}
+\item{proteins_ids}{A character vector of protein IDs that need to be annotated.}
 
 \item{tax_ID}{An integer specifying the taxonomy ID of the species to use for the annotation.}
 
-\item{AnnNbyN}{An integer specifying the number of proteins to process per batch in the API call.}
+\item{splitting_API}{An integer specifying the number of proteins to process per batch in the API call.}
 }
 \value{
 A list with two elements:
@@ -34,7 +34,7 @@ in the final output.
 \examples{
 \dontrun{
   proteins <- c("P12345", "Q67890", "A11111")
-  mapped_id <- protein_mapping(proteins, tax_ID = 9606, AnnNbyN = 100)
+  mapped_id <- protein_mapping(proteins, tax_ID = 9606, splitting_API = 100)
   mapped_id  # Mapped IDs
 }
 

@@ -17,16 +17,19 @@
 #' @param parallel Logical; if TRUE, the function will execute in parallel mode.
 #' Default is TRUE.
 #' @param num_cores Integer specifying the number of cores to use for parallel
+#' @param ... Other arguments to pass on internal functions
 #' processing. Default is one less than the total available cores.
 #'
 #' @return A data frame containing enrichment results per category and term, with
-#' additional columns for computed metrics such as means, DAve, and LDA-adjusted
+#' additional columns for computed metrics such as means, DAve, and manova-adjusted
 #' p-values.
 #'
 #' @details This function first identifies proteins in each group and applies
 #' enrichment analysis. Enrichment results are then filtered by selected categories and
 #' metrics are calculated.
 #'
+#' @importFrom dplyr pull filter
+#' @importFrom parallel stopCluster makeCluster
 #' @examples
 #' \dontrun{
 #' dataset <- data.frame(geneID = c("gene1", "gene2", "gene3"),
@@ -41,9 +44,15 @@
 
 single_profile_enrichment <- function(dataset, names_of_groups, gene_column = 1,
                                       tax_ID,categories = c("Process", "Function", "Component", "RCTM", "WikiPathways"),
-                                      parallel = T, num_cores = parallel::detectCores()-1){
+                                      parallel = T, num_cores = parallel::detectCores()-1, ...){
+  args_list <- list(...)
   if (is.character(gene_column)){
-    gene_column <- which(gene_column == colnames(dataset))
+    if (any(gene_column == colnames(dataset))){
+      gene_column <- which(gene_column == colnames(dataset))
+    } else {
+      stop("Give a valid 'gene_column' value")
+    }
+
   }
 
   identified_prots <- lapply(dataset[,-gene_column], function(x) dataset[x>0,gene_column])
@@ -54,13 +63,22 @@ single_profile_enrichment <- function(dataset, names_of_groups, gene_column = 1,
 
   if (parallel){
     on.exit(parallel::stopCluster(cl))
-    num_cores <- min(num_cores,length(identified_prots))
+    num_cores <- floor(min(num_cores,length(identified_prots)/4))
     cl <- parallel::makeCluster(num_cores)
 
     singleEnrichments <- parallel::parLapply(cl = cl, X = identified_prots,
                                              rbioapi::rba_string_enrichment,
                                              species = tax_ID, split_df = F,
                                              verbose = F)
+
+
+    if (any(sapply(singleEnrichments, class) == "character")){
+      ind_err <- which(sapply(singleEnrichments, class) == "character")
+      singleEnrichments[ind_err] <- lapply(identified_prots[ind_err],
+               rbioapi::rba_string_enrichment,
+               species = tax_ID, split_df = F,
+               verbose = F)
+    }
   } else {
     singleEnrichments <- lapply(identified_prots,
                                 rbioapi::rba_string_enrichment,
@@ -79,22 +97,37 @@ single_profile_enrichment <- function(dataset, names_of_groups, gene_column = 1,
   enrTable <- purrr::reduce(singleEnrichments2, merge, by = c("category","term","description"), all = T) %>%
     filter(category %in% categories)
   enrTable[is.na(enrTable)] <- 0
-  ldaEnrTable <- LDA(dataset = enrTable[,-c(1,3)],names_of_groups,gene_column = 1,
-                     correction.LDA = NULL)
-  ldaEnrTable1 <- t(ldaEnrTable$dataset.LDA)
 
+  args_manova <- args_list[intersect(names(args_list), names(formals(manova)))]
+  args_manova <- args_manova[names(args_manova) != "correction_manova"]
+
+  ldaEnrTable <- manova(dataset = enrTable[,-c(1,3)],
+                        names_of_groups,
+                        gene_column = 1,
+                        correction_manova = NULL,
+                        )
+  ldaEnrTable1 <- enrTable %>%
+    filter(term %in% (ldaEnrTable %>%
+                        filter(p.adj <= 0.05) %>%
+                        pull(GeneName))) %>%
+    select(-category, -description)
+
+  rownames(ldaEnrTable1) <- ldaEnrTable1$term
   groupsEnrTable <- group_listing(ldaEnrTable1,names_of_groups)
   meanEnrTable <- sapply(groupsEnrTable, rowMeans)
   colnames(meanEnrTable) <- paste0("Mean_",colnames(meanEnrTable))
   daveEnrTable <- DAve(groupsEnrTable)
   colnames(daveEnrTable) <- paste0("DAve_",colnames(daveEnrTable))
 
-  ldaEnrTable2 <- data.frame(enrTable[match(rownames(ldaEnrTable1),gsub(":|-",".",enrTable[,2])),1:3],
-                             ldaEnrTable1,
+  ldaEnrTable2 <- data.frame(enrTable[match(rownames(ldaEnrTable1),enrTable[,2]),1:3],
+                             pvalue_manova = ldaEnrTable %>%
+                               filter(p.adj <= 0.05) %>%
+                               pull(p.adj),
+                             daveEnrTable %>%  select(-DAve_GeneName),
                              meanEnrTable,
-                             daveEnrTable,
-                             pvalue_LDA = ldaEnrTable$features_p.values$
-                               p.adj[ldaEnrTable$features_p.values$p.adj < 0.05])
+                             ldaEnrTable1 %>% select(-term)
+
+  )
 
 }
 
