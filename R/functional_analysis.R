@@ -96,7 +96,7 @@ functional_analysis <- function(dataset, manova_pairwise_results, unweighted_CN,
                                       error = function(e){
                                         message("Error in single_profile_enrichment:")
                                         message(e)
-                                        return(NULL)
+                                        return(data.frame(GeneName = character()))
                                       }
   )
 

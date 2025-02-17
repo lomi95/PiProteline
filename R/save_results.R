@@ -130,5 +130,9 @@ save_results <- function(quantitative_analysis_results = NULL,
 
     })
     saveWorkbook(wb_enr_trend, paste0(save_results_as,"_enrichmentTrend.xlsx"))
+
+
+    save_images(quantitativeAnalysis)
     setwd("..")
+
 }

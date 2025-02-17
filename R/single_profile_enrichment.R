@@ -89,7 +89,9 @@ single_profile_enrichment <- function(dataset, names_of_groups, gene_column = 1,
     if (no_prots[i]) singleEnrichments[[i]] <- singleEnrichments[[i]][0,]
   }
 
+
   singleEnrichments2 <- lapply(names(singleEnrichments),  function(x){
+
     colnames(singleEnrichments[[x]])[3] <- x
     return(singleEnrichments[[x]][c(1,2,3,10)])
   })
@@ -112,22 +114,25 @@ single_profile_enrichment <- function(dataset, names_of_groups, gene_column = 1,
                         pull(GeneName))) %>%
     select(-category, -description)
 
-  rownames(ldaEnrTable1) <- ldaEnrTable1$term
-  groupsEnrTable <- group_listing(ldaEnrTable1,names_of_groups)
-  meanEnrTable <- sapply(groupsEnrTable, rowMeans)
-  colnames(meanEnrTable) <- paste0("Mean_",colnames(meanEnrTable))
-  daveEnrTable <- DAve(groupsEnrTable)
-  colnames(daveEnrTable) <- paste0("DAve_",colnames(daveEnrTable))
+  if (nrow(ldaEnrTable1)){
+    rownames(ldaEnrTable1) <- ldaEnrTable1$term
+    groupsEnrTable <- group_listing(ldaEnrTable1,names_of_groups)
+    meanEnrTable <- sapply(groupsEnrTable, rowMeans)
+    colnames(meanEnrTable) <- paste0("Mean_",colnames(meanEnrTable))
+    daveEnrTable <- DAve(groupsEnrTable)
+    colnames(daveEnrTable) <- paste0("DAve_",colnames(daveEnrTable))
 
-  ldaEnrTable2 <- data.frame(enrTable[match(rownames(ldaEnrTable1),enrTable[,2]),1:3],
-                             pvalue_manova = ldaEnrTable %>%
-                               filter(p.adj <= 0.05) %>%
-                               pull(p.adj),
-                             daveEnrTable %>%  select(-DAve_GeneName),
-                             meanEnrTable,
-                             ldaEnrTable1 %>% select(-term)
-
-  )
-
+    ldaEnrTable2 <- data.frame(enrTable[match(rownames(ldaEnrTable1),enrTable[,2]),1:3],
+                               pvalue_manova = ldaEnrTable %>%
+                                 filter(p.adj <= 0.05) %>%
+                                 pull(p.adj),
+                               daveEnrTable %>%  select(-DAve_GeneName),
+                               meanEnrTable,
+                               ldaEnrTable1 %>% select(-term)
+    )
+    return(ldaEnrTable2)
+  } else {
+    return(ldaEnrTable1)
+  }
 }
 
