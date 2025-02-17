@@ -36,7 +36,7 @@
 #'
 quantitative_analysis <- function(dataset, names_of_groups, gene_column, data_grouped_full = NULL,
                                   significance_manova, ...) {
-  args_list <- list(...)
+  args_list <- list(...)[[1]]
   if (is.character(gene_column)){
     gene_column <- which(colnames(dataset) == gene_column)
   }

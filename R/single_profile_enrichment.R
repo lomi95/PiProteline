@@ -45,7 +45,7 @@
 single_profile_enrichment <- function(dataset, names_of_groups, gene_column = 1,
                                       tax_ID,categories = c("Process", "Function", "Component", "RCTM", "WikiPathways"),
                                       parallel = T, num_cores = parallel::detectCores()-1, ...){
-  args_list <- list(...)
+  args_list <- list(...)[[1]]
   if (is.character(gene_column)){
     if (any(gene_column == colnames(dataset))){
       gene_column <- which(gene_column == colnames(dataset))

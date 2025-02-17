@@ -41,7 +41,7 @@
 #'
 network_analysis <- function(data_grouped = NULL, data_grouped_even_dim = NULL, fun_list, g_interactome = NULL,
                              quantile_critical_nodes, names_of_groups = NULL, data_unique = NULL,...){
-  args_list <- list(...)
+  args_list <- list(...)[[1]]
 
   if (is.null(g_interactome)){
     message("No interactome was given, the human interactome will be used")

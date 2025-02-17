@@ -34,7 +34,7 @@
 #' descriptive_statistics(data_unique, data_grouped_full)
 #'
 descriptive_statistics <- function(data_unique, data_grouped_full, ...) {
-  args_list <- list(...)
+  args_list <- list(...)[[1]]
   DS_col <- suppressMessages(descriptive_stats_cols(data_unique))
   DS_row <- suppressMessages(descriptive_stats_rows(data_unique))
   DS_col_groups <- lapply(data_grouped_full, function(x) suppressMessages(descriptive_stats_cols(x)))

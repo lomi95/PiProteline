@@ -47,7 +47,7 @@
 functional_analysis <- function(dataset, manova_pairwise_results, unweighted_CN, weighted_CN,
                                 names_of_groups, tax_ID, categories, ...){
 
-  args_list <- list(...)
+  args_list <- list(...)[[1]]
   summaryTable <- summary_table(manova_pairwise_results = manova_pairwise_results,
                                 unweighted_CN = unweighted_CN,
                                 weighted_CN = weighted_CN)

@@ -46,7 +46,7 @@
 #'
 weighted_network_analysis <- function(data_grouped_even_dim = NULL, names_of_groups, data_unique = NULL,
                                       fun_list, g_interactome = NULL, quantile_critical_nodes, ...) {
-  args_list <- list(...)
+  args_list <- list(...)[[1]]
   names(names_of_groups) <- names_of_groups
 
   if (is.null(g_interactome)){

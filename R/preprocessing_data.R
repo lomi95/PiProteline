@@ -32,7 +32,7 @@
 #'                    gene_column = "Gene", norm_type = "Znorm")
 #'
 preprocessing_data <- function(dataset, names_of_groups, gene_column, norm_type, ...) {
-  args_list <- list(...)
+  args_list <- list(...)[[1]]
   names(names_of_groups) <- names_of_groups
 
   args_remove_duplicates <- args_list[intersect(names(args_list),

@@ -10,11 +10,8 @@
 #' @param pos_vectors_groups A list where each element contains column indices for a group of samples. If provided, `names_of_groups` is ignored.
 #' @param fc_bounds A numeric vector specifying the bounds for highlighting fold changes in Volcano plots. Default is c(0, 0).
 #'
-#' @importFrom matrixStats rowMaxs
-#' @importFrom matrixStats rowMins
-#' @importFrom stats p.adjust
-#' @importFrom stats manova
-#' @importFrom stats summary.aov
+#' @importFrom matrixStats rowMaxs rowMins
+#' @importFrom stats p.adjust p.adjust.methods manova summary.aov
 #' @importFrom magrittr %>%
 #' @importFrom dplyr select all_of
 #'

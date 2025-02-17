@@ -30,7 +30,7 @@
 #' print(weighted_deg)
 wDegree <- function(graph, weights_wd = NULL, ...) {
   if (is.null(weights_wd)) {
-    args_list <- list(...)
+    args_list <- list(...)[[1]]
     args_degree.igraph <- args_list[intersect(names(args_list), names(formals(igraph::degree)))]
     WD <- igraph::degree(graph, ...)
   } else {
