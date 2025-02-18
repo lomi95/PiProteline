@@ -61,7 +61,7 @@
 summary_manova <- function(manova_pairwise_results, significance_manova = 0.05, fc_bounds = c(-0,0), DAve_bounds = c(-0,0)) {
 
   mpr <- lapply(manova_pairwise_results, function(x){
-    x %>% dplyr::filter(.data$p.adj <= significance_manova,
+    x %>% dplyr::filter(p.adj <= significance_manova,
                  rowSums(dplyr::across(dplyr::contains("FC"),   ~ . >= max(fc_bounds)   | . < min(fc_bounds)))   > 0,
                  rowSums(dplyr::across(dplyr::contains("DAve"), ~ . >= max(DAve_bounds) | . < min(DAve_bounds))) > 0
                  ) %>%
