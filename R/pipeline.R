@@ -47,7 +47,7 @@ pipeline <- function(dataset,names_of_groups,gene_column = 1,
                      tax_ID = 9606,
                      save_results_as = paste0("PiProteline_report_",paste0(names_of_groups, collapse = "_")),
                      ...){
-  args_list <- list(...)
+
 
   if (is.null(g_interactome)){
     message("No interactome was given, the human interactome will be used")
@@ -55,12 +55,12 @@ pipeline <- function(dataset,names_of_groups,gene_column = 1,
   }
 
   message("preprocessing data")
-  preprocData <- preprocessing_data(dataset,names_of_groups,gene_column,norm_type,args_list)
+  preprocData <- preprocessing_data(dataset,names_of_groups,gene_column,norm_type,...)
 
   message("computing descriptive statistics")
   descriptiveStatistics <- descriptive_statistics(data_unique = preprocData$data_unique,
                                                   data_grouped_full = preprocData$data_grouped_full,
-                                                  ... = args_list)
+                                                  ... = ...)
 
   message("computing quantitative analysis")
   quantitativeAnalysis  <- quantitative_analysis(dataset = preprocData$data_norm,
@@ -68,7 +68,7 @@ pipeline <- function(dataset,names_of_groups,gene_column = 1,
                                                 gene_column = 1,
                                                 data_grouped_full = preprocData$data_grouped_full,
                                                 significance_manova = significance_manova,
-                                                ... = args_list)
+                                                ... = ...)
 
   message("computing network analysis")
   networkAnalysis <- network_analysis(data_grouped = preprocData$data_grouped,
@@ -76,18 +76,18 @@ pipeline <- function(dataset,names_of_groups,gene_column = 1,
                                       fun_list = fun_list,
                                       g_interactome = g_interactome,
                                       quantile_critical_nodes = quantile_critical_nodes,
-                                      ... = args_list)
+                                      ... = ...)
 
   message("computing functional analysis ")
   functionalAnalysis <- functional_analysis(dataset = preprocData$data_unique,
                                             manova_pairwise_results = quantitativeAnalysis$manova_pairw_results,
                                             unweighted_CN = networkAnalysis$Unweighted_criticalNodes,
                                             weighted_CN   = networkAnalysis$Weighted_criticalNodes,
-                                            names_of_groups,tax_ID, categories, ... = args_list)
+                                            names_of_groups,tax_ID, categories, ... = ...)
 
   if (!is.null(save_results_as)){
     try({
-      message("Saving the results")
+      message("\nSaving the results")
       save_results(quantitativeAnalysis,
                    networkAnalysis,
                    functionalAnalysis,

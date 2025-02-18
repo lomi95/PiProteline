@@ -45,13 +45,15 @@ enrichment_manova <- function(prot_manova, tax_ID, categories, differences = T){
 
   if (differences == T){
     enr_manova.diff <- enr_manova
-    for (i in seq(1,length(enr_manova),by = 2)){
-      enr_manova.diff[[i]]   <- enr_manova[[i]]   %>%
-        dplyr::filter(term %in% setdiff(term,enr_manova[[i+1]]$term)) %>%
-        dplyr::arrange(category, description)
-      enr_manova.diff[[i+1]] <- enr_manova[[i+1]] %>%
-        dplyr::filter(term %in% setdiff(term,enr_manova[[i]]$term)) %>%
-        dplyr::arrange(category, description)
+    if (length(enr_manova)){
+      for (i in seq(1,length(enr_manova),by = 2)){
+        enr_manova.diff[[i]]   <- enr_manova[[i]]   %>%
+          dplyr::filter(term %in% setdiff(term,enr_manova[[i+1]]$term)) %>%
+          dplyr::arrange(category, description)
+        enr_manova.diff[[i+1]] <- enr_manova[[i+1]] %>%
+          dplyr::filter(term %in% setdiff(term,enr_manova[[i]]$term)) %>%
+          dplyr::arrange(category, description)
+      }
     }
 
     return(list(enr_manova = enr_manova,

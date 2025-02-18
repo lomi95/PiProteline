@@ -46,7 +46,8 @@
 #'
 weighted_network_analysis <- function(data_grouped_even_dim = NULL, names_of_groups, data_unique = NULL,
                                       fun_list, g_interactome = NULL, quantile_critical_nodes, ...) {
-  args_list <- list(...)[[1]]
+  args_list <- list(...)
+
   names(names_of_groups) <- names_of_groups
 
   if (is.null(g_interactome)){
@@ -97,8 +98,8 @@ weighted_network_analysis <- function(data_grouped_even_dim = NULL, names_of_gro
       x <- suppressMessages(biggest_component(x))
       WaD <- suppressMessages(weights_as_distances(graph = x))
       centrality_quantiles(x, fun_list = fun_list, quantiles = 0, weights = WaD,
-                           weights_as_distances = WaD, weights_wd = names(igraph::edge.attributes(x))[1],
-                           args_centrality_quantiles)
+                           weights_as_distances = WaD, weights_wd = names(igraph::edge.attributes(x))[1], ... = ...)
+
     })
 
     # Centrality analysis over quantiles

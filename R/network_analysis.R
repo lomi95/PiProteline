@@ -41,7 +41,6 @@
 #'
 network_analysis <- function(data_grouped = NULL, data_grouped_even_dim = NULL, fun_list, g_interactome = NULL,
                              quantile_critical_nodes, names_of_groups = NULL, data_unique = NULL,...){
-  args_list <- list(...)[[1]]
 
   if (is.null(g_interactome)){
     message("No interactome was given, the human interactome will be used")
@@ -61,12 +60,12 @@ network_analysis <- function(data_grouped = NULL, data_grouped_even_dim = NULL, 
   unweightedNetwAnalysis <- unweighted_network_analysis(data_grouped = data_grouped, data_unique = data_unique,
                                                         names_of_groups = names_of_groups,fun_list = fun_list,
                                                         g_interactome = g_interactome,
-                                                        quantile_critical_nodes = quantile_critical_nodes, args_list)
+                                                        quantile_critical_nodes = quantile_critical_nodes, ... = ...)
 
   weightedNetwAnalysis <- weighted_network_analysis(data_grouped_even_dim = data_grouped_even_dim, data_unique = data_unique,
                                                     names_of_groups = names_of_groups,fun_list = fun_list,
                                                     g_interactome = g_interactome,
-                                                    quantile_critical_nodes = quantile_critical_nodes, args_list)
+                                                    quantile_critical_nodes = quantile_critical_nodes, ...)
 
   return(list(Unweighted_centralities  = unweightedNetwAnalysis$Centralities,
               Weighted_centralities    = weightedNetwAnalysis$Centralities,

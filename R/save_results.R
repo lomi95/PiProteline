@@ -58,10 +58,12 @@ save_results <- function(quantitative_analysis_results = NULL,
 
     addWorksheet(wb, "Summary")
     functionalAnalysis$summaryTable[isFALSE(functionalAnalysis$summaryTable)] <- NA
-    writeDataTable(wb, "Summary", functionalAnalysis$summaryTable)
+    try(writeDataTable(wb, "Summary", functionalAnalysis$summaryTable))
 
-    addWorksheet(wb, "Quantitative Analysis")
-    writeDataTable(wb, "Quantitative Analysis", quantitativeAnalysis$manova_results)
+    if (!is.null(quantitativeAnalysis$manova_results)){
+      addWorksheet(wb, "Quantitative Analysis")
+      try(writeDataTable(wb, "Quantitative Analysis", quantitativeAnalysis$manova_results))
+    }
 
     addWorksheet(wb, "Pairwise Quantitative Analysis")
     lapply(seq_along(quantitativeAnalysis$manova_pairw_results), function(x){
@@ -70,11 +72,11 @@ save_results <- function(quantitative_analysis_results = NULL,
         names(quantitativeAnalysis$manova_pairw_results)[x],
         startCol = (x - 1) * (ncol(quantitativeAnalysis$manova_pairw_results[[x]]) + 1) + 1
       )
-      writeDataTable(
+      try(writeDataTable(
         wb, "Pairwise Quantitative Analysis",
         quantitativeAnalysis$manova_pairw_results[[x]], startRow = 2,
         startCol = (x - 1) * (ncol(quantitativeAnalysis$manova_pairw_results[[x]]) + 1) + 1
-      )
+      ))
     })
 
     addWorksheet(wb, "Unweighted Network Analysis")
@@ -84,11 +86,11 @@ save_results <- function(quantitative_analysis_results = NULL,
         names(networkAnalysis$Unweighted_centralities)[x],
         startCol = (x - 1) * (ncol(networkAnalysis$Unweighted_centralities[[x]]) + 2) + 1
       )
-      writeDataTable(
+      try(writeDataTable(
         wb, "Unweighted Network Analysis",
         networkAnalysis$Unweighted_centralities[[x]], startRow = 2, rowNames = T,
         startCol = (x - 1) * (ncol(networkAnalysis$Unweighted_centralities[[x]]) + 2) + 1
-      )
+      ))
     })
 
     addWorksheet(wb, "Weighted Network Analysis")
@@ -98,11 +100,11 @@ save_results <- function(quantitative_analysis_results = NULL,
         names(networkAnalysis$Weighted_centralities)[x],
         startCol = (x - 1) * (ncol(networkAnalysis$Weighted_centralities[[x]]) + 2) + 1
       )
-      writeDataTable(
+      try(writeDataTable(
         wb, "Weighted Network Analysis",
         networkAnalysis$Weighted_centralities[[x]], startRow = 2, rowNames = T,
         startCol = (x - 1) * (ncol(networkAnalysis$Weighted_centralities[[x]]) + 2) + 1
-      )
+      ))
     })
     saveWorkbook(wb, paste0(save_results_as,"_summary.xlsx"))
 
@@ -110,7 +112,7 @@ save_results <- function(quantitative_analysis_results = NULL,
 
     wb_enr <- createWorkbook()
     addWorksheet(wb_enr, "Single Profile Enrichment")
-    writeDataTable(wb_enr, "Single Profile Enrichment", functionalAnalysis$singleProfileEnrichment)
+    try(writeDataTable(wb_enr, "Single Profile Enrichment", functionalAnalysis$singleProfileEnrichment))
 
     merged_enrichment_manova <- merged_enrichment(enr_list = functionalAnalysis$enrmanova$enr_manova)
     merged_enrichment_Netw <- merged_enrichment(enr_list = functionalAnalysis$enrNetw$enr_Netw)
@@ -126,7 +128,7 @@ save_results <- function(quantitative_analysis_results = NULL,
     wb_enr_trend <- createWorkbook()
     lapply(names(functionalAnalysis$enr_manovanetw), function(x){
       addWorksheet(wb_enr_trend, x)
-      writeDataTable(wb_enr_trend, x, functionalAnalysis$enr_manovanetw[[x]])
+      try(writeDataTable(wb_enr_trend, x, functionalAnalysis$enr_manovanetw[[x]]))
 
     })
     saveWorkbook(wb_enr_trend, paste0(save_results_as,"_enrichmentTrend.xlsx"))

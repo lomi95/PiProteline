@@ -46,7 +46,7 @@
 #'
 unweighted_network_analysis <- function(data_grouped = NULL, names_of_groups, data_unique = NULL,
                                         fun_list, g_interactome = NULL, quantile_critical_nodes, ...){
-  args_list <- list(...)[[1]]
+  args_list <- list(...)
 
   if (is.null(g_interactome)){
     message("No interactome was given, the human interactome will be used")
@@ -83,7 +83,7 @@ unweighted_network_analysis <- function(data_grouped = NULL, names_of_groups, da
     x <- suppressMessages(biggest_component(x))
     centrality_quantiles(x, fun_list = fun_list,
                          quantiles = 0,
-                         args_centrality_quantiles)
+                         ... = ...)
   })
 
   Unweighted.q <- centralities_over_quantiles(centralities = Unweighted,

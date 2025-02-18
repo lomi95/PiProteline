@@ -28,7 +28,9 @@
 #' enrichment analysis. Enrichment results are then filtered by selected categories and
 #' metrics are calculated.
 #'
-#' @importFrom dplyr pull filter
+#' @importFrom dplyr pull filter select
+#' @importFrom magrittr %>%
+#' @importFrom purrr reduce
 #' @importFrom parallel stopCluster makeCluster
 #' @examples
 #' \dontrun{
@@ -45,7 +47,8 @@
 single_profile_enrichment <- function(dataset, names_of_groups, gene_column = 1,
                                       tax_ID,categories = c("Process", "Function", "Component", "RCTM", "WikiPathways"),
                                       parallel = T, num_cores = parallel::detectCores()-1, ...){
-  args_list <- list(...)[[1]]
+  args_list <- list(...)
+
   if (is.character(gene_column)){
     if (any(gene_column == colnames(dataset))){
       gene_column <- which(gene_column == colnames(dataset))
@@ -75,9 +78,9 @@ single_profile_enrichment <- function(dataset, names_of_groups, gene_column = 1,
     if (any(sapply(singleEnrichments, class) == "character")){
       ind_err <- which(sapply(singleEnrichments, class) == "character")
       singleEnrichments[ind_err] <- lapply(identified_prots[ind_err],
-               rbioapi::rba_string_enrichment,
-               species = tax_ID, split_df = F,
-               verbose = F)
+                                           rbioapi::rba_string_enrichment,
+                                           species = tax_ID, split_df = F,
+                                           verbose = F)
     }
   } else {
     singleEnrichments <- lapply(identified_prots,
@@ -97,22 +100,22 @@ single_profile_enrichment <- function(dataset, names_of_groups, gene_column = 1,
   })
 
   enrTable <- purrr::reduce(singleEnrichments2, merge, by = c("category","term","description"), all = T) %>%
-    filter(category %in% categories)
+    dplyr::filter(category %in% categories)
   enrTable[is.na(enrTable)] <- 0
 
   args_manova <- args_list[intersect(names(args_list), names(formals(manova)))]
   args_manova <- args_manova[names(args_manova) != "correction_manova"]
 
-  ldaEnrTable <- manova(dataset = enrTable[,-c(1,3)],
-                        names_of_groups,
-                        gene_column = 1,
-                        correction_manova = NULL,
-                        )
+  ldaEnrTable <- do.call(manova,c(list(dataset = enrTable[,-c(1,3)],
+                                       names_of_groups,
+                                       gene_column = 1,
+                                       correction_manova = NULL),
+                                  args_manova))
   ldaEnrTable1 <- enrTable %>%
-    filter(term %in% (ldaEnrTable %>%
-                        filter(p.adj <= 0.05) %>%
-                        pull(GeneName))) %>%
-    select(-category, -description)
+    dplyr::filter(term %in% (ldaEnrTable %>%
+                        dplyr::filter(p.adj <= 0.05) %>%
+                        dplyr::pull(GeneName))) %>%
+    dplyr::select(-category, -description)
 
   if (nrow(ldaEnrTable1)){
     rownames(ldaEnrTable1) <- ldaEnrTable1$term
@@ -124,11 +127,11 @@ single_profile_enrichment <- function(dataset, names_of_groups, gene_column = 1,
 
     ldaEnrTable2 <- data.frame(enrTable[match(rownames(ldaEnrTable1),enrTable[,2]),1:3],
                                pvalue_manova = ldaEnrTable %>%
-                                 filter(p.adj <= 0.05) %>%
-                                 pull(p.adj),
-                               daveEnrTable %>%  select(-DAve_GeneName),
+                                 dplyr::filter(p.adj <= 0.05) %>%
+                                 dplyr::pull(p.adj),
+                               daveEnrTable %>%  dplyr::select(-DAve_GeneName),
                                meanEnrTable,
-                               ldaEnrTable1 %>% select(-term)
+                               ldaEnrTable1 %>% dplyr::select(-term)
     )
     return(ldaEnrTable2)
   } else {

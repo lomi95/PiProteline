@@ -36,7 +36,8 @@
 #'
 quantitative_analysis <- function(dataset, names_of_groups, gene_column, data_grouped_full = NULL,
                                   significance_manova, ...) {
-  args_list <- list(...)[[1]]
+  args_list <- list(...)
+
   if (is.character(gene_column)){
     gene_column <- which(colnames(dataset) == gene_column)
   }
@@ -46,20 +47,18 @@ quantitative_analysis <- function(dataset, names_of_groups, gene_column, data_gr
   args_manova <- args_list[intersect(names(args_list), names(formals(manova)))]
   args_MDS <- args_list[intersect(names(args_list), names(formals(MDS_plot)))]
   # Perform manova
-  manova_pairw_results <- do.call(manova_pairwise,
-                                  c(list(dataset = dataset,
-                                         names_of_groups = names_of_groups,
-                                         gene_column = gene_column),
-                                    args_manova))
+  manova_pairw_results <- manova_pairwise(dataset = dataset,
+                                          names_of_groups = names_of_groups,
+                                          gene_column = gene_column,
+                                          ... = ...)
 
   # Perform pairwise manova if more than two groups
   if (length(names_of_groups) > 2) {
     manova_results <- do.call(manova,
                               c(list(dataset = dataset,
-                                     names_of_groups = names_of_groups,
-                                     gene_column = gene_column),
-                                args_manova)
-    )
+                                   names_of_groups = names_of_groups,
+                                   gene_column = gene_column),
+                              args_manova))
     sign_feat <- manova_results$GeneName[manova_results$p.adj <= significance_manova]
     if (length(sign_feat)){
 
@@ -67,8 +66,8 @@ quantitative_analysis <- function(dataset, names_of_groups, gene_column, data_gr
       mds_plot <- do.call(MDS_plot,
                           c(list(t_dataset = transpose(dataManova,1),
                                  names_of_groups = names_of_groups),
-                            args_MDS)
-      )
+                            args_MDS))
+
     } else {
       mds_plot    <- NULL
     }
@@ -78,7 +77,6 @@ quantitative_analysis <- function(dataset, names_of_groups, gene_column, data_gr
   combinations_nog <- apply(combn(names_of_groups,2),2, c,simplify = F)
   mds_plot_pairw <- lapply(seq_along(combinations_nog), function(x){
 
-
     sign_feat <- manova_pairw_results[[x]]$GeneName[manova_pairw_results[[x]]$p.adj <= significance_manova]
     if (length(sign_feat)){
       dataManova <- dataset[dataset[,gene_column] %in% sign_feat,, drop = F]
@@ -87,7 +85,6 @@ quantitative_analysis <- function(dataset, names_of_groups, gene_column, data_gr
               c(list(t_dataset = transpose(dataManova,1),
                      names_of_groups = combinations_nog[[x]]),
                 args_MDS))
-
     }
   })
   names(mds_plot_pairw) <- names(manova_pairw_results)
@@ -98,12 +95,11 @@ quantitative_analysis <- function(dataset, names_of_groups, gene_column, data_gr
   volcano_plots <- lapply(names(dataVolcano), function(x){
     if (ncol(dataVolcano[[x]])){
       g1vs2 <- stringr::str_split(x, "_vs_")[[1]]
-      do.call(volcano_plot,
-              c(list(t_dataset = dataVolcano[[x]],
-                     group_1 = g1vs2[1],
-                     group_2 = g1vs2[2],
-                     significance = significance_manova),
-                args_volcanos))
+      do.call(volcano_plot,c(list(t_dataset = dataVolcano[[x]],
+                                  group_1 = g1vs2[1],
+                                  group_2 = g1vs2[2],
+                                  significance = significance_manova),
+                             args_volcanos))
     }
   })
   names(volcano_plots) <- names(dataVolcano)
@@ -112,10 +108,9 @@ quantitative_analysis <- function(dataset, names_of_groups, gene_column, data_gr
   if (is.null(data_grouped_full)){
     args_group_listing <- args_list[intersect(names(args_list), names(formals(group_listing)))]
 
-    data_grouped_full <- do.call(group_listing,
-                                 c(list(dataset = dataset,
-                                        names_of_groups = names_of_groups),
-                                   args_group_listing))
+    data_grouped_full <- do.call(group_listing,c(list(dataset = dataset,
+                                                      names_of_groups = names_of_groups),
+                                                 args_group_listing))
   }
 
 
@@ -127,7 +122,7 @@ quantitative_analysis <- function(dataset, names_of_groups, gene_column, data_gr
                 mds_plot_pairw = mds_plot_pairw
     ))
   } else {
-    return(list(manova_pairw_results       = manova_pairw_results,
+    return(list(manova_pairw_results = manova_pairw_results,
                 volcano_plots  = volcano_plots,
                 mds_plot_pairw = mds_plot_pairw
     ))

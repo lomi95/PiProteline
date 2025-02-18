@@ -47,7 +47,9 @@
 functional_analysis <- function(dataset, manova_pairwise_results, unweighted_CN, weighted_CN,
                                 names_of_groups, tax_ID, categories, ...){
 
-  args_list <- list(...)[[1]]
+  args_list <- list(...)
+
+
   summaryTable <- summary_table(manova_pairwise_results = manova_pairwise_results,
                                 unweighted_CN = unweighted_CN,
                                 weighted_CN = weighted_CN)
@@ -57,7 +59,7 @@ functional_analysis <- function(dataset, manova_pairwise_results, unweighted_CN,
   enrmanova  <- tryCatch(enrichment_manova(prot_manova = summaryTable$summarymanova$prot_manova, tax_ID, categories),
                          error = function(e){
                            message("Error in enrichment_manova:")
-                           message(e)
+                           message(e$message)
                            return(NULL)
                          }
   )
@@ -70,9 +72,9 @@ functional_analysis <- function(dataset, manova_pairwise_results, unweighted_CN,
                         return(NULL)
                       }
   )
-  if (!is.null(enrNetw)){
-    names(enrmanova$enr_manova.diff) <- names(enrNetw$enr_Netw.diff)
-    if (!is.null(enrmanova)){
+  if (!is.null(enrNetw$enr_Netw.diff)){
+    if (length(enrmanova$enr_manova.diff)>0){
+      names(enrmanova$enr_manova.diff) <- names(enrNetw$enr_Netw.diff)
       enr_manova.Netw <- intersect_enrichment(enr1 = enrmanova$enr_manova.diff,
                                               enr2 = enrNetw$enr_Netw.diff)
     } else {
@@ -84,15 +86,12 @@ functional_analysis <- function(dataset, manova_pairwise_results, unweighted_CN,
 
 
 
-  args_SPE <- args_list[intersect(names(args_list), names(formals(single_profile_enrichment)))]
 
-  singleProfileEnrichment <- tryCatch(do.call(single_profile_enrichment,
-                                              c(list(dataset = dataset,
-                                                     names_of_groups = names_of_groups,
-                                                     tax_ID = tax_ID,
-                                                     categories = categories,
-                                                     parallel = T),
-                                                args_SPE)),
+  singleProfileEnrichment <- tryCatch(single_profile_enrichment(dataset = dataset,
+                                                                names_of_groups = names_of_groups,
+                                                                tax_ID = tax_ID,
+                                                                categories = categories,
+                                                                ... = ...),
                                       error = function(e){
                                         message("Error in single_profile_enrichment:")
                                         message(e)

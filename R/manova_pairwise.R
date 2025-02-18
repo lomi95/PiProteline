@@ -26,14 +26,17 @@
 #'                             gene_column = 1)
 #' print(manova_results)
 manova_pairwise <- function(dataset, names_of_groups, gene_column, ...) {
-  args_list <- list(...)[[1]]
+
+  args_list <- list(...)
+  args_manova <- args_list[intersect(names(args_list), names(formals(manova)))]
+
   combinations <- utils::combn(names_of_groups, 2)
 
   manova.pairwise <- suppressMessages(apply(combinations, 2, function(x) {
     do.call(manova, c(list(dataset = dataset,
                            names_of_groups = x,
                            gene_column = gene_column),
-                      args_list))
+                      args_manova))
   }))
   names(manova.pairwise) <- apply(combinations, 2, paste, collapse = "_vs_")
 

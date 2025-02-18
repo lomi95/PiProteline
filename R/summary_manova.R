@@ -70,7 +70,7 @@ summary_manova <- function(manova_pairwise_results, significance_manova = 0.05, 
     purrr::reduce(merge, by = "GeneName", all = T)
 
 
-  prot_manova <- lapply(mpr[,-1], function(x){
+  prot_manova <- lapply(mpr[,-1, drop = F], function(x){
     list(up   = mpr$GeneName[which(x>0)],
          down = mpr$GeneName[which(x<0)])
   }) %>%
