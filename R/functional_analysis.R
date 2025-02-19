@@ -65,7 +65,7 @@ functional_analysis <- function(dataset, manova_pairwise_results, unweighted_CN,
   )
   enrNetw <- tryCatch(enrichment_Netw(summaryTable$summaryUnweightedNetw$prot_Netw,
                                       summaryTable$summaryWeightedNetw$prot_Netw,
-                             names_of_groups,tax_ID,categories),
+                                      names_of_groups,tax_ID,categories),
                       error = function(e){
                         message("Error in enrichment_Netw:")
                         message(e)

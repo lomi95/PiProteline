@@ -27,7 +27,7 @@ FC <- function(groups_list){
   names(names_of_groups) <- names_of_groups
 
   list_groups.mean <- sapply(groups_list, function(x){
-    rM <- rowMeans(x)
+    rM <- rowSums(x)/ncol(x)
     rM[is.na(rM)] <- 0
     return(rM)
   })

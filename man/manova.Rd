@@ -10,8 +10,7 @@ manova(
   gene_column,
   ignore_case = T,
   correction_manova = "BH",
-  pos_vectors_groups = NULL,
-  fc_bounds = c(-0, 0)
+  pos_vectors_groups = NULL
 )
 }
 \arguments{
@@ -26,8 +25,6 @@ manova(
 \item{correction_manova}{A character string specifying the p-value correction method. Default is "BH" (Benjamini-Hochberg). See `p.adjust.methods` for more options.}
 
 \item{pos_vectors_groups}{A list where each element contains column indices for a group of samples. If provided, `names_of_groups` is ignored.}
-
-\item{fc_bounds}{A numeric vector specifying the bounds for highlighting fold changes in Volcano plots. Default is c(0, 0).}
 }
 \value{
 A data.frame with p-values, adjusted p-values, Fold changes and DAves for the features.

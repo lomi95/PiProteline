@@ -64,6 +64,8 @@ single_profile_enrichment <- function(dataset, names_of_groups, gene_column = 1,
     if (no_prots[i]) identified_prots[[i]] <- c("RPL24","RPL26","RPL29","RPL34","RPS15","RPS24")
   }
 
+  # PING string
+  rbioapi::rba_string_enrichment(c("RPL24","RPL26","RPL29","RPL34","RPS15","RPS24"), 9606, verbose = F)
   if (parallel){
     on.exit(parallel::stopCluster(cl))
     num_cores <- floor(min(num_cores,length(identified_prots)/4))

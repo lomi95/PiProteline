@@ -18,8 +18,8 @@ save_images <- function(quantitative_analysis_results, device = "svg"){
 
   dir.create("MDS_plots")
   setwd("MDS_plots/")
-  if (!is.null(qar$MDS_plot)){
-    ggplot2::ggsave(qar$MDS_plot, filename = paste0("generalMDS.",device), device = device)
+  if (!is.null(qar$mds_plot)){
+    ggplot2::ggsave(qar$mds_plot, filename = paste0("generalMDS.",device), device = device)
   }
 
   lapply(names(qar$mds_plot_pairw), function(x){
