@@ -35,7 +35,7 @@ filter_interactome <- function(interactome, scores_threshold = c("escore" = 150,
       stop("The names of 'scores_threshold' do not match the column names of the interactome")
     }
     df_filtered <- interactome %>%
-      filter(rowSums(across(all_of(names(scores_threshold)),
+      dplyr::filter(rowSums(dplyr::across(dplyr::all_of(names(scores_threshold)),
                             ~ . > scores_threshold[cur_column()]),
                      na.rm = TRUE) >= 1)
 

@@ -1,24 +1,18 @@
 #' Map Protein IDs Using StringDB
 #'
 #' This function maps a vector of protein IDs using the StringDB API.
-#' It splits the input into smaller chunks to retrieve annotations and mapped IDs,
-#' which are then combined into a final list of data frames.
+#' It splits the input into smaller chunks to retrieve mapped IDs.
 #'
-#' @param proteins_ids A character vector of protein IDs that need to be annotated.
-#' @param splitting_API An integer specifying the number of proteins to process per batch in the API call.
-#' @param tax_ID An integer specifying the taxonomy ID of the species to use for the annotation.
-#'
+#' @param proteins_ids A character vector of protein IDs that need to be mapped
+#' @param splitting_API An integer specifying the number of proteins to process per batch in the API call. Default = 1999.
+#' @param tax_ID An integer specifying the taxonomy ID of the species to use for the mapping
+#' @param verbose If TRUE messsages about progress will appear
 #' @details
-#' The function interacts with the `rba_string_annotations` and `rba_string_map_ids` functions
-#' from the `rbioapi` package to fetch annotations and map protein IDs. The input vector is split
-#' into smaller chunks to avoid overloading the API. Annotations with more than one gene are kept
-#' in the final output.
+#' The function interacts with the `rba_string_map_ids` functions
+#' from the `rbioapi` package to map protein IDs. The input vector is split
+#' into smaller chunks to avoid overloading the API.
 #'
-#' @return A list with two elements:
-#' \describe{
-#'   \item{mapped_id}{A data frame with the mapped protein IDs.}
-#'   \item{annotation.df}{A data frame containing the annotations for the proteins that map to more than one gene.}
-#' }
+#' @return A data frame with the mapped protein IDs.
 #'
 #' @examples
 #' \dontrun{
@@ -31,15 +25,20 @@
 #'
 #' @importFrom rbioapi rba_string_map_ids
 #' @export
-protein_mapping <- function(proteins_ids, tax_ID, splitting_API){
+protein_mapping <- function(proteins_ids, tax_ID, splitting_API = 1999, verbose = F){
 
   vect.ann <- seq(1,length(proteins_ids),by = splitting_API)
 
+  #ping
+  rba_string_map_ids(c("RPL24","RPL26","RPL29","RPL34","RPS15","RPS24"), 9606, verbose = F)
+
   all.mapping <- list()
   for (i in 1:(length(vect.ann)-1)){
+    if (verbose) message("Mapping chunk ", i, " of ", length(vect.ann))
     all.mapping[[i]] <- rba_string_map_ids(
       proteins_ids[vect.ann[i]:(vect.ann[i+1]-1)],tax_ID,verbose = F)
   }
+  if (verbose) message("Mapping chunk ", i+1, " of ", length(vect.ann))
   all.mapping[[i+1]] <- rba_string_map_ids(
     proteins_ids[vect.ann[i+1]:length(proteins_ids)],tax_ID, verbose = F)
 
