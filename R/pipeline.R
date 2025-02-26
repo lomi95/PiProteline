@@ -52,8 +52,7 @@ pipeline <- function(dataset,names_of_groups,gene_column = 1,
   if (is.null(g_interactome)){
     message("No interactome was given, the human interactome will be used")
     interactome_hs_filter <- filter_interactome(interactome_hs, scores_threshold = c(database = 300, experimental = 150))
-    g_interactome <- graph_from_edgelist(as.matrix(interactome_hs_filter[,3:4]),directed = FALSE) %>%
-      filter
+    g_interactome <- graph_from_edgelist(as.matrix(interactome_hs_filter[,3:4]),directed = FALSE)
   }
 
   message("preprocessing data")
@@ -88,12 +87,14 @@ pipeline <- function(dataset,names_of_groups,gene_column = 1,
                                             names_of_groups,tax_ID, categories, ... = ...)
 
   if (!is.null(save_results_as)){
-    try({
+    tryCatch({
       message("\nSaving the results")
       save_results(quantitativeAnalysis,
                    networkAnalysis,
                    functionalAnalysis,
                    save_results_as = save_results_as)
+    }, error = function(e){
+      message(e)
     })
   }
 

@@ -4,32 +4,28 @@
 \alias{protein_mapping}
 \title{Map Protein IDs Using StringDB}
 \usage{
-protein_mapping(proteins_ids, tax_ID, splitting_API)
+protein_mapping(proteins_ids, tax_ID, splitting_API = 1999, verbose = F)
 }
 \arguments{
-\item{proteins_ids}{A character vector of protein IDs that need to be annotated.}
+\item{proteins_ids}{A character vector of protein IDs that need to be mapped}
 
-\item{tax_ID}{An integer specifying the taxonomy ID of the species to use for the annotation.}
+\item{tax_ID}{An integer specifying the taxonomy ID of the species to use for the mapping}
 
-\item{splitting_API}{An integer specifying the number of proteins to process per batch in the API call.}
+\item{splitting_API}{An integer specifying the number of proteins to process per batch in the API call. Default = 1999.}
+
+\item{verbose}{If TRUE messsages about progress will appear}
 }
 \value{
-A list with two elements:
-\describe{
-  \item{mapped_id}{A data frame with the mapped protein IDs.}
-  \item{annotation.df}{A data frame containing the annotations for the proteins that map to more than one gene.}
-}
+A data frame with the mapped protein IDs.
 }
 \description{
 This function maps a vector of protein IDs using the StringDB API.
-It splits the input into smaller chunks to retrieve annotations and mapped IDs,
-which are then combined into a final list of data frames.
+It splits the input into smaller chunks to retrieve mapped IDs.
 }
 \details{
-The function interacts with the `rba_string_annotations` and `rba_string_map_ids` functions
-from the `rbioapi` package to fetch annotations and map protein IDs. The input vector is split
-into smaller chunks to avoid overloading the API. Annotations with more than one gene are kept
-in the final output.
+The function interacts with the `rba_string_map_ids` functions
+from the `rbioapi` package to map protein IDs. The input vector is split
+into smaller chunks to avoid overloading the API.
 }
 \examples{
 \dontrun{
