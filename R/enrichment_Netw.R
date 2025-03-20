@@ -35,6 +35,7 @@
 #' enrichment_Netw(prot_UnwNetw, prot_WNetw, names_of_groups, tax_ID, categories, diff = TRUE)
 #' }
 enrichment_Netw <- function(prot_UnwNetw, prot_WNetw, names_of_groups, tax_ID, categories, differences = TRUE) {
+  check_taboo_words(names_of_groups)
   names(names_of_groups) <- names_of_groups
   enr_Net_single <- suppressMessages(lapply(names_of_groups, function(x) {
 

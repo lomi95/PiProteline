@@ -40,6 +40,8 @@
 #' @export
 
 critical_nodes <- function(x, names_of_groups, centralities, searching_mode, ignore_case = T) {
+
+  check_taboo_words(names_of_groups)
   # Assign names to the groups
   names(names_of_groups) <- names_of_groups
 

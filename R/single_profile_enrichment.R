@@ -109,7 +109,7 @@ single_profile_enrichment <- function(dataset, names_of_groups, gene_column = 1,
   args_manova <- args_manova[names(args_manova) != "correction_manova"]
 
   ldaEnrTable <- do.call(manova,c(list(dataset = enrTable[,-c(1,3)],
-                                       names_of_groups,
+                                       names_of_groups = names_of_groups,
                                        gene_column = 1,
                                        correction_manova = NULL),
                                   args_manova))

@@ -25,13 +25,14 @@
 #' @export
 
 manova <- function(dataset,
-                names_of_groups,
+                names_of_groups = NULL,
                 gene_column,
                 ignore_case = T,
                 correction_manova = "BH",
                 pos_vectors_groups = NULL
                 ){
 
+  check_taboo_words(names_of_groups)
   if (!is.null(correction_manova)){
     correction_manova <- match.arg(correction_manova,choices = p.adjust.methods)
   }

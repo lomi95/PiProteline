@@ -6,7 +6,7 @@
 \usage{
 manova(
   dataset,
-  names_of_groups,
+  names_of_groups = NULL,
   gene_column,
   ignore_case = T,
   correction_manova = "BH",

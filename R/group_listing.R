@@ -32,6 +32,7 @@ group_listing <- function(dataset,
                           pos_vectors_groups = NULL,
                           freq = 0,
                           just_shared_genes = F){
+  check_taboo_words(names_of_groups)
   old_opt <- options()$warn
   options(warn = 1)
   on.exit(options(warn = old_opt))

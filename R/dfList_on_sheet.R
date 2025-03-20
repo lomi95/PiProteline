@@ -58,17 +58,25 @@ dfList_on_sheet <- function(df_list, wb = NULL, name_sheet = "Sheet", by_col = T
     })
   } else {
     lapply(seq_along(df_list), function(x){
+
+      start_row <- 0
+      if (x != 1){
+        for (i in 1:(x-1)){
+          start_row <- start_row + nrow(df_list[[i]]) + 4
+        }
+      }
       writeData(
         wb, name_sheet,
         names(df_list)[x], rowNames = rowNames,
-        startRow = (x - 1) * (nrow(df_list[[x]]) + n_space) + 3
+        startRow = start_row + 1
       )
       writeDataTable(
         wb, name_sheet,
         df_list[[x]], rowNames = rowNames,
-        startRow = (x - 1) * (nrow(df_list[[x]]) + n_space) + 3
+        startRow = start_row + 2
       )
     })
+
   }
 
   return(wb)

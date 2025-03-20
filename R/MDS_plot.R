@@ -25,10 +25,14 @@
 #'
 #' @export
 MDS_plot <- function(t_dataset,
-                     names_of_groups,
+                     names_of_groups = NULL,
                      ignore_case = TRUE,
                      pos_vectors_groups = NULL,
                      n_tree = 5000) {
+
+  check_taboo_words(names_of_groups)
+
+
   labels <- vector(length = nrow(t_dataset))
 
   if (!is.null(pos_vectors_groups)) {

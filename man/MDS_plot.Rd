@@ -6,7 +6,7 @@
 \usage{
 MDS_plot(
   t_dataset,
-  names_of_groups,
+  names_of_groups = NULL,
   ignore_case = TRUE,
   pos_vectors_groups = NULL,
   n_tree = 5000
