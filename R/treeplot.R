@@ -95,24 +95,6 @@ treeplot <- function(category_spe, title_plot,
   dendrogram_object <- as.dendrogram(hclust_object)
   newick <-  ape::as.phylo.hclust(stats::as.hclust(dendrogram_object))
 
-  wrap_after_space <- function(text, n = 20) {
-    sapply(text, function(x) {
-      # Se il testo è più corto di 1.5 * n, non inserire \n
-      if (nchar(x) <= 1.4 * n) return(x)
-
-      # Cerca il primo spazio dopo il carattere n
-      rest <- substr(x, n + 1, nchar(x))
-      space_pos <- regexpr(" ", rest)[1]
-
-      # Se non ci sono spazi, restituisci il testo originale
-      if (space_pos == -1) return(x)
-
-      # Calcola il punto di taglio e inserisci \n
-      cut_point <- n + space_pos
-      paste0(substr(x, 1, cut_point - 1), "\n", substr(x, cut_point + 1, nchar(x)))
-    }, USE.NAMES = FALSE)
-  }
-
 
   single_spe_filter2$description_wrapped <- wrap_after_space(single_spe_filter2$description, n = 20)
   newick$tip.label <- single_spe_filter2$description_wrapped

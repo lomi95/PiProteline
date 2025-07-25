@@ -34,7 +34,7 @@ barplot_enrichment <- function(comparisons_enrichment,
            number_of_genes_in_background <= max_size_enrichments) %>%
     mutate(
       ratio_in_set = number_of_genes / number_of_genes_in_background,
-      description = factor(description, levels = unique(description)) # <- ordina in base all'arrange
+      description = factor(description, levels = unique(description))
     )
 
   enr_plot <- ggplot(data = comparison_filtered,
@@ -43,13 +43,14 @@ barplot_enrichment <- function(comparisons_enrichment,
              fill = fdr)) +
     geom_col(width = 0.7) +
     coord_flip() +
+    scale_y_continuous(limits = c(0, 1)) +
     scale_fill_gradient(low = "blue", high = "red") +
     labs(x = NULL, y = "Ratio in set", fill = "FDR") +
     ggtitle(comparison, subtitle = subtitle)
 
   if (save_plot) {
     ggsave(filename = paste0(comparison, "_", subtitle, ".svg"),
-           plot = enr_plot, width = 12, height = nrow(comparison_filtered)/3, device = "svg")
+           plot = enr_plot, width = 15, height = nrow(comparison_filtered)/3, device = "svg")
   }
 
   return(enr_plot)
