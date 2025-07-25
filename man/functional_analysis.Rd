@@ -12,6 +12,7 @@ functional_analysis(
   names_of_groups,
   tax_ID,
   categories,
+  save_plot = TRUE,
   ...
 )
 }
@@ -29,6 +30,8 @@ functional_analysis(
 \item{tax_ID}{An integer representing the taxonomy ID for the organism (e.g., 9606 for human).}
 
 \item{categories}{A character vector specifying the enrichment categories to filter (e.g., "GO", "KEGG").}
+
+\item{save_plot}{A logical indicating whether to save the plots generated during the analysis. Default is TRUE.}
 
 \item{...}{Additional arguments passed to \link{single_profile_enrichment} function.}
 }

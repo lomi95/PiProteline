@@ -13,8 +13,8 @@ pipeline(
   significance_manova = 0.05,
   fun_list = c(Betweenness = igraph::betweenness, Centroids = centroids, Bridging =
     bridging_centrality),
-  g_interactome = NULL,
-  categories = c("Component", "Function", "Process", "RCTM", "WikiPathway"),
+  g_interactome,
+  categories = c("Component", "Function", "Process", "KEGG", "RCTM", "WikiPathways"),
   tax_ID = 9606,
   save_results_as = paste0("PiProteline_report_", paste0(names_of_groups, collapse =
     "_")),

@@ -9,6 +9,8 @@ save_results(
   network_analysis_results = NULL,
   functional_analysis_results = NULL,
   pipeline_results = NULL,
+  filter_pvalue_or_fdr = "p.value",
+  significance_threshold = 0.05,
   save_results_as = "PiProteline_report"
 )
 }
@@ -20,6 +22,10 @@ save_results(
 \item{functional_analysis_results}{Output of functional analysis.}
 
 \item{pipeline_results}{Output of the complete analysis pipeline. If provided, individual results (`quantitative_analysis_results`, `network_analysis_results`, `functional_analysis_results`) are ignored.}
+
+\item{filter_pvalue_or_fdr}{Character string specifying wether to filter by "p.value" or "p.adj".  Default is "p.value".}
+
+\item{significance_threshold}{Numeric value specifying the significance threshold. Default is 0.05.}
 
 \item{save_results_as}{Directory name where results will be saved. Defaults to "PiProteline_report".}
 }

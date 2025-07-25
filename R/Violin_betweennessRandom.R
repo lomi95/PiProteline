@@ -12,11 +12,10 @@
 #'
 #' @return A `ggplot` object containing a violin plot of the distribution of average betweenness centrality for the random graphs.
 #' @examples
-#' # Example usage
-#' library(igraph)
-#' g <- make_ring(10)
-#' Violin_betweennessRandom(g, nIter = 100, set_seed = 42)
 #'
+#' \dontrun{
+#'   Violin_betweennessRandom(g, nIter = 100, set_seed = 42)
+#' }
 #' @export
 Violin_betweennessRandom <- function(graph, nIter = 100, Weights = NULL, set_seed = 1) {
   set.seed(set_seed)
@@ -30,10 +29,17 @@ Violin_betweennessRandom <- function(graph, nIter = 100, Weights = NULL, set_see
   graph.noZeros <- biggest_component(graph)
 
   # Update weights if needed
-  if (!is.null(Weights)) {
+  if (is.null(Weights)) {
     Weights <- edge.attributes(graph.noZeros)[[1]]
   }
 
+  if (any(Weights < 0)){
+    Weights <- abs(Weights)
+  }
+
+  if (any(Weights == 0)){
+    Weights <- Weights + 0.0001
+  }
   # Generate random graphs while preserving the degree sequence
   randomGraphs <- lapply(1:nIter, function(x) {
     sample_degseq(igraph::degree(graph.noZeros), method = "vl")

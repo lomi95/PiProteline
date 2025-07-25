@@ -85,7 +85,7 @@ test_that("normalization handles Total Signal normalization correctly", {
   expect_equal(dim(result), dim(data))
 
   # Verify that each column sums to 1
-  expect_equal(sum(result$Protein1), 1, tolerance = 1e-8)
+  expect_equal(sum(result$Protein1), 100000, tolerance = 1e-8)
 })
 
 test_that("normalization handles Maximum Signal normalization correctly", {

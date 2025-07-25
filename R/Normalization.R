@@ -38,6 +38,10 @@
 #'
 #' @export
 normalization <- function(dataset, norm_type) {
+
+  if (is.null(norm_type)){
+    return(dataset)
+  }
   # Remove non-numeric columns
   dataset[is.na(dataset)] <- 0
   asnum.NA <- apply(dataset, 2, function(x) {
@@ -64,7 +68,7 @@ normalization <- function(dataset, norm_type) {
                         return(x / sqrt(sum(x^2)))
                       }),
                       TotSigNorm = apply(dataset, 2, function(x) {
-                        return(x / sum(x))
+                        return(x * 100000/ sum(x))
                       }),
                       MaxSigNorm = apply(dataset, 2, function(x) {
                         return(x / max(x))

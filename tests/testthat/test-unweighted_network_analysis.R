@@ -1,16 +1,14 @@
 set.seed(1)
-library(igraph)
-filteredInteractome <- filter_interactome(interactome_hs,scores_threshold = c("experimental" = 0.15,
-                                                                              "database"    = 0.35))
-g_interactome <- graph_from_edgelist(as.matrix(filteredInteractome[,3:4]), directed = F)
-
 test_that("unweighted_network_analysis performs basic analysis", {
+  g_interactome <- igraph::sample_gnm(n = 1000, m = 3000, directed = FALSE, loops = FALSE)
+  igraph::V(g_interactome)$name <- paste0("P", seq_len(igraph::vcount(g_interactome)))  # Assegna nomi ai nodi
+
   data_grouped <- list(
     Group1 = matrix(runif(2000), nrow = 200),
     Group2 = matrix(runif(2000), nrow = 200)
   )
   data_grouped <- lapply(data_grouped, function(x) {
-    rownames(x) <- sample(names(V(g_interactome)), nrow(x))
+    rownames(x) <- sample(names(igraph::V(g_interactome)), nrow(x))
     return(x)
   })
   colnames(data_grouped$Group1) <- paste0("Group1_",1:10)
@@ -29,8 +27,12 @@ test_that("unweighted_network_analysis performs basic analysis", {
 })
 
 test_that("unweighted_network_analysis handles data_unique when data_grouped is NULL", {
+  g_interactome <- igraph::sample_gnm(n = 1000, m = 3000, directed = FALSE, loops = FALSE)
+  igraph::V(g_interactome)$name <- paste0("P", seq_len(igraph::vcount(g_interactome)))  # Assegna nomi ai nodi
+
+
   data_unique <- matrix(runif(4000), nrow = 200)
-  rownames(data_unique) <- sample(names(V(g_interactome)), nrow(data_unique))
+  rownames(data_unique) <- sample(names(igraph::V(g_interactome)), nrow(data_unique))
   colnames(data_unique) <- c(paste0("Group1_",1:10),paste0("Group2_",1:10))
   result <- unweighted_network_analysis(data_grouped = NULL, names_of_groups = c("Group1", "Group2"), data_unique = data_unique,
                                         fun_list = list(Degree = igraph::degree, Betweenness = igraph::betweenness),
@@ -45,6 +47,10 @@ test_that("unweighted_network_analysis handles data_unique when data_grouped is 
 })
 
 test_that("unweighted_network_analysis raises an error when both data_grouped and data_unique are NULL", {
-  expect_error(unweighted_network_analysis(data_grouped = NULL, names_of_groups = c("Group1", "Group2")),
+  g_interactome <- igraph::sample_gnm(n = 1000, m = 3000, directed = FALSE, loops = FALSE)
+  igraph::V(g_interactome)$name <- paste0("P", seq_len(igraph::vcount(g_interactome)))  # Assegna nomi ai nodi
+
+  expect_error(unweighted_network_analysis(g_interactome = g_interactome, data_grouped = NULL, names_of_groups = c("Group1", "Group2")),
                "Either 'data_unique or 'data_grouped' must be given")
 })
+

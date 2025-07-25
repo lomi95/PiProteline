@@ -23,10 +23,8 @@
 #'
 #' @examples
 #' \dontrun{
-#'   destfile <- "C:/Users/WKS/Downloads/STRINGDB_intractome.HS.txt.gx"
-#'   download.file("https://stringdb-downloads.org/download/protein.links.full.v12.0/
-#'                  9606.protein.links.full.v12.0.txt.gz",
-#'                  destfile = destfile)
+#'   # download interactome from STRINGDB
+#'   destfile <- "/STRINGDB_intractome_HS.txt.gx"
 #'   interactome_hs <- build_interactome(directory_interactome = destfile,tax_ID = 9606)
 #' }
 #'

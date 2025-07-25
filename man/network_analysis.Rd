@@ -7,8 +7,9 @@
 network_analysis(
   data_grouped = NULL,
   data_grouped_even_dim = NULL,
-  fun_list,
-  g_interactome = NULL,
+  g_interactome,
+  fun_list = c(Betweenness = igraph::betweenness, Centroids = centroids, Bridging =
+    bridging_centrality),
   quantile_critical_nodes,
   names_of_groups = NULL,
   data_unique = NULL,
@@ -20,9 +21,9 @@ network_analysis(
 
 \item{data_grouped_even_dim}{A list of data frames representing grouped data with even dimensions. Used for weighted network analysis. Default is `NULL`.}
 
-\item{fun_list}{A list of functions for calculating network centralities.}
-
 \item{g_interactome}{A igraph object representing the interactome.}
+
+\item{fun_list}{A list of functions for calculating network centralities.}
 
 \item{quantile_critical_nodes}{A numeric value specifying the quantile threshold for identifying critical nodes.}
 

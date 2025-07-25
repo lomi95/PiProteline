@@ -8,9 +8,10 @@
 unweighted_network_analysis(
   data_grouped = NULL,
   names_of_groups,
+  g_interactome,
   data_unique = NULL,
-  fun_list,
-  g_interactome = NULL,
+  fun_list = c(Betweenness = igraph::betweenness, Centroids = centroids, Bridging =
+    bridging_centrality),
   quantile_critical_nodes,
   ...
 )
@@ -20,11 +21,11 @@ unweighted_network_analysis(
 
 \item{names_of_groups}{A character vector specifying the names of the groups for analysis.}
 
+\item{g_interactome}{A igraph object representing the interactome.}
+
 \item{data_unique}{A data frame with unique data used for grouping, if `data_grouped` is `NULL`. Default is `NULL`.}
 
 \item{fun_list}{A list of functions for calculating network centralities.}
-
-\item{g_interactome}{A igraph object representing the interactome.}
 
 \item{quantile_critical_nodes}{A numeric value specifying the quantile threshold for identifying critical nodes.}
 
@@ -43,12 +44,12 @@ This function performs network analysis on unweighted networks derived from grou
 \examples{
 library(igraph)
 # Example data
-filteredInteractome <- filter_interactome(interactome_hs,
-                                          scores_threshold = c("experimental" = 0.15,
-                                                               "database"    = 0.35))
-g_interactome <- graph_from_edgelist(as.matrix(filteredInteractome[,3:4]),
-                                     directed = FALSE)
+
 set.seed(1)
+g_interactome <- igraph::sample_gnm(n = 1000, m = 3000,
+                                    directed = FALSE, loops = FALSE)
+igraph::V(g_interactome)$name <- paste0("P",
+                                 seq_len(igraph::vcount(g_interactome)))
 data_grouped <- list(Group1 = matrix(runif(2000), nrow = 200),
                      Group2 = matrix(runif(2000), nrow = 200))
 data_grouped <- lapply(data_grouped, function(x) {

@@ -37,23 +37,18 @@
 #'
 
 pipeline <- function(dataset,names_of_groups,gene_column = 1,
-                     norm_type = "TotSigNorm", quantile_critical_nodes = 0.75,
+                     norm_type = "TotSigNorm",
+                     quantile_critical_nodes = 0.75,
                      significance_manova = 0.05,
                      fun_list = c(Betweenness = igraph::betweenness,
                                   Centroids   = centroids,
                                   Bridging    = bridging_centrality),
-                     g_interactome = NULL,
-                     categories = c("Component","Function","Process","RCTM","WikiPathway"),
+                     g_interactome,
+                     categories = c("Component","Function","Process","KEGG", "RCTM","WikiPathways"),
                      tax_ID = 9606,
                      save_results_as = paste0("PiProteline_report_",paste0(names_of_groups, collapse = "_")),
                      ...){
 
-
-  if (is.null(g_interactome)){
-    message("No interactome was given, the human interactome will be used")
-    interactome_hs_filter <- filter_interactome(interactome_hs, scores_threshold = c(database = 300, experimental = 150))
-    g_interactome <- graph_from_edgelist(as.matrix(interactome_hs_filter[,3:4]),directed = FALSE)
-  }
 
   message("preprocessing data")
   preprocData <- preprocessing_data(dataset,names_of_groups,gene_column,norm_type,...)

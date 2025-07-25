@@ -36,6 +36,7 @@ data_volcano <- function(dataset,manova_pairw_results,significance, gene_column 
   }
 
   dataset <- dataset %>% dplyr::relocate(GeneName, .before = 1)
+  dataset[,-1] <- dataset[,-1] + (dataset[,-1] %>%  unlist() %>% unique %>% sort)[2]/50
   dv <- lapply(manova_pairw_results, function(x) {
 
     x <- x %>% filter(GeneName %in% dataset$GeneName)
@@ -43,7 +44,6 @@ data_volcano <- function(dataset,manova_pairw_results,significance, gene_column 
    dataset %>%
      dplyr::filter(GeneName %in% x$GeneName) %>%
      dplyr::mutate(p.adj = x$p.adj) %>%
-     dplyr::filter(p.adj <= significance) %>%
      PiProteline::transpose(1)
   })
   names(dv) <- names(manova_pairw_results)

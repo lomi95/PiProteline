@@ -101,6 +101,26 @@ single_profile_enrichment <- function(dataset, names_of_groups, gene_column = 1,
     return(singleEnrichments[[x]][c(1,2,3,10)])
   })
 
+  merged_df_perGroups <- lapply(names_of_groups, function(nog){
+    enr_g <- singleEnrichments[grep(nog, names(singleEnrichments))]
+    merged_df <- reduce(enr_g, function(df1, df2) {
+      dplyr::full_join(df1, df2, by = "term") %>%
+        dplyr::rowwise() %>%
+        dplyr::mutate(
+          preferredNames = list(unique(c(
+            unlist(preferredNames.x),
+            unlist(preferredNames.y)
+          )))
+        ) %>%
+        dplyr::select(term, preferredNames) %>%
+        dplyr::ungroup()
+    })
+    colnames(merged_df)[2] <- paste0("enriched_in_", nog)
+    return(merged_df)
+  }) %>%
+    purrr::reduce(merge, by = "term", all = TRUE)
+
+
   enrTable <- purrr::reduce(singleEnrichments2, merge, by = c("category","term","description"), all = T) %>%
     dplyr::filter(category %in% categories)
   enrTable[is.na(enrTable)] <- 0
@@ -115,8 +135,8 @@ single_profile_enrichment <- function(dataset, names_of_groups, gene_column = 1,
                                   args_manova))
   ldaEnrTable1 <- enrTable %>%
     dplyr::filter(term %in% (ldaEnrTable %>%
-                        dplyr::filter(p.adj <= 0.05) %>%
-                        dplyr::pull(GeneName))) %>%
+                               dplyr::filter(p.adj <= 0.05) %>%
+                               dplyr::pull(GeneName))) %>%
     dplyr::select(-category, -description)
 
   if (nrow(ldaEnrTable1)){
@@ -134,7 +154,9 @@ single_profile_enrichment <- function(dataset, names_of_groups, gene_column = 1,
                                daveEnrTable %>%  dplyr::select(-DAve_GeneName),
                                meanEnrTable,
                                ldaEnrTable1 %>% dplyr::select(-term)
-    )
+    ) %>% merge(merged_df_perGroups, by = "term")
+
+
     return(ldaEnrTable2)
   } else {
     return(ldaEnrTable1)

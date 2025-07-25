@@ -46,7 +46,7 @@ volcano_plot <- function(t_dataset, significance = 0.05, fc_bounds = c(-0,0), ig
   df$color[log2 <= min(fc_bounds) & pv >= significance.log] <- "down-regulated"
   df$color <- as.factor(df$color)
 
-  df$gene[df$color == "Non-significant"] <- ""
+  df$gene[df$color == "Non-significant"] <- NA
 
   num_up <- sum(df$color == "up-regulated")
   num_down <- sum(df$color == "down-regulated")
@@ -68,21 +68,7 @@ volcano_plot <- function(t_dataset, significance = 0.05, fc_bounds = c(-0,0), ig
     theme(legend.position = "none") +
     labs(title = paste0("volcano plot - UP (red) ", group_1, " vs DOWN (blue) ", group_2),
          x = "log2(FC)",
-         y = "-log10(p.adjusted)") # +
-    # geom_label(
-    #   x = min(log2[log2 != -Inf]) + (max(log2[log2 != Inf]) - min(log2[log2 != -Inf])) / 18, y = max(pv),
-    #   label = paste0("Down-regulated: ", num_down),
-    #   label.padding = unit(0.55, "lines"),
-    #   label.size = 0.35,
-    #   color = "blue",
-    #   fill = NA) +
-    # geom_label(
-    #   x = max(log2[log2 != Inf]) - (max(log2[log2 != Inf]) - min(log2[log2 != -Inf])) / 18, y = max(pv),
-    #   label = paste0("Up-regulated: ", num_up),
-    #   label.padding = unit(0.55, "lines"),
-    #   label.size = 0.35,
-    #   color = "red",
-    #   fill = NA)
+         y = "-log10(p.adjusted)")
 
   return(Vplot)
 }

@@ -9,6 +9,7 @@
 #' @param tax_ID An integer representing the taxonomy ID for the organism (e.g., 9606 for human).
 #' @param categories A character vector specifying the enrichment categories to filter (e.g., "GO", "KEGG").
 #' @param dataset A data.frame containing protein samples, with column named after names of groups
+#' @param save_plot A logical indicating whether to save the plots generated during the analysis. Default is TRUE.
 #' @param ... Additional arguments passed to \link{single_profile_enrichment} function.
 #'
 #' @return A list containing:
@@ -45,7 +46,7 @@
 #'
 #' }
 functional_analysis <- function(dataset, manova_pairwise_results, unweighted_CN, weighted_CN,
-                                names_of_groups, tax_ID, categories, ...){
+                                names_of_groups, tax_ID, categories, save_plot = TRUE, ...){
 
   args_list <- list(...)
 
@@ -56,13 +57,17 @@ functional_analysis <- function(dataset, manova_pairwise_results, unweighted_CN,
 
 
 
-  enrmanova  <- tryCatch(enrichment_manova(prot_manova = summaryTable$summarymanova$prot_manova, tax_ID, categories),
-                         error = function(e){
-                           message("Error in enrichment_manova:")
-                           message(e$message)
-                           return(NULL)
-                         }
+  enrmanova <- tryCatch(enrichment_manova(prot_manova = summaryTable$summarymanova$prot_manova, tax_ID, categories),
+                        error = function(e){
+                          message("Error in enrichment_manova:")
+                          message(e$message)
+                          return(NULL)
+                        }
   )
+
+
+
+
   enrNetw <- tryCatch(enrichment_Netw(summaryTable$summaryUnweightedNetw$prot_Netw,
                                       summaryTable$summaryWeightedNetw$prot_Netw,
                                       names_of_groups,tax_ID,categories),
@@ -72,6 +77,10 @@ functional_analysis <- function(dataset, manova_pairwise_results, unweighted_CN,
                         return(NULL)
                       }
   )
+
+
+
+
   if (!is.null(enrNetw$enr_Netw.diff)){
     if (length(enrmanova$enr_manova.diff)>0){
       names(enrmanova$enr_manova.diff) <- names(enrNetw$enr_Netw.diff)
@@ -99,10 +108,113 @@ functional_analysis <- function(dataset, manova_pairwise_results, unweighted_CN,
                                       }
   )
 
+  plot_manova <- tryCatch({
+    comparison_split <- lapply(enrmanova$enr_manova.diff, function(x) split(x, x$category))
+    args_barplot_enrichment <- args_list[intersect(names(args_list),
+                                                   names(formals(barplot_enrichment)))]
+    if (save_plot){
+      dir.create("manova_enrichment_plots")
+      setwd("manova_enrichment_plots")
+    }
+
+    lapply(names(comparison_split), function(x){
+      if (save_plot){
+        dir.create(x)
+        setwd(x)
+        on.exit(setwd(".."), add = TRUE)
+      }
+      lapply(names(comparison_split[[x]]), function(y){
+        if (!is.null(comparison_split[[x]][[y]])){
+          do.call(barplot_enrichment,
+                  c(list(comparisons_enrichment = comparison_split[[x]][[y]],
+                         comparison = x,
+                         subtitle = y,
+                         save_plot = save_plot),
+                    args_barplot_enrichment))
+        }
+      }) %>% purrr::set_names(names(comparison_split[[x]]))
+    }) %>% purrr::set_names(names(comparison_split))
+  }, error = function(e){
+    message("Error in manova barplot_enrichment:")
+    message(e)
+    return(NULL)
+  })
+  if (save_plot){
+    setwd("..")
+  }
+
+
+  plot_network <- tryCatch({
+    comparison_split <- lapply(enrNetw$enr_Netw.diff, function(x) split(x, x$category))
+    args_barplot_enrichment <- args_list[intersect(names(args_list),
+                                                   names(formals(barplot_enrichment)))]
+    if (save_plot){
+      dir.create("network_enrichment_plots")
+      setwd("network_enrichment_plots")
+    }
+
+    lapply(names(comparison_split), function(x){
+      if (save_plot){
+        dir.create(x)
+        setwd(x)
+        on.exit(setwd(".."), add = TRUE)
+      }
+      lapply(names(comparison_split[[x]]), function(y){
+        if (!is.null(comparison_split[[x]][[y]])){
+          do.call(barplot_enrichment,
+                  c(list(comparisons_enrichment = comparison_split[[x]][[y]],
+                         comparison = x,
+                         subtitle = y,
+                         save_plot = save_plot),
+                    args_barplot_enrichment))
+        }
+      }) %>% purrr::set_names(names(comparison_split[[x]]))
+    }) %>% purrr::set_names(names(comparison_split))
+  }, error = function(e){
+    message("Error in network barplot_enrichment:")
+    message(e)
+    return(NULL)
+  })
+  if (save_plot){
+    setwd("..")
+  }
+  plot_SPE <- tryCatch({
+
+    enr_split <- split(singleProfileEnrichment, singleProfileEnrichment$category)
+    args_treeplot <- args_list[intersect(names(args_list),
+                                         names(formals(treeplot)))]
+    if (save_plot){
+      dir.create("singleProfiles_enrichment_plots")
+      setwd("singleProfiles_enrichment_plots")
+    }
+
+    lapply(names(enr_split), function(x){
+
+      do.call(treeplot,
+              c(list(category_spe = enr_split[[x]],
+                     title_plot = x,
+                     save_plot = save_plot),
+                args_treeplot))
+
+    }) %>% purrr::set_names(names(enr_split))
+  }, error = function(e){
+    message("Error in treeplot:")
+    message(e)
+    return(NULL)
+  })
+  if (save_plot){
+    setwd("..")
+  }
+
 
   return(list(summaryTable = summaryTable$summary,
               enrmanova = enrmanova,
               enrNetw = enrNetw,
               enr_manovanetw = enr_manova.Netw,
-              singleProfileEnrichment = singleProfileEnrichment))
+              singleProfileEnrichment = singleProfileEnrichment,
+              plot_enr = list(
+                manova = plot_manova,
+                network = plot_network,
+                singleProfile = plot_SPE
+              )))
 }

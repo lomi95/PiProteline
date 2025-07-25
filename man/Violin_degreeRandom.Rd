@@ -20,9 +20,8 @@ A `ggplot` object containing a violin plot of the distribution of average degree
 This function generates a violin plot showing the distribution of average degrees from a set of random graphs generated using the Erdős-Rényi model, compared with the average degree of a given input graph.
 }
 \examples{
-# Example usage
-library(igraph)
-g <- make_ring(10)
-Violin_degreeRandom(g, nIter = 100, set_seed = 42)
+\dontrun{
 
+  Violin_degreeRandom(g, nIter = 100, set_seed = 42)
+}
 }

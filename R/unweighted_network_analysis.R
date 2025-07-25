@@ -22,12 +22,12 @@
 #' @examples
 #' library(igraph)
 #' # Example data
-#' filteredInteractome <- filter_interactome(interactome_hs,
-#'                                           scores_threshold = c("experimental" = 0.15,
-#'                                                                "database"    = 0.35))
-#' g_interactome <- graph_from_edgelist(as.matrix(filteredInteractome[,3:4]),
-#'                                      directed = FALSE)
+#'
 #' set.seed(1)
+#' g_interactome <- igraph::sample_gnm(n = 1000, m = 3000,
+#'                                     directed = FALSE, loops = FALSE)
+#' igraph::V(g_interactome)$name <- paste0("P",
+#'                                  seq_len(igraph::vcount(g_interactome)))
 #' data_grouped <- list(Group1 = matrix(runif(2000), nrow = 200),
 #'                      Group2 = matrix(runif(2000), nrow = 200))
 #' data_grouped <- lapply(data_grouped, function(x) {
@@ -44,14 +44,15 @@
 #'                                      quantile_critical_nodes = 0.8)
 #'
 #'
-unweighted_network_analysis <- function(data_grouped = NULL, names_of_groups, data_unique = NULL,
-                                        fun_list, g_interactome = NULL, quantile_critical_nodes, ...){
+unweighted_network_analysis <- function(data_grouped = NULL,
+                                        names_of_groups,
+                                        g_interactome,
+                                        data_unique = NULL,
+                                        fun_list = c(Betweenness = igraph::betweenness,
+                                                     Centroids   = centroids,
+                                                     Bridging    = bridging_centrality),
+                                        quantile_critical_nodes, ...){
   args_list <- list(...)
-
-  if (is.null(g_interactome)){
-    message("No interactome was given, the human interactome will be used")
-    g_interactome <- graph_from_edgelist(as.matrix(interactome_hs[,3:4]),directed = FALSE)
-  }
 
   search_mode <- c("","s","cs")
   names(search_mode) <- c("NotSpecific","Specific","CentralitySpecific")

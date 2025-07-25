@@ -39,14 +39,15 @@
 #'                  quantile_critical_nodes = 0.9, violins = FALSE)
 #' }
 #'
-network_analysis <- function(data_grouped = NULL, data_grouped_even_dim = NULL, fun_list, g_interactome = NULL,
-                             quantile_critical_nodes, names_of_groups = NULL, data_unique = NULL,...){
-
-  if (is.null(g_interactome)){
-    message("No interactome was given, the human interactome will be used")
-    g_interactome <- graph_from_edgelist(as.matrix(interactome_hs[,3:4]),directed = FALSE)
-  }
-
+network_analysis <- function(data_grouped = NULL,
+                             data_grouped_even_dim = NULL,
+                             g_interactome,
+                             fun_list = c(Betweenness = igraph::betweenness,
+                                          Centroids   = centroids,
+                                          Bridging    = bridging_centrality),
+                             quantile_critical_nodes,
+                             names_of_groups = NULL,
+                             data_unique = NULL,...){
 
   if (is.null(names_of_groups)){
     if (is.null(data_unique)){

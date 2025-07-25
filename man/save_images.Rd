@@ -4,12 +4,21 @@
 \alias{save_images}
 \title{Save MDS and Volcano plots from quantitative analysis}
 \usage{
-save_images(quantitative_analysis_results, device = "svg")
+save_images(
+  quantitative_analysis_results,
+  device = "svg",
+  width = 16,
+  height = 10
+)
 }
 \arguments{
 \item{quantitative_analysis_results}{A list containing MDS and volcano plots.}
 
 \item{device}{The file format for saving plots (default: "svg").}
+
+\item{width}{Final width of the saved images.}
+
+\item{height}{Final height of the saved images.}
 }
 \description{
 Save MDS and Volcano plots from quantitative analysis

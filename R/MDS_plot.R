@@ -11,6 +11,8 @@
 #' @importFrom randomForest randomForest
 #' @importFrom stats dist cmdscale
 #' @importFrom ggplot2 ggplot aes geom_text theme_bw xlab ylab ggtitle
+#' @importFrom ggrepel geom_text_repel
+#' @importFrom tibble rownames_to_column
 #'
 #' @return A ggplot object representing the MDS plot based on (1 - random forest proximity).
 #'
@@ -91,15 +93,21 @@ MDS_plot <- function(t_dataset,
   mds.var.per <- round(mds.stuff$eig / sum(mds.stuff$eig) * 100, 1)
 
   mds.values <- mds.stuff$points
-  mds.data <- data.frame(Sample = labels, X = mds.values[, 1], Y = mds.values[, 2], Status = dm.lda$labels)
+  mds.data <- data.frame(X = mds.values[, 1],
+                         Y = mds.values[, 2],
+                         Groups = dm.lda$labels) %>%
+    tibble::rownames_to_column(var = "Sample")
 
   mds <- ggplot(data = mds.data, aes(x = X, y = Y, label = Sample)) +
-    geom_text(aes(color = Status)) +
+    geom_point(aes(color = Groups)) +
+    ggrepel::geom_text_repel(aes(color = Groups),
+                             size = 3, max.overlaps = 10,
+                             box.padding = 0.3, point.padding = 0.2,
+                             segment.color = "grey50") +
     theme_bw() +
     xlab(paste("MDS1 - ", mds.var.per[1], "%", sep = "")) +
     ylab(paste("MDS2 - ", mds.var.per[2], "%", sep = "")) +
-    ggtitle("MDS plot using (1 - Random Forest Proximities)")
-
+    ggtitle("MDS plot using (1 - Random Forest Proximities)") +
+    theme(legend.position = "right")
   return(mds)
 }
-
