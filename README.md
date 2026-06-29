@@ -86,4 +86,6 @@ pipelineResults <- pipeline(
 
 **⚠️ For big datasets the waiting time could be 20-30 minutes, especially for network analysis**
 
+## Examples
 
+Test data input and expected output are in Supplementary data.zip
